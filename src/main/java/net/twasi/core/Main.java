@@ -1,9 +1,11 @@
 package net.twasi.core;
 
+import net.twasi.core.logger.TwasiLogger;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Starting Twasi Core");
+        TwasiLogger.log.info("Starting Twasi Core");
     }
 
 }
