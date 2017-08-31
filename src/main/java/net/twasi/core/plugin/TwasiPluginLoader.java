@@ -1,6 +1,5 @@
 package net.twasi.core.plugin;
 
-import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
 import org.yaml.snakeyaml.Yaml;
 
@@ -13,15 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 final public class TwasiPluginLoader extends URLClassLoader {
-        private final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
-        private final File file;
         final TwasiPlugin plugin;
-        private TwasiPlugin pluginInit;
-        private IllegalStateException pluginState;
 
-        TwasiPluginLoader(final ClassLoader parent, final File file) throws Exception, MalformedURLException {
+        TwasiPluginLoader(final ClassLoader parent, final File file) throws Exception {
             super(new URL[]{file.toURI().toURL()}, parent);
-            this.file = file;
 
             // Check for plugin.yml
             URL infoYamlUrl = this.getResource("plugin.yml");
