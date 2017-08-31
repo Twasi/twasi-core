@@ -2,19 +2,10 @@ package net.twasi.core.plugin;
 
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
-import net.twasi.core.plugin.api.TwasiPluginInterface;
-import org.yaml.snakeyaml.Yaml;
 
-import javax.annotation.Resource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PluginLoader {
 
@@ -46,6 +37,13 @@ public class PluginLoader {
             }
         }
         TwasiLogger.log.info(loadedPlugins.size() + " plugins loaded.");
+
+        TwasiLogger.log.info("Enabling plugins");
+        for (TwasiPlugin plugin : loadedPlugins) {
+            plugin.onEnable();
+        }
+        TwasiLogger.log.info(loadedPlugins.size() + " plugins enabled.");
+
     }
 
 }
