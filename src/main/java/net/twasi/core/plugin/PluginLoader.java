@@ -7,15 +7,15 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
-public class PluginLoader {
+class PluginLoader {
 
-    ArrayList<TwasiPlugin> loadedPlugins = new ArrayList<>();
+    private ArrayList<TwasiPlugin> loadedPlugins = new ArrayList<>();
 
-    public PluginLoader() {
+    PluginLoader() {
 
         if (!new File("plugins").isDirectory()) {
             TwasiLogger.log.info("Plugins directory not found, creating.");
-            new File("plugins").mkdir();
+            if (!new File("plugins").mkdir()) TwasiLogger.log.error("Could not create plugins directory.");
         }
 
         File[] pluginJars = new File("plugins").listFiles(new FilenameFilter() {
@@ -24,21 +24,20 @@ public class PluginLoader {
             }
         });
 
+        assert pluginJars != null;
         for(File plugin : pluginJars) {
             TwasiLogger.log.debug("Loading plugin " + plugin);
 
             try {
                 TwasiPluginLoader urlCl = new TwasiPluginLoader(System.class.getClassLoader(), plugin);
                 loadedPlugins.add(urlCl.plugin);
-            } catch (ClassNotFoundException e) {
-                TwasiLogger.log.error(e);
             } catch (Exception e) {
                 TwasiLogger.log.error(e);
             }
         }
-        TwasiLogger.log.info(loadedPlugins.size() + " plugins loaded.");
+        TwasiLogger.log.info(loadedPlugins.size() + " plugin(s) loaded.");
 
-        TwasiLogger.log.info("Enabling plugins");
+        TwasiLogger.log.info("Enabling plugin(s)");
         for (TwasiPlugin plugin : loadedPlugins) {
             plugin.onEnable();
         }

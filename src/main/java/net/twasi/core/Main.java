@@ -7,9 +7,11 @@ import net.twasi.core.plugin.Plugin;
 
 public class Main {
 
-    static CommandLineInterface cli = new CommandLineInterface();
+    private static CommandLineInterface cli = new CommandLineInterface();
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+
         TwasiLogger.log.info("Starting Twasi Core");
 
         TwasiLogger.log.debug("Reading config");
@@ -18,9 +20,11 @@ public class Main {
         TwasiLogger.log.debug("Loading plugins");
         Plugin.load();
 
-        cli.start();
+        float time = System.currentTimeMillis() - start;
+        double longTime = time / 1000;
+        TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
 
-        System.out.println(Config.catalog.database.hostname);
+        cli.start();
     }
 
 }

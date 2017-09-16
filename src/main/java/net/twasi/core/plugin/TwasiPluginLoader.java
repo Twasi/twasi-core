@@ -5,11 +5,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
-import java.util.Map;
 
 final public class TwasiPluginLoader extends URLClassLoader {
         final TwasiPlugin plugin;
@@ -41,14 +39,14 @@ final public class TwasiPluginLoader extends URLClassLoader {
                 try {
                     pluginClass = jarClass.asSubclass(TwasiPlugin.class);
                 } catch (ClassCastException ex) {
-                    throw new Exception("main class `" + main + "' does not extend TwasiPlugin", ex);
+                    throw new Exception("Main class `" + main + "' does not extend TwasiPlugin", ex);
                 }
 
                 plugin = pluginClass.newInstance();
-            } catch (IllegalAccessException ex) {
-                throw new Exception("No public constructor", ex);
-            } catch (InstantiationException ex) {
-                throw new Exception("Abnormal plugin type", ex);
+            } catch (IllegalAccessException e) {
+                throw new Exception("No public constructor found", e);
+            } catch (InstantiationException e) {
+                throw new Exception("Abnormal plugin type", e);
             }
         }
 
