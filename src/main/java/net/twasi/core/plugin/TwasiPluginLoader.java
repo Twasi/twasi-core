@@ -1,27 +1,19 @@
 package net.twasi.core.plugin;
 
-import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
-import java.util.Map;
 
 final public class TwasiPluginLoader extends URLClassLoader {
-        private final Map<String, Class<?>> classes = new HashMap<String, Class<?>>();
-        private final File file;
         final TwasiPlugin plugin;
-        private TwasiPlugin pluginInit;
-        private IllegalStateException pluginState;
 
-        TwasiPluginLoader(final ClassLoader parent, final File file) throws Exception, MalformedURLException {
+        TwasiPluginLoader(final ClassLoader parent, final File file) throws Exception {
             super(new URL[]{file.toURI().toURL()}, parent);
-            this.file = file;
 
             // Check for plugin.yml
             URL infoYamlUrl = this.getResource("plugin.yml");
@@ -47,14 +39,14 @@ final public class TwasiPluginLoader extends URLClassLoader {
                 try {
                     pluginClass = jarClass.asSubclass(TwasiPlugin.class);
                 } catch (ClassCastException ex) {
-                    throw new Exception("main class `" + main + "' does not extend TwasiPlugin", ex);
+                    throw new Exception("Main class `" + main + "' does not extend TwasiPlugin", ex);
                 }
 
                 plugin = pluginClass.newInstance();
-            } catch (IllegalAccessException ex) {
-                throw new Exception("No public constructor", ex);
-            } catch (InstantiationException ex) {
-                throw new Exception("Abnormal plugin type", ex);
+            } catch (IllegalAccessException e) {
+                throw new Exception("No public constructor found", e);
+            } catch (InstantiationException e) {
+                throw new Exception("Abnormal plugin type", e);
             }
         }
 

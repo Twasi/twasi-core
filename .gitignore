@@ -30,4 +30,7 @@ hs_err_pid*
 
 # Twasi
 plugins
+interfaces
 twasi.yml
+*.iml
+.idea/
