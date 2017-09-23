@@ -1,3 +1,14 @@
 language: java
+sudo: required
+
+services:
+  - docker
+
+before_install:
+- docker pull maven
+- docker run maven
+#- docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
+#- docker ps -a
+#- docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
 
 script: mvn clean compile assembly:single
