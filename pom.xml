@@ -35,7 +35,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
-                    <imageName>twasi-core</imageName>
+                    <imageName>twasi/twasi-core</imageName>
                     <baseImage>java</baseImage>
                     <entryPoint>["java", "-jar", "/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
                     <!-- copy the service's jar file from target into the root directory of the image -->
