@@ -7,9 +7,9 @@ services:
 jobs:
   include:
     - stage: build
-      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
-    - stage: deploy
       script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build"
+    - stage: deploy
+      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
 
 stages:
   - build
