@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <servers>
+        <server>
+            <id>docker-hub</id>
+            <username>${env.DOCKERHUB_USERNAME}</username>
+            <password>${env.DOCKERHUB_PASSWORD}</password>
+            <configuration>
+                <email>${env.DOCKERHUB_EMAIL}</email>
+            </configuration>
+        </server>
+    </servers>
+</settings>

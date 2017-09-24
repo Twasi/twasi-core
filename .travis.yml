@@ -4,4 +4,15 @@ sudo: required
 services:
   - docker
 
-script: mvn clean compile assembly:single docker:build
+jobs:
+  include:
+    - stage: build
+      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
+    - stage: deploy
+      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build"
+
+stages:
+  - build
+  - name: deploy
+    if: branch = master
+
