@@ -43,7 +43,7 @@
                         <resource>
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
+                            <include>${project.build.finalName}-jar-with-dependencies.jar</include>
                         </resource>
                     </resources>
                 </configuration>
