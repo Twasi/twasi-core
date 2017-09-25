@@ -10,7 +10,7 @@ public class CommandLineInterface {
         Scanner scanner = new Scanner(System.in);
         TwasiLogger.log.info("Started Twasi CLI. Use /help for a list of commands.");
 
-        do {
+        while(scanner.hasNextLine()) {
             System.out.print("> ");
             String input = scanner.nextLine();
 
@@ -25,7 +25,7 @@ public class CommandLineInterface {
                 default:
                     System.out.println("Command not found. Use /help for help.");
             }
-        } while (true);
+        };
     }
 
 }
