@@ -5,6 +5,7 @@ import net.twasi.core.config.Config;
 import net.twasi.core.interfaces.Interface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.Plugin;
+import net.twasi.core.webinterface.WebInterfaceApp;
 
 public class Main {
 
@@ -28,6 +29,7 @@ public class Main {
         double longTime = time / 1000;
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
 
+        WebInterfaceApp.start();
         cli.start();
     }
 
