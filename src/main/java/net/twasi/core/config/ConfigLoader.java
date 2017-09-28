@@ -20,11 +20,11 @@ class ConfigLoader {
                 writer.println("# This is the default Twasi configuration.\n");
                 writer.println("# The default database connection");
                 writer.println("database:");
-                writer.println("  type: MySQL");
+                writer.println("  type: MongoDB");
                 writer.println("  hostname: localhost");
                 writer.println("  user: root");
                 writer.println("  password: Ultr4S4f3p455w0rd");
-                writer.println("  database: TwasiDB");
+                writer.println("  database: twasidb");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {
