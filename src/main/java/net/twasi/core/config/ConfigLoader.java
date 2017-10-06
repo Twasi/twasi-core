@@ -20,11 +20,16 @@ class ConfigLoader {
                 writer.println("# This is the default Twasi configuration.\n");
                 writer.println("# The default database connection");
                 writer.println("database:");
-                writer.println("  type: MongoDB");
+                writer.println("  type: MongoDB # Only type that is supported");
                 writer.println("  hostname: localhost");
                 writer.println("  user: root");
                 writer.println("  password: Ultr4S4f3p455w0rd");
                 writer.println("  database: twasidb");
+                writer.println("twitch:");
+                writer.println("  hostname: irc.twitch.tv");
+                writer.println("  port: 6667");
+                writer.println("  defaultName: Twasibot");
+                writer.println("  defaultToken: oauth:OAuthToken");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

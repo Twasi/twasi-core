@@ -26,9 +26,9 @@ public class DatabaseTest {
     @Test
     public void saveUserTest() {
 
-        //User user = new User("test.user@domain.com");
-        //user.setTwitchAccount(new TwitchAccount("Larcce", "OAuth"));
-        //Database.getStore().save(user);
+        User user = new User("test.user@domain.com");
+        user.setTwitchAccount(new TwitchAccount("Larcce", "OAuth"));
+        Database.getStore().save(user);
 
         List users = Database.getStore().createQuery(User.class).asList();
         System.out.println(Database.getMorphia().toDBObject(users.get(0)).toString());

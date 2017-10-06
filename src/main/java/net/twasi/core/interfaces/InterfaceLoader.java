@@ -1,16 +1,14 @@
 package net.twasi.core.interfaces;
 
 import net.twasi.core.interfaces.twitch.TwitchInterface;
+import net.twasi.core.models.Streamer;
 
 class InterfaceLoader {
 
-    TwitchInterface twitch;
-
     public InterfaceLoader() {
-        twitch = new TwitchInterface();
     }
 
-    public TwitchInterface getTwitch() {
-        return twitch;
+    public TwitchInterface createNewTwitch(Streamer streamer) {
+        return new TwitchInterface(streamer);
     }
 }
