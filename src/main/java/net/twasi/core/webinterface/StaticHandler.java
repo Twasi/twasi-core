@@ -14,7 +14,6 @@ public class StaticHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         String root = "./dashboard";
         URI uri = t.getRequestURI();
-        System.out.println("looking for: "+ root + uri.getPath());
         String path = uri.getPath();
         File file = new File(root + path).getCanonicalFile();
 

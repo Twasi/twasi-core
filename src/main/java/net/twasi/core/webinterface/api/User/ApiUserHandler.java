@@ -16,7 +16,6 @@ public class ApiUserHandler implements HttpHandler {
     UserPost post = new UserPost();
 
     public void handle(HttpExchange t) throws IOException {
-        System.out.println("Handling");
 
         Document response;
         OutputStream os = t.getResponseBody();

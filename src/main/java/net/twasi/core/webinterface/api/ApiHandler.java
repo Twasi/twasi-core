@@ -10,7 +10,6 @@ import java.net.URI;
 public class ApiHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
         URI uri = t.getRequestURI();
-        System.out.println("api call for: "+ uri.getPath());
 
         // Object does not exist or is not a file: reject with 404 error.
         String response = "{\"status\":[{\"component\":\"Twasi-Core\",\"description\":\"Twasi Main program\",\"status\":false}]}\n";

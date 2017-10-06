@@ -19,10 +19,8 @@ public class UserGet implements ApiEndpoint {
         List users = Database.getStore().createQuery(User.class).asList();
         //System.out.println(users);
         Gson gson = new Gson();
-        System.out.println(Database.getMorphia().toDBObject(users).toString());
 
         List<DBObject> mapped = (List<DBObject>) users.stream().map(e -> Database.getMorphia().toDBObject(e)).collect(Collectors.toList());
-        System.out.println(mapped);
 
         return new Document("status", true){{
             append("users", mapped);
