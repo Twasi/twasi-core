@@ -8,8 +8,8 @@ import org.mongodb.morphia.annotations.Id;
 public class User {
     @Id
     private ObjectId id;
-
     private String email;
+    private TwitchAccount twitchAccount;
 
     public User(String email) {
         this.email = email;
@@ -31,5 +31,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public TwitchAccount getTwitchAccount() {
+        return twitchAccount;
+    }
+
+    public void setTwitchAccount(TwitchAccount twitchAccount) {
+        this.twitchAccount = twitchAccount;
     }
 }

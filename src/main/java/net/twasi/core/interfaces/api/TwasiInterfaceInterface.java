@@ -5,13 +5,13 @@ import net.twasi.core.models.Streamer;
 public interface TwasiInterfaceInterface {
 
     void onEnable();
-    void onDIsable();
+    void onDisable();
 
     boolean connect();
 
     boolean disconnect();
 
-    boolean join(Streamer user);
+    boolean join(Streamer streamer);
 
     CommunicationHandlerInterface getCommunicationHandler();
 

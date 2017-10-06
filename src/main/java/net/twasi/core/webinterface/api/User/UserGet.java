@@ -1,6 +1,5 @@
 package net.twasi.core.webinterface.api.User;
 
-import com.google.gson.Gson;
 import com.mongodb.DBObject;
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.Database;
@@ -17,8 +16,6 @@ public class UserGet implements ApiEndpoint {
     public Document getResponse(HttpExchange exchange) {
 
         List users = Database.getStore().createQuery(User.class).asList();
-        //System.out.println(users);
-        Gson gson = new Gson();
 
         List<DBObject> mapped = (List<DBObject>) users.stream().map(e -> Database.getMorphia().toDBObject(e)).collect(Collectors.toList());
 

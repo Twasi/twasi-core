@@ -1,11 +1,13 @@
 package net.twasi.core.database;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseTest {
@@ -25,9 +27,11 @@ public class DatabaseTest {
     public void saveUserTest() {
 
         //User user = new User("test.user@domain.com");
+        //user.setTwitchAccount(new TwitchAccount("Larcce", "OAuth"));
         //Database.getStore().save(user);
 
         List users = Database.getStore().createQuery(User.class).asList();
+        System.out.println(Database.getMorphia().toDBObject(users.get(0)).toString());
 
         // assert statements
         //assertEquals("Creates User in Database", 0, Database.getStore().save(user));
