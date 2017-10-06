@@ -29,8 +29,8 @@ target/
 hs_err_pid*
 
 # Twasi
-plugins
-interfaces
+/plugins
+/interfaces
 twasi.yml
 *.iml
 .idea/
