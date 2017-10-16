@@ -1,6 +1,6 @@
 package net.twasi.core.interfaces;
 
-import net.twasi.core.database.Database;
+import net.twasi.core.database.UserStore;
 import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
 import net.twasi.core.logger.TwasiLogger;
@@ -8,14 +8,20 @@ import net.twasi.core.models.Streamer;
 
 import java.util.List;
 
+/**
+ * Static class that loads twitch interfaces and joins channels
+ */
 public class Interface {
 
     static InterfaceLoader loader;
 
+    /**
+     * Starts the InterfaceLoader and join all already existing channels.
+     */
     public static void load() {
         loader = new InterfaceLoader();
 
-        List<User> users = Database.getStore().createQuery(User.class).asList();
+        List<User> users = UserStore.getUsers();
 
         // Join existing channels (after restart)
         TwasiLogger.log.info("Joining Twitch channels...");
@@ -31,5 +37,4 @@ public class Interface {
         }
         TwasiLogger.log.info(success + " Twitch channels joined. (" + failed + " failed)");
     }
-
 }
