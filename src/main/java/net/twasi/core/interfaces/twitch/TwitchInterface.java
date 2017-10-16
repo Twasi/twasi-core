@@ -44,7 +44,7 @@ public class TwitchInterface extends TwasiInterface {
 
     @Override
     public boolean connect() {
-        TwasiLogger.log.info("Connecting to Twitch IRC");
+        TwasiLogger.log.debug("Connecting to Twitch IRC");
         try {
             socket = new Socket(Config.catalog.twitch.hostname, Config.catalog.twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -59,7 +59,7 @@ public class TwitchInterface extends TwasiInterface {
             String line = "";
             while ((line = this.reader.readLine()) != null) {
                 if (line.contains("004")) {
-                    TwasiLogger.log.debug("Connected: " + streamer.getUser().getTwitchAccount().getUserName() + " ~ irc.twitch.tv");
+                    TwasiLogger.log.debug("Connected: " + streamer.getUser().getTwitchAccount().getUserName() + " to " + Config.catalog.twitch.hostname + ":" + Config.catalog.twitch.port + "(Account: " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + ")");
                     break;
                 } else {
                     TwasiLogger.log.debug(line);

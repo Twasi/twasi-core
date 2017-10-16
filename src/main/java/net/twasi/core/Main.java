@@ -23,7 +23,7 @@ public class Main {
         TwasiLogger.log.info("Connecting to database " + Config.catalog.database.hostname);
         Database.connect();
 
-        TwasiLogger.log.debug("Loading interfaces");
+        TwasiLogger.log.debug("Loading interfaces and joining active channels");
         Interface.load();
 
         TwasiLogger.log.debug("Loading plugins");
