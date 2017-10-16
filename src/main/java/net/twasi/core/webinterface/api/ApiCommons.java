@@ -5,10 +5,11 @@ import org.bson.Document;
 
 public class ApiCommons {
 
-    public static Document UnallowedMethod = new Document() {{
-        append("success", false);
-        append("message", "Unknown or unhandled Method");
-    }};
+    public static Document getUnallowedMethod() {
+        Document doc = new Document("success", false);
+        doc.append("message", "Unknown or unhandled method");
+        return doc;
+    };
 
     public static void setReponseHeaders(HttpExchange t) {
         t.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
