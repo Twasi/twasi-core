@@ -4,12 +4,22 @@ sudo: required
 services:
   - docker
 
+addons:
+  sonarcloud:
+    organization: "twasi"
+    token:
+      secure: "SONAR_TOKEN"
+
 jobs:
   include:
     - stage: build
-      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build"
+      script:
+        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build"
+        - sonar-scanner
     - stage: deploy
-      script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
+      script:
+        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
+        - sonar-scanner
 
 stages:
   - build
