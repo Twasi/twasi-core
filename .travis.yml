@@ -7,8 +7,6 @@ services:
 addons:
   sonarcloud:
     organization: "twasi"
-    token:
-      secure: "SONAR_TOKEN"
 
 jobs:
   include:
