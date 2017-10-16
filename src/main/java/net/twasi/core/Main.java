@@ -29,7 +29,7 @@ public class Main {
         TwasiLogger.log.debug("Loading plugins");
         Plugin.load();
 
-        float time = System.currentTimeMillis() - start;
+        float time = (float) (System.currentTimeMillis() - start);
         double longTime = time / 1000;
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
 

@@ -11,6 +11,9 @@ import java.io.OutputStream;
 import java.net.URI;
 
 public class StaticHandler implements HttpHandler {
+
+    FileInputStream fs = null;
+
     public void handle(HttpExchange t) throws IOException {
         String root = "./dashboard";
         URI uri = t.getRequestURI();
@@ -28,7 +31,7 @@ public class StaticHandler implements HttpHandler {
             t.sendResponseHeaders(200, 0);
 
             OutputStream os = t.getResponseBody();
-            FileInputStream fs = new FileInputStream(file);
+            fs = new FileInputStream(file);
             final byte[] buffer = new byte[0x10000];
             int count = 0;
             while ((count = fs.read(buffer)) >= 0) {
@@ -46,7 +49,7 @@ public class StaticHandler implements HttpHandler {
                 t.sendResponseHeaders(200, 0);
 
                 OutputStream os = t.getResponseBody();
-                FileInputStream fs = new FileInputStream(index);
+                fs = new FileInputStream(index);
                 final byte[] buffer = new byte[0x10000];
                 int count = 0;
                 while ((count = fs.read(buffer)) >= 0) {

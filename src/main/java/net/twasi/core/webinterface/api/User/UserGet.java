@@ -7,7 +7,6 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.webinterface.api.ApiEndpoint;
 import org.bson.Document;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +18,9 @@ public class UserGet implements ApiEndpoint {
 
         List<DBObject> mapped = (List<DBObject>) users.stream().map(e -> Database.getMorphia().toDBObject(e)).collect(Collectors.toList());
 
-        return new Document("status", true){{
-            append("users", mapped);
-            append("num", 0);
-        }};
+        Document doc = new Document("status", true);
+        doc.append("users", mapped);
+        doc.append("num", 0);
+        return doc;
     }
 }

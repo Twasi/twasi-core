@@ -31,8 +31,10 @@ class PluginLoader {
             try {
                 TwasiPluginLoader urlCl = new TwasiPluginLoader(System.class.getClassLoader(), plugin);
                 loadedPlugins.add(urlCl.plugin);
+                urlCl.close();
             } catch (Exception e) {
                 TwasiLogger.log.error(e);
+            } finally {
             }
         }
         TwasiLogger.log.info(loadedPlugins.size() + " plugin(s) loaded.");

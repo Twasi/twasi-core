@@ -25,7 +25,7 @@ public class ApiUserHandler implements HttpHandler {
                 response = get.getResponse(t);
                 break;
             default:
-                response = ApiCommons.UnallowedMethod;
+                response = ApiCommons.getUnallowedMethod();
         }
 
         String resp = response.toJson(new JsonWriterSettings(JsonMode.STRICT, true));
