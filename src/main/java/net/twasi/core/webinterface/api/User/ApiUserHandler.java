@@ -35,6 +35,5 @@ public class ApiUserHandler implements HttpHandler {
         t.sendResponseHeaders(200, resp.length());
         os.write(resp.getBytes());
         os.close();
-
     }
 }

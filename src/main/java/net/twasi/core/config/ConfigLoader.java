@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import net.twasi.core.config.ConfigCatalog.ConfigCatalog;
 import net.twasi.core.logger.TwasiLogger;
+import org.apache.log4j.Level;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,8 @@ class ConfigLoader {
                 writer.println("  port: 6667");
                 writer.println("  defaultName: Twasibot");
                 writer.println("  defaultToken: oauth:OAuthToken");
+                writer.println("log:");
+                writer.println("  level: ALL");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {
@@ -46,7 +49,11 @@ class ConfigLoader {
             TwasiLogger.log.error("Cannot parse config file: " + e.getMessage());
         }
 
-        TwasiLogger.log.info("Config file loaded");
+        TwasiLogger.log.debug("Config file loaded");
+
+        // Apply logger level
+        TwasiLogger.setLogLevel(Level.toLevel(configCatalog.log.level));
+        System.out.println("Loglevel set to " + configCatalog.log.level);
     }
 
 }
