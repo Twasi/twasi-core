@@ -41,4 +41,8 @@ public class TwitchAccount {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String getChannel() {
+        return "#" + this.userName;
+    }
 }

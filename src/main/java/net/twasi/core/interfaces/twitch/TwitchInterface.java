@@ -8,25 +8,39 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message;
 import net.twasi.core.models.Streamer;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class TwitchInterface extends TwasiInterface {
 
-    CommunicationHandler handler = new CommunicationHandler() {
+    private CommunicationHandler handler = new CommunicationHandler() {
         @Override
         public boolean sendMessage(Message message) {
-            return false;
+            try {
+                writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message.getMessage());
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        public Message readMessage() {
+            try {
+                String line = reader.readLine();
+                return new Message(line);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     };
-    Streamer streamer;
+    private Streamer streamer;
 
-    Socket socket;
-    BufferedWriter writer;
-    BufferedReader reader;
+    private Socket socket;
+    private BufferedWriter writer;
+    private BufferedReader reader;
 
     public TwitchInterface(Streamer streamer) {
         this.streamer = streamer;
@@ -98,5 +112,9 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public CommunicationHandlerInterface getCommunicationHandler() {
         return handler;
+    }
+
+    private void onMessage(String message) {
+
     }
 }

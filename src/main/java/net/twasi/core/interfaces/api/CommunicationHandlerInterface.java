@@ -6,4 +6,6 @@ public interface CommunicationHandlerInterface {
 
     boolean sendMessage(Message message);
 
+    Message readMessage();
+
 }
