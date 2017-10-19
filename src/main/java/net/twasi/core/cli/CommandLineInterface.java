@@ -17,11 +17,17 @@ public class CommandLineInterface {
             switch (input) {
                 case "/help":
                     System.out.println("Available commands:\n" +
-                            "/help: Show all commands");
+                            "/help: Show all commands\n" + "" +
+                            "/loglevel: Show loglevel\n");
                     break;
+
                 case "/version":
                     System.out.println("Not implemented");
                     break;
+
+                case "/loglevel":
+                    System.out.println("Loglevel: " + TwasiLogger.log.getLevel().toString());
+
                 default:
                     System.out.println("Command not found. Use /help for help.");
             }
