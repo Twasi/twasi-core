@@ -2,6 +2,7 @@ package net.twasi.core.database;
 
 import com.mongodb.MongoClient;
 import net.twasi.core.config.Config;
+import net.twasi.core.config.ConfigCatalog.ConfigCatalog;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -23,7 +24,7 @@ public class Database {
         morphia.mapPackage("net.twasi.database.models");
 
         // create the Datastore connecting to the default port on the local host
-        store = morphia.createDatastore(new MongoClient(), Config.catalog.database.database);
+        store = morphia.createDatastore(new MongoClient(Config.catalog.database.hostname, Config.catalog.database.port), Config.catalog.database.database);
         store.ensureIndexes();
 
         UserStore.loadUsers();

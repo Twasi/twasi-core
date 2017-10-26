@@ -26,6 +26,7 @@ class ConfigLoader {
                 writer.println("  user: root");
                 writer.println("  password: Ultr4S4f3p455w0rd");
                 writer.println("  database: twasidb");
+                writer.println("  port: 27017");
                 writer.println("twitch:");
                 writer.println("  hostname: irc.twitch.tv");
                 writer.println("  port: 6667");

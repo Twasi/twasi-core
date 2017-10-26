@@ -6,4 +6,5 @@ public class DatabaseConfig {
     public String user;
     public String password;
     public String database;
+    public int port;
 }
