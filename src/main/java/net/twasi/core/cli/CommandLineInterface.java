@@ -27,6 +27,7 @@ public class CommandLineInterface {
 
                 case "/loglevel":
                     System.out.println("Loglevel: " + TwasiLogger.log.getLevel().toString());
+                    break;
 
                 default:
                     System.out.println("Command not found. Use /help for help.");
