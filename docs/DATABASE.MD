@@ -12,7 +12,7 @@ use admin
 db.createUser({user: "root", pwd: "s3cur3p4ssw0rd", roles:["root"]})
 ```
 - Stop the database and start it with authorization enabled (provide the "--auth" parameter or set authorization to true if using a config file)
-- Now you should be able to login using user "root" and your password an algorithm SCRAM-SHA1
+- Now you should be able to login using user "root" and your password and algorithm SCRAM-SHA1
 
 ## Creating an account for Twasi
 Next you have to create an account for Twasi to access your database. You could use root, but root is bad and Twasi isn't. It's a better security practice to create an own account.
@@ -24,4 +24,4 @@ use twasidb
 db.createUser({user: "twasi", pwd: "anothers3cur3p4ssw0rd", roles:["readWrite"]})
 ```
 
-Now the account should be created. You can now fill in the information into the twasi.yml config file.
+Now the account should be created. You can now fill in the information into the twasi.yml config file. No further installation or setup has to be done - Collections are created automatically on data insert.
