@@ -23,7 +23,8 @@ class ConfigLoader {
                 writer.println("database:");
                 writer.println("  type: MongoDB # Only type that is supported");
                 writer.println("  hostname: localhost");
-                writer.println("  user: root");
+                writer.println("  port: 27017");
+                writer.println("  user: twasi");
                 writer.println("  password: Ultr4S4f3p455w0rd");
                 writer.println("  database: twasidb");
                 writer.println("twitch:");
