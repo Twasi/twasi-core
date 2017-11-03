@@ -5,6 +5,7 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Streamer;
+import net.twasi.core.services.InstanceManagerService;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class Interface {
 
-    static InterfaceLoader loader;
+    private static InterfaceLoader loader;
 
     /**
      * Starts the InterfaceLoader and join all already existing channels.
@@ -31,6 +32,7 @@ public class Interface {
             TwitchInterface bot = loader.createNewTwitch(new Streamer(user));
             if (bot.connect()) {
                 success++;
+                InstanceManagerService.getService().registerInterface(bot);
             } else {
                 failed++;
             }
