@@ -24,6 +24,9 @@ public class ApiUserHandler implements HttpHandler {
             case "get":
                 response = get.getResponse(t);
                 break;
+            case "post":
+                response = post.getResponse(t);
+                break;
             default:
                 response = ApiCommons.getUnallowedMethod();
         }
