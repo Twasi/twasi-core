@@ -33,6 +33,9 @@ class ConfigLoader {
                 writer.println("  port: 6667");
                 writer.println("  defaultName: Twasibot");
                 writer.println("  defaultToken: oauth:OAuthToken");
+                writer.println("  clientId: TWITCH_CLIENTID");
+                writer.println("  clientSecret: TWITCH_SECRET");
+                writer.println("  redirectUri: http://localhost:8000/auth/callback");
                 writer.println("log:");
                 writer.println("  level: ALL");
                 writer.close();
