@@ -1,15 +1,22 @@
 package net.twasi.core.webinterface.session;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.Database;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.store.UserStore;
 import net.twasi.core.logger.TwasiLogger;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 
 public class JWTManager {
 
@@ -21,7 +28,7 @@ public class JWTManager {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             token = JWT.create()
-                    .withIssuer("Twasi JWT Service")
+                    .withIssuer(Config.catalog.auth.issuer)
                     .withIssuedAt(new Date())
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
@@ -45,6 +52,41 @@ public class JWTManager {
         String randomString = sb.toString();
 
         return DatatypeConverter.printBase64Binary(randomString.getBytes());
+    }
+
+    public boolean isValidToken(String jwt) {
+        String userId;
+
+        // First read out User of token. This has to be done before verification
+        // because every user has another secret.
+        try {
+            DecodedJWT decodedJWT = JWT.decode(jwt);
+            userId = decodedJWT.getClaim("twitchid").asString();
+        } catch (JWTDecodeException exception){
+            TwasiLogger.log.info(exception);
+            return false;
+        }
+
+        User user = UserStore.getById(userId);
+
+        if (user == null) {
+            return false;
+        }
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(user.getJWTSecret());
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(Config.catalog.auth.issuer)
+                    .build(); //Reusable verifier instance
+            DecodedJWT decodedJWT = verifier.verify(jwt);
+            return true;
+        } catch (UnsupportedEncodingException exception) {
+            TwasiLogger.log.error(exception);
+            return false;
+        } catch (JWTVerificationException exception) {
+            TwasiLogger.log.debug(exception);
+            return false;
+        }
     }
 
 }

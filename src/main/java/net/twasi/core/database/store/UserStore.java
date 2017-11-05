@@ -52,4 +52,12 @@ public class UserStore {
         return users.get(0);
     }
 
+    public static User getById(String twitchid) {
+        List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", twitchid).asList();
+        if (users.size() == 0) {
+            return null;
+        }
+        return users.get(0);
+    }
+
 }

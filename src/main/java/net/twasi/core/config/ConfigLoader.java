@@ -40,7 +40,7 @@ class ConfigLoader {
                 writer.println("log:");
                 writer.println("  level: ALL");
                 writer.println("auth:");
-                writer.println("  secret: SECURE_SECRET_FOR_JWT");
+                writer.println("  issuer: Twasi");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {
