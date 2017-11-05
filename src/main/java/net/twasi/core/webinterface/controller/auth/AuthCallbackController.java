@@ -7,7 +7,7 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.services.JWTService;
 import net.twasi.core.services.TwitchAPIService;
 import net.twasi.core.webinterface.dto.auth.AccessTokenDTO;
-import net.twasi.core.webinterface.dto.auth.TokenInfoDTO;
+import net.twasi.core.webinterface.dto.auth.CallbackResponseDTO;
 import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 
@@ -23,6 +23,8 @@ public class AuthCallbackController extends RequestHandler {
         User user = UserStore.getOrCreate(account);
         String token = JWTService.getService().createNewToken(user);
 
-        // Commons.writeString(t, "Your Access Token: " + accessToken.getAccessToken(), 200);
+        CallbackResponseDTO response = new CallbackResponseDTO(token);
+
+        Commons.writeDTO(t, response, 200);
     }
 }

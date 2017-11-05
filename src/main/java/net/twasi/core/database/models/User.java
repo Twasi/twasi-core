@@ -14,6 +14,7 @@ public class User {
     private ObjectId id;
     private TwitchAccount twitchAccount;
     private TwitchAccount twitchBotAccount;
+    private String JWTSecret;
 
     public User() {};
 
@@ -47,5 +48,13 @@ public class User {
 
     public void setTwitchBotAccount(TwitchAccount twitchBotAccount) {
         this.twitchBotAccount = twitchBotAccount;
+    }
+
+    public String getJWTSecret() {
+        return JWTSecret;
+    }
+
+    public void setJWTSecret(String JWTSecret) {
+        this.JWTSecret = JWTSecret;
     }
 }
