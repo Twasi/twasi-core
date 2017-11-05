@@ -5,4 +5,5 @@ public class ConfigCatalog {
     public TwitchCatalog twitch;
     public LogCatalog log;
     public WebInterfaceConfig webinterface;
+    public AuthCatalog auth;
 }

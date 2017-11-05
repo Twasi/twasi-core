@@ -5,6 +5,7 @@ public class TwitchCatalog {
     public int port;
     public String defaultName;
     public String defaultToken;
+    public String defaultUserId;
     public String clientId;
     public String clientSecret;
     public String redirectUri;

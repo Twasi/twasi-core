@@ -1,6 +1,6 @@
 package net.twasi.core.interfaces;
 
-import net.twasi.core.database.UserStore;
+import net.twasi.core.database.store.UserStore;
 import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
 import net.twasi.core.logger.TwasiLogger;

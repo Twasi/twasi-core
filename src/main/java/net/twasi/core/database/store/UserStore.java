@@ -1,5 +1,7 @@
-package net.twasi.core.database;
+package net.twasi.core.database.store;
 
+import net.twasi.core.database.Database;
+import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 
@@ -15,7 +17,7 @@ public class UserStore {
     /**
      * Loads all users from the database
      */
-    static void loadUsers() {
+    public static void loadUsers() {
         TwasiLogger.log.debug("Loading users from database");
         users = Database.getStore().createQuery(User.class).asList();
     }
@@ -33,6 +35,21 @@ public class UserStore {
      */
     public static List<User> getUsers() {
         return users;
+    }
+
+    /**
+     * Returns a user by TwitchID
+     */
+    public static User getOrCreate(TwitchAccount account) {
+        List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
+        if (users.size() == 0) {
+            // User not registered.
+            User user = new User();
+            user.setTwitchAccount(account);
+            Database.getStore().save(user);
+            return user;
+        }
+        return users.get(0);
     }
 
 }

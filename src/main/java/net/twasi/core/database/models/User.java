@@ -8,17 +8,12 @@ import org.mongodb.morphia.annotations.Id;
 @Entity("users")
 public class User {
 
-    private static TwitchAccount defaultAccount = new TwitchAccount(Config.catalog.twitch.defaultName, Config.catalog.twitch.defaultToken);
+    private static TwitchAccount defaultAccount = new TwitchAccount(Config.catalog.twitch.defaultName, new AccessToken(Config.catalog.twitch.defaultToken), Config.catalog.twitch.defaultUserId);
 
     @Id
     private ObjectId id;
-    private String email;
     private TwitchAccount twitchAccount;
     private TwitchAccount twitchBotAccount;
-
-    public User(String email) {
-        this.email = email;
-    }
 
     public User() {};
 
@@ -28,14 +23,6 @@ public class User {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public TwitchAccount getTwitchAccount() {

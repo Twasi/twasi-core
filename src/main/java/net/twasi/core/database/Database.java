@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import net.twasi.core.config.Config;
+import net.twasi.core.database.store.UserStore;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

@@ -1,6 +1,7 @@
 package net.twasi.core.database;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import org.junit.AfterClass;
@@ -25,8 +26,8 @@ public class DatabaseTest {
     @Test
     public void saveUserTest() {
 
-        User user = new User("test.user@domain.com");
-        user.setTwitchAccount(new TwitchAccount("Larcce", "OAuth"));
+        User user = new User();
+        user.setTwitchAccount(new TwitchAccount("Larcce", new AccessToken("OAuth"), "0"));
         Database.getStore().save(user);
 
         List users = Database.getStore().createQuery(User.class).asList();

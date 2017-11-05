@@ -33,11 +33,14 @@ class ConfigLoader {
                 writer.println("  port: 6667");
                 writer.println("  defaultName: Twasibot");
                 writer.println("  defaultToken: oauth:OAuthToken");
+                writer.println("  defaultUserId: TWITCHID");
                 writer.println("  clientId: TWITCH_CLIENTID");
                 writer.println("  clientSecret: TWITCH_SECRET");
                 writer.println("  redirectUri: http://localhost:8000/auth/callback");
                 writer.println("log:");
                 writer.println("  level: ALL");
+                writer.println("auth:");
+                writer.println("  secret: SECURE_SECRET_FOR_JWT");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

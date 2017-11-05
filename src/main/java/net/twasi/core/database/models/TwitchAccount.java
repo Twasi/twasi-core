@@ -9,13 +9,15 @@ public class TwitchAccount {
     @Id
     private ObjectId id;
     private String userName;
-    private String token;
+    private AccessToken token;
+    private String twitchId;
 
     public TwitchAccount() {}
 
-    public TwitchAccount(String userName, String token) {
+    public TwitchAccount(String userName, AccessToken token, String twitchId) {
         this.userName = userName;
         this.token = token;
+        this.twitchId = twitchId;
     }
 
     public ObjectId getId() {
@@ -34,15 +36,23 @@ public class TwitchAccount {
         this.userName = userName;
     }
 
-    public String getToken() {
+    public AccessToken getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(AccessToken token) {
         this.token = token;
     }
 
     public String getChannel() {
         return "#" + this.userName;
+    }
+
+    public String getTwitchId() {
+        return twitchId;
+    }
+
+    public void setTwitchId(String twitchId) {
+        this.twitchId = twitchId;
     }
 }
