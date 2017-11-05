@@ -4,17 +4,19 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.webinterface.dto.ApiDTO;
+import net.twasi.core.webinterface.dto.error.BadRequestDTO;
 import net.twasi.core.webinterface.dto.error.UnallowedMethodDTO;
 import org.bson.Document;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 public class Commons {
 
     public static void handleUnallowedMethod(HttpExchange t) {
-        writeDTO(t, new UnallowedMethodDTO(false), 405);
+        writeDTO(t, new UnallowedMethodDTO(), 405);
     };
 
     public static void writeString(HttpExchange t, String s, int code) {
@@ -49,8 +51,23 @@ public class Commons {
     }
 
     public static void handleBadRequest(HttpExchange t) {
-        Document doc = new Document("success", false);
-        doc.append("message", "Bad request. Please check submitted data.");
-        writeString(t, doc.toJson(), 400);
+        writeDTO(t, new BadRequestDTO(), 400);
+    }
+
+    public static HashMap<String, String> parseQueryParams(HttpExchange t) {
+        HashMap<String, String> params = new HashMap<>();
+        String queryString = t.getRequestURI().getQuery();
+        String[] pairs = queryString.split("&");
+
+        for (String str : pairs) {
+            String[] splittedString = str.split("=", 2);
+            if (splittedString.length != 2) {
+                params.put(splittedString[0], "");
+                continue;
+            }
+
+            params.put(splittedString[0], splittedString[1]);
+        }
+        return params;
     }
 }
