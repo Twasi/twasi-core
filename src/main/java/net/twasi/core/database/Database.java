@@ -5,8 +5,10 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.store.UserStore;
+import net.twasi.core.logger.TwasiLoggerFactory;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.logging.MorphiaLoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -17,13 +19,20 @@ import java.util.List;
  */
 public class Database {
 
-    public static Morphia morphia = new Morphia();
+    private static Morphia morphia;
     private static Datastore store;
 
     /**
      * Connect to the database and map Model-Classes
      */
     public static void connect() {
+        // Apply custom logger
+        MorphiaLoggerFactory.registerLogger(TwasiLoggerFactory.class);
+        // Disable Mongo Debugging
+        System.setProperty("DEBUG.MONGO", "false");
+
+        morphia = new Morphia();
+
         // tell Morphia where to find your classes
         // can be called multiple times with different packages or classes
         morphia.mapPackage("net.twasi.database.models");
