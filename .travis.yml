@@ -15,10 +15,10 @@ jobs:
         - "mvn jacoco:prepare-agent surefire:test jacoco:report sonar:sonar"
     - stage: build
       script:
-        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile sonar:sonar assembly:single docker:build"
+        - "mvn clean compile assembly:single"
     - stage: deploy
       script:
-        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile sonar:sonar assembly:single docker:build -DpushImage"
+        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
 
 stages:
   - tests
