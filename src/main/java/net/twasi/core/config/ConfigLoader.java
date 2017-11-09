@@ -41,6 +41,8 @@ class ConfigLoader {
                 writer.println("  level: ALL");
                 writer.println("auth:");
                 writer.println("  issuer: Twasi");
+                writer.println("webinterface:");
+                writer.println("  port: 8000");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

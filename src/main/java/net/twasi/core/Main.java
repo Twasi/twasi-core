@@ -3,9 +3,10 @@ package net.twasi.core;
 import net.twasi.core.cli.CommandLineInterface;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.Database;
-import net.twasi.core.interfaces.Interface;
+import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.Plugin;
+import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.webinterface.WebInterfaceApp;
 
 public class Main {
@@ -24,7 +25,7 @@ public class Main {
         Database.connect();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
-        Interface.load();
+        InstanceManagerService.getService().startForAllUsers(Database.getStore().createQuery(User.class).asList());
 
         TwasiLogger.log.debug("Loading plugins");
         Plugin.load();

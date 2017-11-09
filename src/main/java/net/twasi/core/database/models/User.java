@@ -14,7 +14,10 @@ public class User {
     private ObjectId id;
     private TwitchAccount twitchAccount;
     private TwitchAccount twitchBotAccount;
+
     private String JWTSecret;
+
+    private GlobalConfig config;
 
     public User() {};
 
@@ -56,5 +59,16 @@ public class User {
 
     public void setJWTSecret(String JWTSecret) {
         this.JWTSecret = JWTSecret;
+    }
+
+    public GlobalConfig getConfig() {
+        if (config == null) {
+            return GlobalConfig.getDefault();
+        }
+        return config;
+    }
+
+    public void setConfig(GlobalConfig config) {
+        this.config = config;
     }
 }
