@@ -24,6 +24,8 @@ public class InstanceManager {
             return false;
         }
 
+        inf.connect();
+
         interfaces.add(inf);
         TwasiLogger.log.debug("Registered interface: " + inf.toString());
         return true;
@@ -44,5 +46,9 @@ public class InstanceManager {
             }
         }
         return true;
+    }
+
+    public boolean hasRegisteredInstance(User user) {
+        return interfaces.stream().anyMatch(twasiInterface -> twasiInterface.getStreamer().getUser().getId().equals(user.getId()));
     }
 }

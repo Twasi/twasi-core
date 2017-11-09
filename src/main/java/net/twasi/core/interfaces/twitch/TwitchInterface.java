@@ -1,11 +1,12 @@
 package net.twasi.core.interfaces.twitch;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.interfaces.MessageReader;
 import net.twasi.core.interfaces.api.CommunicationHandler;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Message;
+import net.twasi.core.models.Message.Message;
 import net.twasi.core.models.Streamer;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class TwitchInterface extends TwasiInterface {
         public Message readMessage() {
             try {
                 String line = reader.readLine();
-                return new Message(line);
+                return Message.parse(line);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -41,6 +42,8 @@ public class TwitchInterface extends TwasiInterface {
     private Socket socket;
     private BufferedWriter writer;
     private BufferedReader reader;
+
+    private Thread messageReader;
 
     public TwitchInterface(Streamer streamer) {
         this.streamer = streamer;
@@ -58,16 +61,16 @@ public class TwitchInterface extends TwasiInterface {
 
     @Override
     public boolean connect() {
-        TwasiLogger.log.debug("Connecting to Twitch IRC");
         try {
             socket = new Socket(Config.getCatalog().twitch.hostname, Config.getCatalog().twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            this.writer.write("PASS " + streamer.getUser().getTwitchBotAccountOrDefault().getToken() + "\r\n");
-            this.writer.write("NICK " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + "\r\n");
-            this.writer.write("CAP REQ :twitch.tv/commands \r\n");
-            this.writer.write("CAP REQ :twitch.tv/membership \r\n");
+            this.writer.write("PASS " + streamer.getUser().getTwitchBotAccountOrDefault().getToken().getAccessToken() + "\n");
+            this.writer.write("NICK " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + "\n");
+            this.writer.write("CAP REQ :twitch.tv/commands\n");
+            this.writer.write("CAP REQ :twitch.tv/membership\n");
+            this.writer.write("JOIN " + streamer.getUser().getTwitchAccount().getChannel() + "\n");
             this.writer.flush();
 
             String line = "";
@@ -76,9 +79,12 @@ public class TwitchInterface extends TwasiInterface {
                     TwasiLogger.log.debug("Connected: " + streamer.getUser().getTwitchAccount().getUserName() + " to " + Config.getCatalog().twitch.hostname + ":" + Config.getCatalog().twitch.port + " (Account: " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + ")");
                     break;
                 } else {
-                    TwasiLogger.log.debug(line);
+                    TwasiLogger.log.trace(line);
                 }
             }
+
+            this.messageReader = new Thread(new MessageReader(this));
+            this.messageReader.start();
 
             return true;
         } catch (Exception e) {
@@ -92,6 +98,7 @@ public class TwitchInterface extends TwasiInterface {
     public boolean disconnect() {
         TwasiLogger.log.info("Disconnecting from Twitch IRC");
         try {
+            this.messageReader.stop();
             writer.close();
             reader.close();
             socket.close();
@@ -114,7 +121,8 @@ public class TwitchInterface extends TwasiInterface {
         return handler;
     }
 
-    private void onMessage(String message) {
-
+    @Override
+    public Streamer getStreamer() {
+        return streamer;
     }
 }

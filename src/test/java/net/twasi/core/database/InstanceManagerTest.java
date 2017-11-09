@@ -42,6 +42,11 @@ public class InstanceManagerTest {
             public CommunicationHandlerInterface getCommunicationHandler() {
                 return null;
             }
+
+            @Override
+            public Streamer getStreamer() {
+                return null;
+            }
         };
         TwasiInterface interfaceTwo = new TwasiInterface() {
             @Override
@@ -71,6 +76,11 @@ public class InstanceManagerTest {
 
             @Override
             public CommunicationHandlerInterface getCommunicationHandler() {
+                return null;
+            }
+
+            @Override
+            public Streamer getStreamer() {
                 return null;
             }
         };

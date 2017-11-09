@@ -39,4 +39,10 @@ public interface TwasiInterfaceInterface {
      */
     CommunicationHandlerInterface getCommunicationHandler();
 
+    /**
+     * Returns the streamer this Interface is for
+     * @return streamer
+     */
+    Streamer getStreamer();
+
 }

@@ -1,11 +1,13 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.Database;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
-@Entity("globalConfigs")
 public class GlobalConfig {
-
+    @Id
+    private ObjectId id;
     private boolean isActivated;
 
     public GlobalConfig() {
