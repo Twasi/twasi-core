@@ -11,6 +11,7 @@ addons:
 jobs:
   include:
     - stage: tests
+      script:
         - "mvn surefire:test sonar:sonar"
     - stage: build
       script:
