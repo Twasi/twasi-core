@@ -10,7 +10,7 @@ addons:
 
 jobs:
   include:
-    - stage: test
+    - stage: tests
         - "mvn surefire:test sonar:sonar"
     - stage: build
       script:
@@ -20,7 +20,7 @@ jobs:
         - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile sonar:sonar assembly:single docker:build -DpushImage"
 
 stages:
-  - test
+  - tests
   - build
   - name: deploy
     if: branch = master
