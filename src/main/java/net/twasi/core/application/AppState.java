@@ -8,7 +8,7 @@ public class AppState {
     /**
      * Current state of the application
      */
-    public static ApplicationState state = ApplicationState.STARTING;
+    private static ApplicationState state = ApplicationState.STARTING;
 
     /**
      * Checks if the application is starting. If this is the case, no changes or operations should be accepted.

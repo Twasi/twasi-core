@@ -8,7 +8,7 @@ import org.mongodb.morphia.annotations.Id;
 @Entity("users")
 public class User {
 
-    private static TwitchAccount defaultAccount = new TwitchAccount(Config.catalog.twitch.defaultName, new AccessToken(Config.catalog.twitch.defaultToken), Config.catalog.twitch.defaultUserId);
+    private static TwitchAccount defaultAccount = new TwitchAccount(Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken), Config.getCatalog().twitch.defaultUserId);
 
     @Id
     private ObjectId id;

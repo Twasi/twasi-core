@@ -21,7 +21,7 @@ public class Main {
         TwasiLogger.log.debug("Reading config");
         Config.load();
 
-        TwasiLogger.log.info("Connecting to database " + Config.catalog.database.hostname);
+        TwasiLogger.log.info("Connecting to database " + Config.getCatalog().database.hostname);
         Database.connect();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");

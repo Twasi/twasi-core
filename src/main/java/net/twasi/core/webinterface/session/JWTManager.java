@@ -28,7 +28,7 @@ public class JWTManager {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             token = JWT.create()
-                    .withIssuer(Config.catalog.auth.issuer)
+                    .withIssuer(Config.getCatalog().auth.issuer)
                     .withIssuedAt(new Date())
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
@@ -76,7 +76,7 @@ public class JWTManager {
         try {
             Algorithm algorithm = Algorithm.HMAC256(user.getJWTSecret());
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(Config.catalog.auth.issuer)
+                    .withIssuer(Config.getCatalog().auth.issuer)
                     .build(); //Reusable verifier instance
             DecodedJWT decodedJWT = verifier.verify(jwt);
             return true;

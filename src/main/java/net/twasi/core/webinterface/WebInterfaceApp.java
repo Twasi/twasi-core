@@ -13,7 +13,7 @@ public class WebInterfaceApp {
         public static void start() {
             try {
                 // Create server
-                HttpServer server = HttpServer.create(new InetSocketAddress(Config.catalog.webinterface.port), 0);
+                HttpServer server = HttpServer.create(new InetSocketAddress(Config.getCatalog().webinterface.port), 0);
 
                 // Register all handlers
                 ApiRegistry.register(server);
@@ -24,7 +24,7 @@ public class WebInterfaceApp {
 
                 // Start server, show message
                 server.start();
-                TwasiLogger.log.info("Web interface started on port " + Config.catalog.webinterface.port);
+                TwasiLogger.log.info("Web interface started on port " + Config.getCatalog().webinterface.port);
             } catch (Exception e) {
                 e.printStackTrace();
             }

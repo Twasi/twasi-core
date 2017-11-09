@@ -19,22 +19,22 @@ public class TwitchAPI {
 
     public String getAuthURL() {
         return "https://api.twitch.tv/kraken/oauth2/authorize" +
-                "?client_id=" + Config.catalog.twitch.clientId +
-                "&redirect_uri=" + Config.catalog.twitch.redirectUri +
+                "?client_id=" + Config.getCatalog().twitch.clientId +
+                "&redirect_uri=" + Config.getCatalog().twitch.redirectUri +
                 "&response_type=code" +
                 "&scope=channel_editor";
     }
 
     public AccessTokenDTO getToken(String code) {
-        HttpClient httpclient = new DefaultHttpClient();
+        DefaultHttpClient httpclient = new DefaultHttpClient();
         AccessTokenDTO token = null;
         try {
             HttpPost httppost = new HttpPost("https://api.twitch.tv/kraken/oauth2/token" +
-                    "?client_id=" + Config.catalog.twitch.clientId +
-                    "&client_secret=" + Config.catalog.twitch.clientSecret +
+                    "?client_id=" + Config.getCatalog().twitch.clientId +
+                    "&client_secret=" + Config.getCatalog().twitch.clientSecret +
                     "&code=" + code +
                     "&grant_type=authorization_code" +
-                    "&redirect_uri=" + Config.catalog.twitch.redirectUri);
+                    "&redirect_uri=" + Config.getCatalog().twitch.redirectUri);
 
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseBody = httpclient.execute(httppost, responseHandler);
@@ -47,12 +47,13 @@ public class TwitchAPI {
             // shut down the connection manager to ensure
             // immediate deallocation of all system resources
             httpclient.getConnectionManager().shutdown();
+            httpclient.close();
         }
         return token;
     }
 
     public TwitchAccount getTwitchAccountByToken(AccessTokenDTO token) {
-        HttpClient httpclient = new DefaultHttpClient();
+        DefaultHttpClient httpclient = new DefaultHttpClient();
         TwitchAccount acc = null;
         try {
             HttpGet httpget = new HttpGet("https://api.twitch.tv/kraken");
@@ -73,6 +74,7 @@ public class TwitchAPI {
             // shut down the connection manager to ensure
             // immediate deallocation of all system resources
             httpclient.getConnectionManager().shutdown();
+            httpclient.close();
         }
         return acc;
     }

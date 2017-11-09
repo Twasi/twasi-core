@@ -30,15 +30,15 @@ public class Database {
 
         // Connect with given credentials
         Morphia morphia = new Morphia();
-        ServerAddress addr = new ServerAddress(Config.catalog.database.hostname, Config.catalog.database.port);
+        ServerAddress addr = new ServerAddress(Config.getCatalog().database.hostname, Config.getCatalog().database.port);
         List<MongoCredential> credentialsList = new ArrayList<MongoCredential>();
         MongoCredential credentia = MongoCredential.createCredential(
-                Config.catalog.database.user, Config.catalog.database.database, Config.catalog.database.password.toCharArray());
+                Config.getCatalog().database.user, Config.getCatalog().database.database, Config.getCatalog().database.password.toCharArray());
         credentialsList.add(credentia);
         MongoClient client = new MongoClient(addr, credentialsList);
 
         // Create the store
-        store = morphia.createDatastore(client, Config.catalog.database.database);
+        store = morphia.createDatastore(client, Config.getCatalog().database.database);
         store.ensureIndexes();
 
         UserStore.loadUsers();
