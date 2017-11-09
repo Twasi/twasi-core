@@ -54,6 +54,16 @@ public class JWTManager {
         return DatatypeConverter.printBase64Binary(randomString.getBytes());
     }
 
+    public User getUserFromToken(String jwt) {
+        if (!isValidToken(jwt)) {
+            return null;
+        } else {
+            DecodedJWT decodedJWT = JWT.decode(jwt);
+            String userId = decodedJWT.getClaim("twitchid").asString();
+            return UserStore.getById(userId);
+        }
+    }
+
     public boolean isValidToken(String jwt) {
         String userId;
 

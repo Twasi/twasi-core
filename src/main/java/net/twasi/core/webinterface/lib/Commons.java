@@ -2,6 +2,7 @@ package net.twasi.core.webinterface.lib;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
+import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.webinterface.dto.ApiDTO;
 import net.twasi.core.webinterface.dto.error.BadRequestDTO;

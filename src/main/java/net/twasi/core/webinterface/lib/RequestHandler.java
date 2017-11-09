@@ -3,6 +3,7 @@ package net.twasi.core.webinterface.lib;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import net.twasi.core.database.models.User;
 import net.twasi.core.services.JWTService;
 
 import java.io.IOException;
@@ -35,22 +36,33 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
         Commons.handleUnallowedMethod(t);
     }
 
-    public boolean isAuthenticated(HttpExchange t) {
+    private String getToken(HttpExchange t) {
         String authorizationHeader = t.getRequestHeaders().getFirst("Authorization");
         if (authorizationHeader == null) {
-            return false;
+            return null;
         }
 
         String[] splitted = authorizationHeader.split(" ", 2);
 
         if (splitted.length != 2) {
-            return false;
+            return null;
         }
 
         if (!splitted[0].equals("Bearer")) {
-            return false;
+            return null;
         }
 
-        return JWTService.getService().isValidToken(splitted[1]);
+        return splitted[1];
+    }
+
+    protected boolean isAuthenticated(HttpExchange t) {
+        String jwt = getToken(t);
+
+        return jwt != null && JWTService.getService().isValidToken(jwt);
+
+    }
+
+    public User getUser(HttpExchange t) {
+        return JWTService.getService().getUserFromToken(getToken(t));
     }
 }
