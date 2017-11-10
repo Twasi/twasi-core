@@ -25,7 +25,7 @@ public class Message {
     }
 
     public static Message parse(String ircLine) {
-        System.out.println(ircLine);
+        // System.out.println(ircLine);
         String message = null;
         String sender = null;
         MessageType type = null;
