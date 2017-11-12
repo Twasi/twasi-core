@@ -29,12 +29,11 @@ public class MessageDispatcher {
             for (TwasiPlugin plugin : availablePlugins) {
                 plugin.onCommand(command);
             }
+        }
+        List<TwasiPlugin> onMessagePlugins = PluginManagerService.getService().getMessagePlugins();
 
-            List<TwasiPlugin> onMessagePlugins = PluginManagerService.getService().getMessagePlugins();
-
-            for (TwasiPlugin plugin : onMessagePlugins) {
-                plugin.onMessage(msg);
-            }
+        for (TwasiPlugin plugin : onMessagePlugins) {
+            plugin.onMessage(msg);
         }
         return false;
     }
