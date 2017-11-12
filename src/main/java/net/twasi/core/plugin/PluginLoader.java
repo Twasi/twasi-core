@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class PluginLoader {
 
@@ -41,6 +42,9 @@ class PluginLoader {
             }
         }
         TwasiLogger.log.info(PluginManagerService.getService().getPlugins().size() + " plugin(s) loaded.");
+        TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(
+                PluginManagerService.getService().getPlugins().stream().map(plugin -> plugin.getConfig().getName()).toArray()
+        ));
     }
 
 }

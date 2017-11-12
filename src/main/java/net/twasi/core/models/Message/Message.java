@@ -5,10 +5,10 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 
 public class Message {
 
-    private MessageType type;
-    private String message;
-    private String sender;
-    private TwasiInterface twasiInterface;
+    protected MessageType type;
+    protected String message;
+    protected String sender;
+    protected TwasiInterface twasiInterface;
 
     public Message(String message, MessageType type, String sender, TwasiInterface inf) {
         this.message = message;
@@ -36,8 +36,15 @@ public class Message {
         return message.startsWith(Config.getCatalog().bot.prefix);
     }
 
-    public String getCommandName() {
-        return message.split(" ")[0].substring(Config.getCatalog().bot.prefix.length()).toLowerCase();
+    public Command toCommand() {
+        if (!isCommand()) {
+            return null;
+        }
+        return new Command(message, type,sender, twasiInterface);
+    }
+
+    public void reply(String text) {
+        twasiInterface.getCommunicationHandler().sendMessage("Hello World!");
     }
 
     public static Message parse(String ircLine, TwasiInterface inf) {

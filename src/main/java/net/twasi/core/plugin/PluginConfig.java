@@ -10,7 +10,7 @@ public class PluginConfig {
     public String version;
     public String main;
 
-    List<String> registeredCommands;
+    public List<String> commands;
 
     public String getName() {
         return name;
@@ -32,7 +32,7 @@ public class PluginConfig {
         return main;
     }
 
-    public List<String> getRegisteredCommands() {
-        return registeredCommands;
+    public List<String> getCommands() {
+        return commands;
     }
 }

@@ -32,9 +32,9 @@ public class TwitchInterface extends TwasiInterface {
 
         this.handler = new CommunicationHandler(this) {
             @Override
-            public boolean sendMessage(Message message) {
+            public boolean sendMessage(String message) {
                 try {
-                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message.getMessage());
+                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message);
                     return true;
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -4,7 +4,7 @@ import net.twasi.core.models.Message.Message;
 
 public interface CommunicationHandlerInterface {
 
-    boolean sendMessage(Message message);
+    boolean sendMessage(String message);
 
     Message readMessage();
 
