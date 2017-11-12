@@ -35,4 +35,8 @@ public class PluginManager {
         ).collect(Collectors.toList());
         return availablePlugins;
     }
+
+    public List<TwasiPlugin> getMessagePlugins() {
+        return plugins.stream().filter(plugin -> plugin.getConfig().handlesMessages()).collect(Collectors.toList());
+    }
 }

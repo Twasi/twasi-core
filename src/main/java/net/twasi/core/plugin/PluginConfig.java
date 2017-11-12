@@ -9,6 +9,7 @@ public class PluginConfig {
     public String author;
     public String version;
     public String main;
+    public boolean messageHandler;
 
     public List<String> commands;
 
@@ -30,6 +31,10 @@ public class PluginConfig {
 
     public String getMain() {
         return main;
+    }
+
+    public boolean handlesMessages() {
+        return messageHandler;
     }
 
     public List<String> getCommands() {

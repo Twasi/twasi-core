@@ -17,7 +17,6 @@ public class MessageDispatcher {
     }
 
     public boolean dispatch(Message msg) {
-        // TwasiLogger.log.debug("Dispatching [Type: " + twasiInterface.getStreamer().getUser().getTwitchAccount().getUserName());
         if (msg.isCommand()) {
             Command command = msg.toCommand();
 
@@ -29,6 +28,12 @@ public class MessageDispatcher {
 
             for (TwasiPlugin plugin : availablePlugins) {
                 plugin.onCommand(command);
+            }
+
+            List<TwasiPlugin> onMessagePlugins = PluginManagerService.getService().getMessagePlugins();
+
+            for (TwasiPlugin plugin : onMessagePlugins) {
+                plugin.onMessage(msg);
             }
         }
         return false;
