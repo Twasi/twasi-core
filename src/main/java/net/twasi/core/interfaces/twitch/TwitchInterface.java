@@ -34,7 +34,8 @@ public class TwitchInterface extends TwasiInterface {
             @Override
             public boolean sendMessage(String message) {
                 try {
-                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message);
+                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " :" + message + "\n");
+                    writer.flush();
                     return true;
                 } catch (IOException e) {
                     e.printStackTrace();

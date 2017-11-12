@@ -28,7 +28,11 @@ public class PluginManager {
     }
 
     public List<TwasiPlugin> getByCommand(String command) {
-        List<TwasiPlugin> availablePlugins = plugins.stream().filter(plugin -> plugin.getConfig().getCommands().contains(command)).collect(Collectors.toList());
+        List<TwasiPlugin> availablePlugins = plugins.stream().filter(
+                plugin -> plugin.getConfig().getCommands().stream().map(
+                        c -> c.toLowerCase()).collect(Collectors.toList()
+                ).contains(command.toLowerCase())
+        ).collect(Collectors.toList());
         return availablePlugins;
     }
 }
