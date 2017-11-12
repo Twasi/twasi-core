@@ -18,7 +18,8 @@ public class MessageReader implements Runnable {
             if (message == null) {
                 continue;
             }
-            TwasiLogger.log.info(message.getMessage() + ", " + message.getType() + ", " + message.getSender());
+            // TwasiLogger.log.info(message.getMessage() + ", " + message.getType() + ", " + message.getSender());
+            twasiInterface.getDispatcher().dispatch(message);
         }
     }
 }

@@ -6,6 +6,7 @@ import net.twasi.core.interfaces.api.CommunicationHandler;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Message.Message;
 import net.twasi.core.models.Streamer;
 
@@ -14,29 +15,7 @@ import java.net.Socket;
 
 public class TwitchInterface extends TwasiInterface {
 
-    private CommunicationHandler handler = new CommunicationHandler() {
-        @Override
-        public boolean sendMessage(Message message) {
-            try {
-                writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message.getMessage());
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        @Override
-        public Message readMessage() {
-            try {
-                String line = reader.readLine();
-                return Message.parse(line);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    };
+    private CommunicationHandler handler;
     private Streamer streamer;
 
     private Socket socket;
@@ -45,8 +24,40 @@ public class TwitchInterface extends TwasiInterface {
 
     private Thread messageReader;
 
+    // Dispatcher for incoming messages
+    private MessageDispatcher dispatcher;
+
     public TwitchInterface(Streamer streamer) {
         this.streamer = streamer;
+
+        this.handler = new CommunicationHandler() {
+            @Override
+            public boolean sendMessage(Message message) {
+                try {
+                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " " + message.getMessage());
+                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            public Message readMessage() {
+                try {
+                    String line = reader.readLine();
+                    if (line == null) {
+                        return null;
+                    }
+                    return Message.parse(line);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        };
+
+        this.dispatcher = new MessageDispatcher(this);
     }
 
     @Override
@@ -124,5 +135,10 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public Streamer getStreamer() {
         return streamer;
+    }
+
+    @Override
+    public MessageDispatcher getDispatcher() {
+        return dispatcher;
     }
 }

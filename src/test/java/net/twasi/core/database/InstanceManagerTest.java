@@ -3,6 +3,7 @@ package net.twasi.core.database;
 import net.twasi.core.instances.InstanceManager;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,6 +48,11 @@ public class InstanceManagerTest {
             public Streamer getStreamer() {
                 return null;
             }
+
+            @Override
+            public MessageDispatcher getDispatcher() {
+                return null;
+            }
         };
         TwasiInterface interfaceTwo = new TwasiInterface() {
             @Override
@@ -81,6 +87,11 @@ public class InstanceManagerTest {
 
             @Override
             public Streamer getStreamer() {
+                return null;
+            }
+
+            @Override
+            public MessageDispatcher getDispatcher() {
                 return null;
             }
         };

@@ -1,5 +1,7 @@
 package net.twasi.core;
 
+import net.twasi.core.application.AppState;
+import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.Database;
@@ -33,6 +35,7 @@ public class Main {
         float time = (float) (System.currentTimeMillis() - start);
         double longTime = time / 1000;
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
+        AppState.state = ApplicationState.OPERATING;
 
         WebInterfaceApp.start();
         cli.start();

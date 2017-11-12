@@ -1,5 +1,6 @@
 package net.twasi.core.interfaces.api;
 
+import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 
 public interface TwasiInterfaceInterface {
@@ -44,5 +45,11 @@ public interface TwasiInterfaceInterface {
      * @return streamer
      */
     Streamer getStreamer();
+
+    /**
+     * Get the message dispatcher
+     * @return dispatcher
+     */
+    MessageDispatcher getDispatcher();
 
 }
