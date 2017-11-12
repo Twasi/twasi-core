@@ -12,7 +12,7 @@ public class PluginManager {
 
     public boolean registerPlugin(TwasiPlugin plugin) {
         if (plugins.contains(plugin)) {
-            TwasiLogger.log.info("Tried to register plugin " + plugin.getName() + " twice. Skipped.");
+            TwasiLogger.log.info("Tried to register plugin " + plugin.getConfig().getName() + " twice. Skipped.");
             return false;
         }
 

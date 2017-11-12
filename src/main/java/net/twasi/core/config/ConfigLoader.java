@@ -43,6 +43,8 @@ class ConfigLoader {
                 writer.println("  issuer: Twasi");
                 writer.println("webinterface:");
                 writer.println("  port: 8000");
+                writer.println("bot:");
+                writer.println("  prefix: \"!\"");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

@@ -1,15 +1,20 @@
 package net.twasi.core.models.Message;
 
+import net.twasi.core.config.Config;
+import net.twasi.core.interfaces.api.TwasiInterface;
+
 public class Message {
 
     private MessageType type;
     private String message;
     private String sender;
+    private TwasiInterface twasiInterface;
 
-    public Message(String message, MessageType type, String sender) {
+    public Message(String message, MessageType type, String sender, TwasiInterface inf) {
         this.message = message;
         this.type = type;
         this.sender = sender;
+        this.twasiInterface = inf;
     }
 
     public String getMessage() {
@@ -24,7 +29,18 @@ public class Message {
         return sender;
     }
 
-    public static Message parse(String ircLine) {
+    public boolean isCommand() {
+        if (message == null) {
+            return false;
+        }
+        return message.startsWith(Config.getCatalog().bot.prefix);
+    }
+
+    public String getCommandName() {
+        return message.split(" ")[0].substring(Config.getCatalog().bot.prefix.length()).toLowerCase();
+    }
+
+    public static Message parse(String ircLine, TwasiInterface inf) {
         // System.out.println(ircLine);
         String message = null;
         String sender = null;
@@ -48,7 +64,7 @@ public class Message {
             return null;
         }
 
-        return new Message(message, type, sender);
+        return new Message(message, type, sender, inf);
     }
 
 }

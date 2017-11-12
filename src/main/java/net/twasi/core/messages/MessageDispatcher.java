@@ -1,8 +1,11 @@
 package net.twasi.core.messages;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.Message;
+import net.twasi.core.plugin.api.TwasiPlugin;
+import net.twasi.core.services.PluginManagerService;
+
+import java.util.List;
 
 public class MessageDispatcher {
 
@@ -13,7 +16,12 @@ public class MessageDispatcher {
     }
 
     public boolean dispatch(Message msg) {
-        TwasiLogger.log.debug("Dispatching");
+        // TwasiLogger.log.debug("Dispatching [Type: " + twasiInterface.getStreamer().getUser().getTwitchAccount().getUserName());
+        if (msg.isCommand()) {
+            String commandName = msg.getCommandName();
+
+            // List<TwasiPlugin> availablePlugins = PluginManagerService.getService();
+        }
         return false;
     }
 

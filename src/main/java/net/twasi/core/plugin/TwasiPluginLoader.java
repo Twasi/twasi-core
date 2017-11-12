@@ -1,5 +1,9 @@
 package net.twasi.core.plugin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import net.twasi.core.config.ConfigCatalog.ConfigCatalog;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
 import org.yaml.snakeyaml.Yaml;
 
@@ -23,26 +27,34 @@ final public class TwasiPluginLoader extends URLClassLoader {
 
             // Get File, read
             InputStream stream = (InputStream) infoYamlUrl.getContent();
-            Yaml yaml = new Yaml();
-            HashMap config = yaml.loadAs( stream, HashMap.class);
-            String main = (String) config.get("Main");
+            PluginConfig config = null;
+
+            // Parse
+            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+
+            try {
+                config = mapper.readValue(stream, PluginConfig.class);
+            } catch (Exception e) {
+                TwasiLogger.log.error("Cannot parse config file: " + e.getMessage());
+            }
 
             try {
                 Class<?> jarClass;
                 try {
-                    jarClass = Class.forName(main, true, this);
+                    jarClass = Class.forName(config.main, true, this);
                 } catch (ClassNotFoundException ex) {
-                    throw new Exception("Cannot find main class `" + main + "'", ex);
+                    throw new Exception("Cannot find main class `" + config.main + "'", ex);
                 }
 
                 Class<? extends TwasiPlugin> pluginClass;
                 try {
                     pluginClass = jarClass.asSubclass(TwasiPlugin.class);
                 } catch (ClassCastException ex) {
-                    throw new Exception("Main class `" + main + "' does not extend TwasiPlugin", ex);
+                    throw new Exception("Main class `" + config.main + "' does not extend TwasiPlugin", ex);
                 }
 
                 plugin = pluginClass.newInstance();
+                plugin.setConfig(config);
             } catch (IllegalAccessException e) {
                 throw new Exception("No public constructor found", e);
             } catch (InstantiationException e) {

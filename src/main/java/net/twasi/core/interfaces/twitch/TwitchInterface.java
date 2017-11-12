@@ -30,7 +30,7 @@ public class TwitchInterface extends TwasiInterface {
     public TwitchInterface(Streamer streamer) {
         this.streamer = streamer;
 
-        this.handler = new CommunicationHandler() {
+        this.handler = new CommunicationHandler(this) {
             @Override
             public boolean sendMessage(Message message) {
                 try {
@@ -49,7 +49,7 @@ public class TwitchInterface extends TwasiInterface {
                     if (line == null) {
                         return null;
                     }
-                    return Message.parse(line);
+                    return Message.parse(line, getInterface());
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
