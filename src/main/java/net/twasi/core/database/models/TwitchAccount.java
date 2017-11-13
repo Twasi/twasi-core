@@ -1,8 +1,12 @@
 package net.twasi.core.database.models;
 
+import net.twasi.core.database.models.permissions.PermissionGroups;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.NotSaved;
+
+import java.util.List;
 
 @Entity("twitchAccounts")
 public class TwitchAccount {
@@ -11,6 +15,9 @@ public class TwitchAccount {
     private String userName;
     private AccessToken token;
     private String twitchId;
+
+    @NotSaved
+    private List<PermissionGroups> groups;
 
     public TwitchAccount() {}
 
@@ -54,5 +61,13 @@ public class TwitchAccount {
 
     public void setTwitchId(String twitchId) {
         this.twitchId = twitchId;
+    }
+
+    public List<PermissionGroups> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<PermissionGroups> groups) {
+        this.groups = groups;
     }
 }

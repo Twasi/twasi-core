@@ -91,4 +91,13 @@ public class User {
     public void setPermissions(List<Permissions> permissions) {
         this.permissions = permissions;
     }
+
+    public boolean hasPermission(TwitchAccount account, String permissionKey) {
+        for (Permissions perm : getPermissions()) {
+            if (perm.hasPermission(account, permissionKey)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

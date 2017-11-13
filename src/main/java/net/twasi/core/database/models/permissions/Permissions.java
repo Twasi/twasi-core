@@ -1,5 +1,6 @@
 package net.twasi.core.database.models.permissions;
 
+import net.twasi.core.database.models.TwitchAccount;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 
@@ -44,5 +45,24 @@ public class Permissions {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean hasPermission(TwitchAccount account, String permissionKey) {
+        if (!getKeys().contains(permissionKey)) {
+            return false;
+        }
+        for (PermissionEntity entity : getEntities()) {
+            if (entity.getType() == PermissionEntityType.SINGLE) {
+                if (entity.getAccount().getTwitchId().equals(account.getTwitchId())) {
+                    return true;
+                }
+            }
+            if (entity.getType() == PermissionEntityType.GROUP) {
+                if (account.getGroups().contains(entity.getGroup())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
