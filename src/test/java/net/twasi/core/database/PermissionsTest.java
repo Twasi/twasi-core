@@ -1,6 +1,5 @@
 package net.twasi.core.database;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.permissions.PermissionEntity;
