@@ -4,6 +4,7 @@ import net.twasi.core.database.models.TwitchAccount;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Permissions {
@@ -64,5 +65,17 @@ public class Permissions {
             }
         }
         return false;
+    }
+
+    public boolean doAllKeysExist(ArrayList<String> keys) {
+        List<String> toCheck = (List<String>)keys.clone();
+
+        for (String key : getKeys()) {
+            if (toCheck.contains(key)) {
+                toCheck.remove(key);
+            }
+        }
+
+        return toCheck.size() == 0;
     }
 }

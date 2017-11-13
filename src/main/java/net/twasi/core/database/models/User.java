@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity("users")
@@ -106,5 +107,14 @@ public class User {
             }
         }
         return false;
+    }
+
+    public boolean doAllPermissionKeysExist(ArrayList<String> keys) {
+        for (Permissions perm : getPermissions()) {
+            if (!perm.doAllKeysExist(keys)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
