@@ -1,5 +1,6 @@
 package net.twasi.core.plugin.api;
 
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.Command;
 import net.twasi.core.models.Message.Message;
 
@@ -10,6 +11,10 @@ public interface TwasiPluginInterface {
     void onEnable();
 
     void onDisable();
+
+    void onInstall(TwasiInterface inf);
+
+    void onUninstall(TwasiInterface inf);
 
     void onCommand(Command command);
 

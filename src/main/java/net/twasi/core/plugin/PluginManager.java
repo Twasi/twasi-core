@@ -1,7 +1,9 @@
 package net.twasi.core.plugin;
 
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
+import net.twasi.core.services.InstanceManagerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +20,14 @@ public class PluginManager {
         }
 
         plugins.add(plugin);
-
         plugin.onEnable();
+
+        // TODO if plugin enabling/disabling system is enabled this should be checked here
+        // all plugins will be enabled for all until then
+        for(TwasiInterface twasiInterface : InstanceManagerService.getService().interfaces) {
+            plugin.onInstall(twasiInterface);
+        }
+
         return true;
     }
 
