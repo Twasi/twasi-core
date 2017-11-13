@@ -1,9 +1,12 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.database.models.permissions.Permissions;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+
+import java.util.List;
 
 @Entity("users")
 public class User {
@@ -18,6 +21,7 @@ public class User {
     private String JWTSecret;
 
     private GlobalConfig config;
+    private List<Permissions> permissions;
 
     public User() {};
 
@@ -70,5 +74,21 @@ public class User {
 
     public void setConfig(GlobalConfig config) {
         this.config = config;
+    }
+
+    public static TwitchAccount getDefaultAccount() {
+        return defaultAccount;
+    }
+
+    public static void setDefaultAccount(TwitchAccount defaultAccount) {
+        User.defaultAccount = defaultAccount;
+    }
+
+    public List<Permissions> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permissions> permissions) {
+        this.permissions = permissions;
     }
 }
