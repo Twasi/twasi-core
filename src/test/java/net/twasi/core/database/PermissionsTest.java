@@ -87,7 +87,7 @@ public class PermissionsTest {
     }
 
     @Test
-    public void revokesPermissionByGroup() {
+    public void revokesPermission() {
         Boolean hasAddPermission = user.hasPermission(viewer, "commands.add");
         Boolean hasEditPermission = user.hasPermission(viewer, "commands.edit");
         Boolean hasDeletePermission = user.hasPermission(viewer, "commands.delete");
