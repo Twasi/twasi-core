@@ -11,7 +11,7 @@ import java.util.List;
 @Entity("users")
 public class User {
 
-    private static TwitchAccount defaultAccount = new TwitchAccount(Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken), Config.getCatalog().twitch.defaultUserId);
+    private static TwitchAccount defaultAccount;
 
     @Id
     private ObjectId id;
@@ -23,7 +23,14 @@ public class User {
     private GlobalConfig config;
     private List<Permissions> permissions;
 
-    public User() {};
+    public User() {
+        if (Config.getCatalog() != null) {
+            defaultAccount = new TwitchAccount(
+                    Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken),
+                    Config.getCatalog().twitch.defaultUserId
+            );
+        }
+    };
 
     public ObjectId getId() {
         return id;
