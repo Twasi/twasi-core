@@ -1,5 +1,6 @@
 package net.twasi.core.plugin.api;
 
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.Command;
 import net.twasi.core.models.Message.Message;
@@ -16,6 +17,14 @@ public abstract class TwasiPlugin implements TwasiPluginInterface {
     }
 
     public void onDisable() {
+
+    }
+
+    public void onInstall(TwasiInterface inf) {
+
+    }
+
+    public void onUninstall(TwasiInterface inf) {
 
     }
 
