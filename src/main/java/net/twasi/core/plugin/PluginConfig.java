@@ -12,6 +12,7 @@ public class PluginConfig {
     public boolean messageHandler;
 
     public List<String> commands;
+    public List<String> permissions;
 
     public String getName() {
         return name;
@@ -31,6 +32,10 @@ public class PluginConfig {
 
     public String getMain() {
         return main;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
     }
 
     public boolean handlesMessages() {
