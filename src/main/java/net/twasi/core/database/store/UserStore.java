@@ -3,13 +3,8 @@ package net.twasi.core.database.store;
 import net.twasi.core.database.Database;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.models.permissions.PermissionEntity;
-import net.twasi.core.database.models.permissions.PermissionEntityType;
-import net.twasi.core.database.models.permissions.PermissionGroups;
-import net.twasi.core.database.models.permissions.Permissions;
 import net.twasi.core.logger.TwasiLogger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -14,6 +14,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TwitchAPI {
 
@@ -66,7 +67,7 @@ public class TwitchAPI {
 
             TokenInfoDTO info = new Gson().fromJson(responseBody, TokenInfoDTO.class);
 
-            acc = new TwitchAccount(info.token.userName, token.toModel(), info.token.userId);
+            acc = new TwitchAccount(info.token.userName, token.toModel(), info.token.userId, new ArrayList<>());
         } catch (IOException e) {
             TwasiLogger.log.error(e);
         } finally {

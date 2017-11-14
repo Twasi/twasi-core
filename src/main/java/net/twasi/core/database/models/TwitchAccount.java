@@ -21,10 +21,11 @@ public class TwitchAccount {
 
     public TwitchAccount() {}
 
-    public TwitchAccount(String userName, AccessToken token, String twitchId) {
+    public TwitchAccount(String userName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
         this.userName = userName;
         this.token = token;
         this.twitchId = twitchId;
+        this.groups = groups;
     }
 
     public ObjectId getId() {

@@ -1,20 +1,31 @@
 package net.twasi.core.database.models.permissions;
 
 import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.database.models.permissions.PermissionEntity;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.NotSaved;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Permissions {
 
     @Id
     private ObjectId id;
-
     private List<PermissionEntity> entities;
     private List<String> keys;
     private String name;
+
+    public Permissions() {}
+
+    public Permissions(List<PermissionEntity> entities, List<String> keys, String name) {
+        this.entities = entities;
+        this.keys = keys;
+        this.name = name;
+    }
 
     public ObjectId getId() {
         return id;

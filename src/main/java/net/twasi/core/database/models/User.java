@@ -28,7 +28,8 @@ public class User {
         if (Config.getCatalog() != null) {
             defaultAccount = new TwitchAccount(
                     Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken),
-                    Config.getCatalog().twitch.defaultUserId
+                    Config.getCatalog().twitch.defaultUserId,
+                    new ArrayList<>()
             );
         }
     };
@@ -110,6 +111,9 @@ public class User {
     }
 
     public boolean doAllPermissionKeysExist(ArrayList<String> keys) {
+        if (getPermissions() == null) {
+            return false;
+        }
         for (Permissions perm : getPermissions()) {
             if (!perm.doAllKeysExist(keys)) {
                 return false;

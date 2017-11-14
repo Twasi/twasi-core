@@ -9,6 +9,7 @@ public class PluginConfig {
     public String author;
     public String version;
     public String main;
+    public String helpText;
     public boolean messageHandler;
 
     public List<String> commands;
@@ -44,5 +45,9 @@ public class PluginConfig {
 
     public List<String> getCommands() {
         return commands;
+    }
+
+    public String getHelpText() {
+        return helpText;
     }
 }

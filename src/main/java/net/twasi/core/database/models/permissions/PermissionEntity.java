@@ -2,8 +2,11 @@ package net.twasi.core.database.models.permissions;
 
 import net.twasi.core.database.models.TwitchAccount;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.NotSaved;
 
+@Entity
 public class PermissionEntity {
 
     @Id
@@ -12,7 +15,16 @@ public class PermissionEntity {
     private PermissionEntityType type;
 
     private PermissionGroups group;
+
     private TwitchAccount account;
+
+    public PermissionEntity() {}
+
+    public PermissionEntity(PermissionEntityType type, PermissionGroups group, TwitchAccount account) {
+        this.type = type;
+        this.group = group;
+        this.account = account;
+    }
 
     public ObjectId getId() {
         return id;
