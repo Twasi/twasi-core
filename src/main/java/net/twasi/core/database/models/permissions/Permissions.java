@@ -1,11 +1,9 @@
 package net.twasi.core.database.models.permissions;
 
 import net.twasi.core.database.models.TwitchAccount;
-import net.twasi.core.database.models.permissions.PermissionEntity;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.NotSaved;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +15,7 @@ public class Permissions {
     private ObjectId id;
     private List<PermissionEntity> entities;
     private List<String> keys;
+
     private String name;
 
     public Permissions() {}
@@ -78,8 +77,8 @@ public class Permissions {
         return false;
     }
 
-    public boolean doAllKeysExist(ArrayList<String> keys) {
-        List<String> toCheck = (List<String>)keys.clone();
+    public boolean doAllKeysExist(List<String> keys) {
+        List<String> toCheck = new ArrayList<>(keys);
 
         for (String key : getKeys()) {
             if (toCheck.contains(key)) {

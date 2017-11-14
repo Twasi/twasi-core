@@ -94,6 +94,9 @@ public class User {
     }
 
     public List<Permissions> getPermissions() {
+        if (permissions == null) {
+            return new ArrayList<>();
+        }
         return permissions;
     }
 
@@ -110,7 +113,7 @@ public class User {
         return false;
     }
 
-    public boolean doAllPermissionKeysExist(ArrayList<String> keys) {
+    public boolean doAllPermissionKeysExist(List<String> keys) {
         if (getPermissions() == null) {
             return false;
         }

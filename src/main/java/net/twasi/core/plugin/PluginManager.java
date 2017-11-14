@@ -25,7 +25,12 @@ public class PluginManager {
         // TODO if plugin enabling/disabling system is enabled this should be checked here
         // all plugins will be enabled for all until then
         for(TwasiInterface twasiInterface : InstanceManagerService.getService().interfaces) {
-            plugin.onInstall(twasiInterface);
+            try {
+                plugin.onInstall(twasiInterface);
+            } catch (Exception e) {
+                TwasiLogger.log.error(e);
+                e.printStackTrace();
+            }
         }
 
         return true;
