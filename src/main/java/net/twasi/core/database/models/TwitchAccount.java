@@ -16,7 +16,6 @@ public class TwitchAccount {
     private AccessToken token;
     private String twitchId;
 
-    @NotSaved
     private List<PermissionGroups> groups;
 
     public TwitchAccount() {}

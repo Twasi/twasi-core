@@ -82,6 +82,7 @@ public class TwitchInterface extends TwasiInterface {
             this.writer.write("NICK " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + "\n");
             this.writer.write("CAP REQ :twitch.tv/commands\n");
             this.writer.write("CAP REQ :twitch.tv/membership\n");
+            this.writer.write("CAP REQ :twitch.tv/tags\n");
             this.writer.write("JOIN " + streamer.getUser().getTwitchAccount().getChannel() + "\n");
             this.writer.flush();
 

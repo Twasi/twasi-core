@@ -14,12 +14,17 @@ public class MessageReader implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Message message = twasiInterface.getCommunicationHandler().readMessage();
-            if (message == null) {
-                continue;
+            try {
+                Message message = twasiInterface.getCommunicationHandler().readMessage();
+                if (message == null) {
+                    continue;
+                }
+                // TwasiLogger.log.info(message.getMessage() + ", " + message.getType() + ", " + message.getSender());
+                twasiInterface.getDispatcher().dispatch(message);
+            } catch (Throwable e) {
+                TwasiLogger.log.error("Exception in MessageReader of " + twasiInterface.getStreamer().getUser().getTwitchAccount().getUserName() + ": " + e.getMessage());
+                e.printStackTrace();
             }
-            // TwasiLogger.log.info(message.getMessage() + ", " + message.getType() + ", " + message.getSender());
-            twasiInterface.getDispatcher().dispatch(message);
         }
     }
 }
