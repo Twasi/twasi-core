@@ -114,7 +114,7 @@ public class User {
     }
 
     public boolean doAllPermissionKeysExist(List<String> keys) {
-        if (getPermissions() == null) {
+        if (getPermissions() == null || getPermissions().size() == 0) {
             return false;
         }
         for (Permissions perm : getPermissions()) {
