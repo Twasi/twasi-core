@@ -9,6 +9,7 @@ import net.twasi.core.logger.TwasiLoggerFactory;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.logging.MorphiaLoggerFactory;
+import org.mongodb.morphia.mapping.DefaultCreator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;

@@ -1,13 +1,11 @@
 package net.twasi.core.plugin;
 
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.api.TwasiPlugin;
+import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.services.PluginManagerService;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 class PluginLoader {
@@ -24,21 +22,13 @@ class PluginLoader {
         assert pluginJars != null;
         for(File plugin : pluginJars) {
             TwasiLogger.log.debug("Loading plugin " + plugin);
-            TwasiPluginLoader urlCl = null;
 
             try {
-                urlCl = new TwasiPluginLoader(System.class.getClassLoader(), plugin);
-                PluginManagerService.getService().registerPlugin(urlCl.plugin);
+                JavaPluginLoader pluginLoader = new JavaPluginLoader(plugin);
+                PluginManagerService.getService().registerPlugin(pluginLoader.plugin);
             } catch (Exception e) {
                 TwasiLogger.log.error(e);
-            } finally {
-                if (urlCl != null) {
-                    try {
-                        urlCl.close();
-                    } catch (IOException e) {
-                        TwasiLogger.log.error(e);
-                    }
-                }
+                e.printStackTrace();
             }
         }
         TwasiLogger.log.info(PluginManagerService.getService().getPlugins().size() + " plugin(s) loaded.");

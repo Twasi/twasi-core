@@ -23,10 +23,6 @@ public class MessageDispatcher {
 
             List<TwasiPlugin> availablePlugins = PluginManagerService.getService().getByCommand(command.getCommandName());
 
-            if (availablePlugins.size() == 0) {
-                return false;
-            }
-
             for (TwasiPlugin plugin : availablePlugins) {
                 plugin.onCommand(command);
             }
