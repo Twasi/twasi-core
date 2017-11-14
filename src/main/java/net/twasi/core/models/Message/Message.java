@@ -50,6 +50,10 @@ public class Message {
         return new Command(message, type,sender, twasiInterface);
     }
 
+    public TwasiInterface getTwasiInterface() {
+        return twasiInterface;
+    }
+
     public void reply(String text) {
         twasiInterface.getCommunicationHandler().sendMessage(text);
     }
