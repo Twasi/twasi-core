@@ -24,8 +24,6 @@ public class InstanceManager {
             return false;
         }
 
-        inf.connect();
-
         interfaces.add(inf);
         TwasiLogger.log.debug("Registered interface: " + inf.toString());
         return true;
@@ -39,16 +37,47 @@ public class InstanceManager {
      */
     public boolean startForAllUsers(List<User> users) {
         for(User u : users) {
-            if (u.getConfig().isActivated()) {
-                Streamer streamer = new Streamer(u);
-                TwasiInterface inf = new TwitchInterface(streamer);
-                registerInterface(inf);
-            }
+            start(u);
         }
         return true;
     }
 
     public boolean hasRegisteredInstance(User user) {
         return interfaces.stream().anyMatch(twasiInterface -> twasiInterface.getStreamer().getUser().getId().equals(user.getId()));
+    }
+
+    public TwasiInterface getByUser(User user) {
+        return (TwasiInterface) interfaces.stream().filter(twasiInterface -> twasiInterface.getStreamer().getUser().getId().equals(user.getId())).toArray()[0];
+    }
+
+    public boolean stop(User user) {
+        if (!hasRegisteredInstance(user)) {
+            TwasiLogger.log.info("Tried to stop interface for user " + user.getTwitchAccount().getUserName() + " but no instance is running.");
+            return false;
+        }
+
+        TwasiInterface inf = getByUser(user);
+
+        inf.disconnect();
+        inf.onDisable();
+
+        interfaces.remove(inf);
+        return true;
+    }
+
+    public boolean start(User user) {
+        if (user.getConfig().isActivated()) {
+            TwasiInterface inf = new TwitchInterface(new Streamer(user));
+
+            inf.onEnable();
+            inf.connect();
+
+            registerInterface(inf);
+        }
+        return false;
+    }
+
+    public boolean restart(User user) {
+        return stop(user) && start(user);
     }
 }

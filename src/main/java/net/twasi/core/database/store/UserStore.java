@@ -3,7 +3,10 @@ package net.twasi.core.database.store;
 import net.twasi.core.database.Database;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.core.instances.InstanceManager;
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.InstanceManagerService;
 
 import java.util.List;
 
@@ -58,6 +61,16 @@ public class UserStore {
             return null;
         }
         return users.get(0);
+    }
+
+    public static void updateUser(User user) {
+        InstanceManagerService.getService().stop(user);
+        users.remove(user);
+
+        User newUser = getById(user.getTwitchAccount().getTwitchId());
+        users.add(newUser);
+
+        InstanceManagerService.getService().start(user);
     }
 
 }

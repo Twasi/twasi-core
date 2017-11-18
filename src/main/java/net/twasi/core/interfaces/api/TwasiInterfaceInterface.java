@@ -3,6 +3,8 @@ package net.twasi.core.interfaces.api;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 
+import java.net.Socket;
+
 public interface TwasiInterfaceInterface {
 
     /**
@@ -51,5 +53,11 @@ public interface TwasiInterfaceInterface {
      * @return dispatcher
      */
     MessageDispatcher getDispatcher();
+
+    /**
+     * Returns the socket
+     * @return socket
+     */
+    Socket getSocket();
 
 }

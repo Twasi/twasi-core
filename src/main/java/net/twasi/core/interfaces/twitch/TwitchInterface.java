@@ -52,6 +52,11 @@ public class TwitchInterface extends TwasiInterface {
                     }
                     return Message.parse(line, getInterface());
                 } catch (IOException e) {
+                    if (e.getMessage().equals("Socket closed")) {
+                        TwasiLogger.log.info("Connection to Socket lost for Interface " + getStreamer().getUser().getTwitchAccount().getUserName());
+                        return null;
+                    }
+
                     e.printStackTrace();
                     return null;
                 }
@@ -111,7 +116,6 @@ public class TwitchInterface extends TwasiInterface {
     public boolean disconnect() {
         TwasiLogger.log.info("Disconnecting from Twitch IRC");
         try {
-            this.messageReader.stop();
             writer.close();
             reader.close();
             socket.close();
@@ -142,5 +146,10 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public MessageDispatcher getDispatcher() {
         return dispatcher;
+    }
+
+    @Override
+    public Socket getSocket() {
+        return socket;
     }
 }

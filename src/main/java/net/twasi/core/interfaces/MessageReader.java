@@ -13,7 +13,7 @@ public class MessageReader implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!twasiInterface.getSocket().isClosed()) {
             try {
                 Message message = twasiInterface.getCommunicationHandler().readMessage();
                 if (message == null) {

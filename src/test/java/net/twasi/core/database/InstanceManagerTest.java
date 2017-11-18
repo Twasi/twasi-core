@@ -8,6 +8,8 @@ import net.twasi.core.models.Streamer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.net.Socket;
+
 public class InstanceManagerTest {
     @Test
     public void registerInterfaceTest() {
@@ -53,6 +55,11 @@ public class InstanceManagerTest {
             public MessageDispatcher getDispatcher() {
                 return null;
             }
+
+            @Override
+            public Socket getSocket() {
+                return null;
+            }
         };
         TwasiInterface interfaceTwo = new TwasiInterface() {
             @Override
@@ -92,6 +99,11 @@ public class InstanceManagerTest {
 
             @Override
             public MessageDispatcher getDispatcher() {
+                return null;
+            }
+
+            @Override
+            public Socket getSocket() {
                 return null;
             }
         };
