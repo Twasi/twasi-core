@@ -21,6 +21,8 @@ public class User {
 
     private String JWTSecret;
 
+    private Language language;
+
     private GlobalConfig config;
     private List<Permissions> permissions;
 
@@ -102,6 +104,14 @@ public class User {
 
     public void setPermissions(List<Permissions> permissions) {
         this.permissions = permissions;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public boolean hasPermission(TwitchAccount account, String permissionKey) {

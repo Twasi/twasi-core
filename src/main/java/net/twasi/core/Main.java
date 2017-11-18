@@ -9,6 +9,7 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.Plugin;
 import net.twasi.core.services.InstanceManagerService;
+import net.twasi.core.translations.TwasiTranslation;
 import net.twasi.core.webinterface.WebInterfaceApp;
 
 public class Main {
