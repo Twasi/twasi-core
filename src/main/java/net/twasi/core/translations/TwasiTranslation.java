@@ -4,9 +4,7 @@ import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class TwasiTranslation {
@@ -17,27 +15,30 @@ public class TwasiTranslation {
     }
 
     public String getTranslation(Language language, String translationKey) {
-        URL resource = classLoader.getResource("translations/" + language.toString() + ".lang");
 
-        if (resource == null && language == Language.EN_GB) {
+        if (language == null) {
+            language = Language.EN_GB;
+        }
+
+        InputStream inputStream = classLoader.getResourceAsStream("translations/" + language.toString() + ".lang");
+
+        if (inputStream == null && language == Language.EN_GB) {
             TwasiLogger.log.error("Default English language not found in classLoader resources folder. Please create a folder 'translations' with the file 'EN_GB.lang' in it.");
             return translationKey;
         }
 
-        if (resource == null) {
+        if (inputStream == null) {
             return getTranslation(Language.EN_GB, translationKey);
         }
 
-        File translationFile = new File(resource.getFile());
-
-        try (Scanner scanner = new Scanner(translationFile)) {
+        try (Scanner scanner = new Scanner(inputStream)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (line.startsWith(translationKey + "=")) {
                     return line.substring(translationKey.length() + 1);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             TwasiLogger.log.error(e);
             e.printStackTrace();
         }

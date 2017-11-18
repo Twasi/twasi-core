@@ -5,12 +5,14 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.Command;
 import net.twasi.core.models.Message.Message;
 import net.twasi.core.plugin.PluginConfig;
+import net.twasi.core.translations.TwasiTranslation;
 
 import java.util.List;
 
 public abstract class TwasiPlugin implements TwasiPluginInterface {
 
     protected PluginConfig config;
+    protected TwasiTranslation translations;
 
     public void onEnable() {
 
@@ -46,5 +48,13 @@ public abstract class TwasiPlugin implements TwasiPluginInterface {
 
     public List<String> getRegisteredCommands() {
         return null;
+    }
+
+    public void setTranslations(TwasiTranslation translations) {
+        this.translations = translations;
+    }
+
+    public TwasiTranslation getTranslations() {
+        return translations;
     }
 }
