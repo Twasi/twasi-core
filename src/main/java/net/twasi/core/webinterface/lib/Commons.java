@@ -55,6 +55,8 @@ public class Commons {
         writeDTO(t, new BadRequestDTO(), 400);
     }
 
+    public static void handleOptions(HttpExchange t) { writeDTO(t, new ApiDTO(true), 200); }
+
     public static HashMap<String, String> parseQueryParams(HttpExchange t) {
         HashMap<String, String> params = new HashMap<>();
         String queryString = t.getRequestURI().getQuery();

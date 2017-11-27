@@ -20,6 +20,10 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
             case "post":
                 handlePost(httpExchange);
                 break;
+            case "options":
+                httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Authorization");
+                Commons.handleOptions(httpExchange);
+                break;
             default:
                 Commons.handleUnallowedMethod(httpExchange);
                 break;

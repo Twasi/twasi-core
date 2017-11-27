@@ -1,6 +1,7 @@
 package net.twasi.core.webinterface.controller.auth;
 
 import com.sun.net.httpserver.HttpExchange;
+import net.twasi.core.config.Config;
 import net.twasi.core.database.store.UserStore;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
@@ -29,6 +30,6 @@ public class AuthCallbackController extends RequestHandler {
             InstanceManagerService.getService().registerInterface(new TwitchInterface(new Streamer(user)));
         }
 
-        Commons.writeRedirect(t, "/login?jwt="+token);
+        Commons.writeRedirect(t, Config.getCatalog().webinterface.frontend + "?jwt="+token);
     }
 }
