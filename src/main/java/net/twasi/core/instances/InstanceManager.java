@@ -1,5 +1,7 @@
 package net.twasi.core.instances;
 
+import net.twasi.core.database.models.EventMessage;
+import net.twasi.core.database.models.EventMessageType;
 import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
@@ -62,6 +64,8 @@ public class InstanceManager {
         inf.onDisable();
 
         interfaces.remove(inf);
+
+        user.addMessage(new EventMessage("Instance stopped.", EventMessageType.INFO));
         return true;
     }
 
@@ -73,6 +77,8 @@ public class InstanceManager {
             inf.connect();
 
             registerInterface(inf);
+            user.addMessage(new EventMessage("Instance started.", EventMessageType.INFO));
+            return true;
         }
         return false;
     }

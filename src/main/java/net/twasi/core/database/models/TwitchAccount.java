@@ -4,7 +4,6 @@ import net.twasi.core.database.models.permissions.PermissionGroups;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.NotSaved;
 
 import java.util.List;
 

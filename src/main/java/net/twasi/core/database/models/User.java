@@ -1,10 +1,12 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.database.Database;
 import net.twasi.core.database.models.permissions.Permissions;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,8 @@ public class User {
 
     private GlobalConfig config;
     private List<Permissions> permissions;
+
+    private List<EventMessage> events;
 
     public User() {
         if (Config.getCatalog() != null) {
@@ -121,6 +125,22 @@ public class User {
             }
         }
         return false;
+    }
+
+    public List<EventMessage> getEvents() {
+        if (events == null) {
+            events = new ArrayList<>();
+        }
+        return events;
+    }
+
+    public void setEvents(List<EventMessage> events) {
+        this.events = events;
+    }
+
+    public void addMessage(EventMessage message) {
+        getEvents().add(message);
+        Database.getStore().save(this);
     }
 
     public boolean doAllPermissionKeysExist(List<String> keys) {

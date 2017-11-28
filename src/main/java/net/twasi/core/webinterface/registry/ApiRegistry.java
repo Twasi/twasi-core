@@ -5,6 +5,7 @@ import net.twasi.core.webinterface.controller.InfoController;
 import net.twasi.core.webinterface.controller.bot.BotInfoController;
 import net.twasi.core.webinterface.controller.bot.StartController;
 import net.twasi.core.webinterface.controller.user.UserController;
+import net.twasi.core.webinterface.controller.user.UserEventsController;
 import net.twasi.core.webinterface.controller.user.UserRefreshController;
 
 public class ApiRegistry {
@@ -19,6 +20,8 @@ public class ApiRegistry {
 
         // Refresh
         server.createContext("/api/user/refresh", new UserRefreshController());
+        // Events
+        server.createContext("/api/user/events", new UserEventsController());
 
         // Bot
         server.createContext("/api/bot", new BotInfoController());
