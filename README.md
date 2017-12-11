@@ -2,6 +2,10 @@
 Twasi Core is the Core Application of the Twasi Twitchbot. It hosts all the other plugins, manages the connection to the interface (Twitch IRC) and manages data persistence.
 
 [![Build Status](https://travis-ci.org/Twasi/twasi-core.svg?branch=master)](https://travis-ci.org/Twasi/twasi-core)
+[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=net.twasi:TwasiCore)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
+[![Code Coverage](https://sonarcloud.io/api/badges/measure?key=net.twasi:TwasiCore&metric=coverage)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
+[![Duplicated lines](https://sonarcloud.io/api/badges/measure?key=net.twasi:TwasiCore&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
+[![Lines of code](https://sonarcloud.io/api/badges/measure?key=net.twasi:TwasiCore&metric=ncloc)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 
 ## Contents
 Twasi-Core is the main application. It can be started an will then automatically create the initial folder structure and create default config files. After that, you have to adapt those files and install all the plugins you need. After that, you can start it again. It will connect to the configured MongoDB server, load all plugins in the 'plugins' directory and start the webinterface.
