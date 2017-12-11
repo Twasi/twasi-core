@@ -17,10 +17,13 @@ The following list of feature plugins are planned:
 | Plugin Name | Description | Author |
 | --- | --- | --- |
 | [commands](https://github.com/Twasi/twasi-commands) | Create, edit, delete and execute custom commands. Powerful in combination with twasi-variables | Twasi team |
-| [variables](https://github.com/Twasi/twasi-variables) | Variable preprocessor (Also create, edit and delete variables) | Twasi team |
-| [tokens](https://github.com/Twasi/twasi-tokens) | Award your viewers for their participation in your stream | Twasi team |
-| [songrequests](https://github.com/Twasi/twasi-songrequests) | Let your viewers request their music. This plugin also provides an API for the player. Furhtermore, it allows to create giveaways or other games with the earned tokens | Twasi team |
-| [message-logger](https://github.com/Twasi/twasi-message-logger) | Log messages in the database and access them via WebAPI including pagination | Twasi team
+| [variables](https://github.com/Twasi/twasi-variables) | Variable preprocessor (Also create, edit and delete variables) | Twasi-team |
+| [tokens](https://github.com/Twasi/twasi-tokens) | Award your viewers for their participation in your stream | Twasi-team |
+| [songrequests](https://github.com/Twasi/twasi-songrequests) | Let your viewers request their music. This plugin also provides an API for the player. Furhtermore, it allows to create giveaways or other games with the earned tokens | Twasi-team |
+| [message-logger](https://github.com/Twasi/twasi-message-logger) | Log messages in the database and access them via WebAPI including pagination. Also collect some neat chat statistics. | Twasi-team |
+| [stream-stats](https://github.com/Twasi/twasi-stream-stats) | Collect statistics for your stream and access them via WebAPI. You can generate some pretty awesome charts with this data! | Twasi-team |
+| [timed-messages](https://github.com/Twasi/twasi-timed-messages) | Twasi-team |
+| [raffles](https://github.com/Twasi/twasi-raffles | Giveaways and other tools to give your viewers something back. Integrates and depends on twasi-variables. | Twasi-team |
 
 All these plugins listed here are also available in our hosted version. Have you written your own plugin and want to have it featured here and to easy use it in the hosted version? Let us now!
 
@@ -28,4 +31,4 @@ All these plugins listed here are also available in our hosted version. Have you
 Twasi-Core is a java maven application. Just issue `mvn clean compile assembly:single` to generate your jar file. Copy it to an own directory (it will create some files) and issue `java -jar TwasiCore-1.0-SNAPSHOT-jar-with-dependencies.jar` in it. It will fail to start (no connection to database), but create a config file (twasi.yml). Edit the config files and adapt all values to your needs. Learn [here](https://github.com/Twasi/twasi-core/blob/master/docs/DATABASE.MD) how to set up and initialize the database. Learn [here](https://github.com/Twasi/twasi-core/blob/master/docs/TWITCH_OAUTH_SETUP.MD) how to set up the authentication with Twitch to use the /auth endpoint.
 
 ## Download precompiled version
-Late you would find the latest release in the release tab on Github. Sadly, there are no releases during our instable development version. But you can download a snapshot of the latest changes from our artifactory repository [here](https://artifactory.twasi.net/artifactory/list/libs-snapshot-local/net/twasi/TwasiCore/1.0-SNAPSHOT/)
+Later you will find the latest release in the release tab on Github. Sadly, there are no releases during our instable development version. But you can download a snapshot of the latest changes from our artifactory repository [here](https://artifactory.twasi.net/artifactory/list/libs-snapshot-local/net/twasi/TwasiCore/1.0-SNAPSHOT/)
