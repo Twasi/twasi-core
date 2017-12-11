@@ -23,7 +23,7 @@ The following list of feature plugins are planned:
 | [message-logger](https://github.com/Twasi/twasi-message-logger) | Log messages in the database and access them via WebAPI including pagination. Also collect some neat chat statistics. | Twasi-team |
 | [stream-stats](https://github.com/Twasi/twasi-stream-stats) | Collect statistics for your stream and access them via WebAPI. You can generate some pretty awesome charts with this data! | Twasi-team |
 | [timed-messages](https://github.com/Twasi/twasi-timed-messages) | Twasi-team |
-| [raffles](https://github.com/Twasi/twasi-raffles | Giveaways and other tools to give your viewers something back. Integrates and depends on twasi-variables. | Twasi-team |
+| [raffles](https://github.com/Twasi/twasi-raffles) | Giveaways and other tools to give your viewers something back. Integrates and depends on twasi-variables. | Twasi-team |
 
 All these plugins listed here are also available in our hosted version. Have you written your own plugin and want to have it featured here and to easy use it in the hosted version? Let us now!
 
