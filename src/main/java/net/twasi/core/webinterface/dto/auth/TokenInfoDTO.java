@@ -4,20 +4,39 @@ import com.google.gson.annotations.SerializedName;
 
 public class TokenInfoDTO {
 
-    public TokenDTO token;
+    private TokenDTO token;
 
     public class TokenDTO {
         @SerializedName("client_id")
-        public String clientId;
+        private String clientId;
 
         @SerializedName("user_id")
-        public String userId;
+        private String userId;
 
         @SerializedName("user_name")
-        public String userName;
+        private String userName;
 
         @SerializedName("valid")
-        public boolean valid;
+        private boolean valid;
+
+        public String getClientId() {
+            return clientId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public boolean isValid() {
+            return valid;
+        }
     }
 
+    public TokenDTO getToken() {
+        return token;
+    }
 }

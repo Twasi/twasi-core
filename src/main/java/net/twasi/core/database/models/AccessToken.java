@@ -2,10 +2,10 @@ package net.twasi.core.database.models;
 
 public class AccessToken {
 
-    public String accessToken;
-    public String refreshToken;
-    public int expiresIn;
-    public String[] scope;
+    private String accessToken;
+    private String refreshToken;
+    private int expiresIn;
+    private String[] scope;
 
     public AccessToken() {}
 

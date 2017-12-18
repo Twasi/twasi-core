@@ -13,7 +13,7 @@ import java.util.List;
 
 public class InstanceManager {
 
-    public List<TwasiInterface> interfaces = new ArrayList<>();
+    private List<TwasiInterface> interfaces = new ArrayList<>();
 
     /**
      * Registers a single interface (e.g. if someone starts the bot aferwards)
@@ -85,5 +85,9 @@ public class InstanceManager {
 
     public boolean restart(User user) {
         return stop(user) && start(user);
+    }
+
+    public List<TwasiInterface> getInterfaces() {
+        return interfaces;
     }
 }

@@ -14,7 +14,7 @@ import java.net.URLClassLoader;
 
 public class JavaPluginLoader {
 
-    public TwasiPlugin plugin;
+    private TwasiPlugin plugin;
 
     public JavaPluginLoader (File file) {
         URLClassLoader cl = null;
@@ -66,6 +66,10 @@ public class JavaPluginLoader {
             TwasiLogger.log.error(e);
             e.printStackTrace();
         }
+    }
+
+    public TwasiPlugin getPlugin() {
+        return plugin;
     }
 
 }

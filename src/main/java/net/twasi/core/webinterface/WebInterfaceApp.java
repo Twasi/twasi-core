@@ -26,6 +26,7 @@ public class WebInterfaceApp {
                 server.start();
                 TwasiLogger.log.info("Web interface started on port " + Config.getCatalog().webinterface.port);
             } catch (Exception e) {
+                TwasiLogger.log.error(e);
                 e.printStackTrace();
             }
         }

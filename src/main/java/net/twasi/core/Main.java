@@ -36,7 +36,7 @@ public class Main {
         float time = (float) (System.currentTimeMillis() - start);
         double longTime = time / 1000;
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
-        AppState.state = ApplicationState.OPERATING;
+        AppState.setState(ApplicationState.OPERATING);
 
         WebInterfaceApp.start();
         cli.start();
