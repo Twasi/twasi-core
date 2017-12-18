@@ -2,7 +2,6 @@ package net.twasi.core.plugin.java;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import net.twasi.core.database.models.Language;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginConfig;
 import net.twasi.core.plugin.api.TwasiPlugin;
@@ -18,9 +17,10 @@ public class JavaPluginLoader {
     public TwasiPlugin plugin;
 
     public JavaPluginLoader (File file) {
+        URLClassLoader cl = null;
         try {
             URL[] urls = {new URL("jar:file:" + file.getAbsolutePath() + "!/")};
-            URLClassLoader cl = URLClassLoader.newInstance(urls);
+            cl = URLClassLoader.newInstance(urls);
 
             // Check for plugin.yml
             URL infoYamlUrl = cl.getResource("plugin.yml");
@@ -39,6 +39,10 @@ public class JavaPluginLoader {
                 config = mapper.readValue(stream, PluginConfig.class);
             } catch (Exception ee) {
                 TwasiLogger.log.error("Cannot parse config file: " + ee.getMessage());
+            }
+
+            if (config == null) {
+                throw new Exception("Cannot parse config: Config is NULL.");
             }
 
             Class<?> jarClass;
