@@ -6,6 +6,7 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginConfig;
 import net.twasi.core.plugin.api.TwasiPlugin;
 import net.twasi.core.translations.TwasiTranslation;
+import net.twasi.core.webinterface.WebInterfaceApp;
 
 import java.io.File;
 import java.io.InputStream;
@@ -62,6 +63,7 @@ public class JavaPluginLoader {
             plugin = pluginClass.newInstance();
             plugin.setConfig(config);
             plugin.setTranslations(new TwasiTranslation(cl));
+            plugin.setWebServer(WebInterfaceApp.getServer());
         } catch (Exception e) {
             TwasiLogger.log.error(e);
             e.printStackTrace();

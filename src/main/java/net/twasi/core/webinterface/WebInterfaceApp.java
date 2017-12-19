@@ -10,10 +10,12 @@ import java.net.InetSocketAddress;
 
 public class WebInterfaceApp {
 
+    private static HttpServer server;
+
         public static void start() {
             try {
                 // Create server
-                HttpServer server = HttpServer.create(new InetSocketAddress(Config.getCatalog().webinterface.port), 0);
+                server = HttpServer.create(new InetSocketAddress(Config.getCatalog().webinterface.port), 0);
 
                 // Register all handlers
                 ApiRegistry.register(server);
@@ -31,6 +33,9 @@ public class WebInterfaceApp {
             }
         }
 
+        public static HttpServer getServer() {
+            return server;
+        }
 
 
     }
