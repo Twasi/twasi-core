@@ -27,6 +27,9 @@ public class Main {
         TwasiLogger.log.info("Connecting to database " + Config.getCatalog().database.hostname);
         Database.connect();
 
+        TwasiLogger.log.info("Preparing webinterface");
+        WebInterfaceApp.prepare();
+
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
         InstanceManagerService.getService().startForAllUsers(Database.getStore().createQuery(User.class).asList());
 
