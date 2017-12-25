@@ -37,11 +37,13 @@
                 <configuration>
                     <imageName>twasi/twasi-core</imageName>
                     <baseImage>java</baseImage>
-                    <entryPoint>["java", "-jar", "/home/twasi/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
+                    <!-- Set the work dir to use in volumes -->
+                    <workdir>/data</workdir>
+                    <entryPoint>["java", "-jar", "/home/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
                     <!-- copy the service's jar file from target into the root directory of the image -->
                     <resources>
                         <resource>
-                            <targetPath>/home/twasi</targetPath>
+                            <targetPath>/home</targetPath>
                             <directory>${project.build.directory}</directory>
                             <include>${project.build.finalName}-jar-with-dependencies.jar</include>
                         </resource>
