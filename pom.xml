@@ -37,7 +37,7 @@
                 <configuration>
                     <imageName>twasi/twasi-core</imageName>
                     <baseImage>java</baseImage>
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
+                    <entryPoint>["java", "-jar", "/home/twasi/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
                     <!-- copy the service's jar file from target into the root directory of the image -->
                     <resources>
                         <resource>
