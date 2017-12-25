@@ -38,6 +38,7 @@ public class TwitchInterface extends TwasiInterface {
                     writer.flush();
                     return true;
                 } catch (IOException e) {
+                    TwasiLogger.log.error(e);
                     e.printStackTrace();
                     return false;
                 }
@@ -57,6 +58,7 @@ public class TwitchInterface extends TwasiInterface {
                         return null;
                     }
 
+                    TwasiLogger.log.error(e);
                     e.printStackTrace();
                     return null;
                 }

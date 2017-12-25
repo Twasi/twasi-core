@@ -112,7 +112,7 @@ public class InstanceManagerTest {
         instanceManager.registerInterface(interfaceTwo);
         boolean alreadyRegistered = instanceManager.registerInterface(interfaceOne);
 
-        Assert.assertEquals(instanceManager.interfaces.size(), 2);
+        Assert.assertEquals(instanceManager.getInterfaces().size(), 2);
         Assert.assertFalse(alreadyRegistered);
     }
 

@@ -4,6 +4,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import net.twasi.core.database.models.User;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.JWTService;
 
 import java.io.IOException;
@@ -11,22 +12,26 @@ import java.util.List;
 
 public abstract class RequestHandler implements HttpHandler, HttpController {
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-
-        switch(httpExchange.getRequestMethod().toLowerCase()) {
-            case "get":
-                handleGet(httpExchange);
-                break;
-            case "post":
-                handlePost(httpExchange);
-                break;
-            case "options":
-                httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Authorization");
-                Commons.handleOptions(httpExchange);
-                break;
-            default:
-                Commons.handleUnallowedMethod(httpExchange);
-                break;
+    public void handle(HttpExchange httpExchange) {
+        try {
+            switch (httpExchange.getRequestMethod().toLowerCase()) {
+                case "get":
+                    handleGet(httpExchange);
+                    break;
+                case "post":
+                    handlePost(httpExchange);
+                    break;
+                case "options":
+                    httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Authorization");
+                    Commons.handleOptions(httpExchange);
+                    break;
+                default:
+                    Commons.handleUnallowedMethod(httpExchange);
+                    break;
+            }
+        } catch (Throwable e) {
+            TwasiLogger.log.error(e);
+            e.printStackTrace();
         }
     }
 

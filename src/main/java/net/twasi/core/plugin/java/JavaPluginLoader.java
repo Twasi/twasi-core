@@ -2,11 +2,11 @@ package net.twasi.core.plugin.java;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import net.twasi.core.database.models.Language;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginConfig;
 import net.twasi.core.plugin.api.TwasiPlugin;
 import net.twasi.core.translations.TwasiTranslation;
+import net.twasi.core.webinterface.WebInterfaceApp;
 
 import java.io.File;
 import java.io.InputStream;
@@ -15,12 +15,13 @@ import java.net.URLClassLoader;
 
 public class JavaPluginLoader {
 
-    public TwasiPlugin plugin;
+    private TwasiPlugin plugin;
 
     public JavaPluginLoader (File file) {
+        URLClassLoader cl = null;
         try {
             URL[] urls = {new URL("jar:file:" + file.getAbsolutePath() + "!/")};
-            URLClassLoader cl = URLClassLoader.newInstance(urls);
+            cl = URLClassLoader.newInstance(urls);
 
             // Check for plugin.yml
             URL infoYamlUrl = cl.getResource("plugin.yml");
@@ -41,6 +42,10 @@ public class JavaPluginLoader {
                 TwasiLogger.log.error("Cannot parse config file: " + ee.getMessage());
             }
 
+            if (config == null) {
+                throw new Exception("Cannot parse config: Config is NULL.");
+            }
+
             Class<?> jarClass;
             try {
                 jarClass = Class.forName(config.main, true, cl);
@@ -58,10 +63,15 @@ public class JavaPluginLoader {
             plugin = pluginClass.newInstance();
             plugin.setConfig(config);
             plugin.setTranslations(new TwasiTranslation(cl));
+            plugin.setWebServer(WebInterfaceApp.getServer());
         } catch (Exception e) {
             TwasiLogger.log.error(e);
             e.printStackTrace();
         }
+    }
+
+    public TwasiPlugin getPlugin() {
+        return plugin;
     }
 
 }

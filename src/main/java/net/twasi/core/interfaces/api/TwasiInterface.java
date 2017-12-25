@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
-    public List<TwasiPlugin> installedPlugins = new ArrayList<>();
+    private List<TwasiPlugin> installedPlugins = new ArrayList<>();
 
     public boolean installPlugin(TwasiPlugin plugin) {
         if (installedPlugins.contains(plugin)) {

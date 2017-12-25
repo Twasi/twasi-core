@@ -25,7 +25,7 @@ class PluginLoader {
 
             try {
                 JavaPluginLoader pluginLoader = new JavaPluginLoader(plugin);
-                PluginManagerService.getService().registerPlugin(pluginLoader.plugin);
+                PluginManagerService.getService().registerPlugin(pluginLoader.getPlugin());
             } catch (Exception e) {
                 TwasiLogger.log.error(e);
                 e.printStackTrace();

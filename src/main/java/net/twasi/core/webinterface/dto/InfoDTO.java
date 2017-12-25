@@ -1,9 +1,9 @@
 package net.twasi.core.webinterface.dto;
 
 public class InfoDTO extends ApiDTO {
-    public String twitchid;
-    public String username;
-    public boolean isRunning;
+    private String twitchid;
+    private String username;
+    private boolean isRunning;
 
 
     public InfoDTO(boolean status, String twitchid, String username, boolean isInstanceRunning) {

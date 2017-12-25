@@ -1,11 +1,11 @@
 package net.twasi.core.webinterface.dto;
 
-public class TwitchAccountDTO {
+class TwitchAccountDTO {
 
-    public String name;
-    public String token;
+    private String name;
+    private String token;
 
-    public boolean isValid() {
+    boolean isValid() {
         return name != null && token != null;
     }
 

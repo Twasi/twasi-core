@@ -6,16 +6,16 @@ import net.twasi.core.database.models.AccessToken;
 public class AccessTokenDTO {
 
     @SerializedName("access_token")
-    public String accessToken;
+    private String accessToken;
 
     @SerializedName("refresh_token")
-    public String refreshToken;
+    private String refreshToken;
 
     @SerializedName("expires_in")
-    public int expiresIn;
+    private int expiresIn;
 
     @SerializedName("scope")
-    public String[] scope;
+    private String[] scope;
 
     public String getAccessToken() {
         return accessToken;
