@@ -3,14 +3,14 @@ package net.twasi.core.webinterface.controller.user;
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.EventMessage;
 import net.twasi.core.database.models.User;
-import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.webinterface.dto.ApiDTO;
-import net.twasi.core.webinterface.dto.InfoDTO;
 import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;
 import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserEventsController extends RequestHandler {
 
@@ -23,6 +23,8 @@ public class UserEventsController extends RequestHandler {
         User user = getUser(t);
 
         List<EventMessage> messages = user.getEvents();
+        Collections.reverse(messages);
+        messages = messages.subList(0, 10);
 
         UserEventDTO dto = new UserEventDTO(messages);
 
@@ -30,11 +32,23 @@ public class UserEventsController extends RequestHandler {
     }
 
     class UserEventDTO extends ApiDTO {
-        List<EventMessage> messages;
+        List<Object> messages;
 
         private UserEventDTO(List<EventMessage> messages) {
             super(true);
-            this.messages = messages;
+            this.messages = messages.stream().map(msg -> new UserSingleEventDTO(msg.getMessage(), msg.getCreatedAt(), msg.getType().toString())).collect(Collectors.toList());
+        }
+
+        class UserSingleEventDTO {
+            String message;
+            String createdAt;
+            String type;
+
+            public UserSingleEventDTO(String message, String createdAt, String type) {
+                this.message = message;
+                this.createdAt = createdAt;
+                this.type = type;
+            }
         }
     }
 }
