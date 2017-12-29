@@ -2,6 +2,7 @@ package net.twasi.core.webinterface.registry;
 
 import com.sun.net.httpserver.HttpServer;
 import net.twasi.core.webinterface.controller.InfoController;
+import net.twasi.core.webinterface.controller.VersionController;
 import net.twasi.core.webinterface.controller.bot.BotInfoController;
 import net.twasi.core.webinterface.controller.bot.StartController;
 import net.twasi.core.webinterface.controller.bot.StopController;
@@ -16,6 +17,9 @@ public class ApiRegistry {
 
         // Info
         server.createContext("/api", new InfoController());
+
+        // Version
+        server.createContext("/api/version", new VersionController());
 
         // User
         server.createContext("/api/user", new UserController());
