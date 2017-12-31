@@ -82,7 +82,9 @@ public class User {
 
     public GlobalConfig getConfig() {
         if (config == null) {
-            return GlobalConfig.getDefault();
+            GlobalConfig config = GlobalConfig.getDefault();
+            setConfig(config);
+            return config;
         }
         return config;
     }

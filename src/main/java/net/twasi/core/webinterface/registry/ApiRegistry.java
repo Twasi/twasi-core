@@ -7,6 +7,7 @@ import net.twasi.core.webinterface.controller.bot.BotInfoController;
 import net.twasi.core.webinterface.controller.bot.StartController;
 import net.twasi.core.webinterface.controller.bot.StopController;
 import net.twasi.core.webinterface.controller.plugins.PluginController;
+import net.twasi.core.webinterface.controller.settings.SettingsController;
 import net.twasi.core.webinterface.controller.user.UserController;
 import net.twasi.core.webinterface.controller.user.UserEventsController;
 import net.twasi.core.webinterface.controller.user.UserRefreshController;
@@ -23,6 +24,9 @@ public class ApiRegistry {
 
         // User
         server.createContext("/api/user", new UserController());
+
+        // Settings
+        server.createContext("/api/settings", new SettingsController());
 
         // Refresh
         server.createContext("/api/user/refresh", new UserRefreshController());

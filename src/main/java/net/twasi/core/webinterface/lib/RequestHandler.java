@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.JWTService;
+import net.twasi.core.webinterface.dto.error.NotFoundDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +14,12 @@ import java.util.List;
 public abstract class RequestHandler implements HttpHandler, HttpController {
     @Override
     public void handle(HttpExchange httpExchange) {
+
+        if (!httpExchange.getHttpContext().getPath().equalsIgnoreCase(httpExchange.getRequestURI().getPath())) {
+            Commons.writeDTO(httpExchange, new NotFoundDTO(), 404);
+            return;
+        }
+
         try {
             switch (httpExchange.getRequestMethod().toLowerCase()) {
                 case "get":

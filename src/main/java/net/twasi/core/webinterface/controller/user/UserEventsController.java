@@ -24,7 +24,9 @@ public class UserEventsController extends RequestHandler {
 
         List<EventMessage> messages = user.getEvents();
         Collections.reverse(messages);
-        messages = messages.subList(0, 10);
+        if (messages.size() >= 10){
+            messages = messages.subList(0, 10);
+        }
 
         UserEventDTO dto = new UserEventDTO(messages);
 

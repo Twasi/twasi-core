@@ -1,15 +1,13 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.Database;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
-@Entity
+@Entity("globalConfigs")
 public class GlobalConfig {
-    @Id
-    private ObjectId id;
+
     private boolean isActivated;
+    private String language;
 
     public GlobalConfig() {
 
@@ -23,9 +21,18 @@ public class GlobalConfig {
         isActivated = activated;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public static GlobalConfig getDefault() {
         GlobalConfig config = new GlobalConfig();
         config.setActivated(true);
+        config.setLanguage("DE_DE");
         Database.getStore().save(config);
         return config;
     }

@@ -29,7 +29,6 @@ public class BotInfoController extends RequestHandler {
         TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
 
         BotInfoControllerDTO dto = new BotInfoControllerDTO(true);
-        dto.user = inf.getStreamer().getUser();
 
         Commons.writeDTO(t, dto, 200);
     }
@@ -37,10 +36,8 @@ public class BotInfoController extends RequestHandler {
 
 class BotInfoControllerDTO extends ApiDTO {
     boolean isRunning;
-    User user;
 
-
-    public BotInfoControllerDTO(Boolean isRunning) {
+    BotInfoControllerDTO(Boolean isRunning) {
         super(true);
         this.isRunning = isRunning;
     }
