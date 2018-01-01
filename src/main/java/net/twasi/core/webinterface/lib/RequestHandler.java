@@ -28,6 +28,9 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
                 case "post":
                     handlePost(httpExchange);
                     break;
+                case "put":
+                    handlePut(httpExchange);
+                    break;
                 case "options":
                     httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Authorization");
                     Commons.handleOptions(httpExchange);
@@ -51,6 +54,9 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
     public void handlePost(HttpExchange t) {
         Commons.handleUnallowedMethod(t);
     }
+
+    @Override
+    public void handlePut(HttpExchange t) { Commons.handleUnallowedMethod(t); }
 
     private String getToken(HttpExchange t) {
         String authorizationHeader = t.getRequestHeaders().getFirst("Authorization");

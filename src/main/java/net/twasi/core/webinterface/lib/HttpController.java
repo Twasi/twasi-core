@@ -8,4 +8,6 @@ public interface HttpController {
 
     public void handlePost(HttpExchange t);
 
+    public void handlePut(HttpExchange t);
+
 }

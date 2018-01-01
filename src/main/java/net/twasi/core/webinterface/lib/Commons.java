@@ -57,6 +57,7 @@ public class Commons {
 
     static void handleOptions(HttpExchange t) {
         t.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        t.getResponseHeaders().set("Access-Control-Allow-Methods", "*");
         writeString(t, "", 200);
     }
 
