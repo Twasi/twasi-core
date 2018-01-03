@@ -27,7 +27,7 @@ public class InstanceManager {
         }
 
         interfaces.add(inf);
-        TwasiLogger.log.debug("Registered interface: " + inf.toString());
+        TwasiLogger.log.debug("Registered interface for streamer " + inf.getStreamer().getUser().getTwitchAccount().getUserName());
         return true;
     }
 

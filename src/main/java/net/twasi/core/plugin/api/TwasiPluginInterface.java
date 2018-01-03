@@ -1,24 +1,26 @@
 package net.twasi.core.plugin.api;
 
-import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.models.Message.Command;
-import net.twasi.core.models.Message.Message;
+import net.twasi.core.plugin.api.events.*;
 
 import java.util.List;
 
 public interface TwasiPluginInterface {
 
-    void onEnable();
+    void onActivate(TwasiActivateEvent e);
 
-    void onDisable();
+    void onDeactivate(TwasiDeactivateEvent e);
 
-    void onInstall(TwasiInterface inf);
+    void onEnable(TwasiEnableEvent e);
 
-    void onUninstall(TwasiInterface inf);
+    void onDisable(TwasiDisableEvent e);
 
-    void onCommand(Command command);
+    void onInstall(TwasiInstallEvent e);
 
-    void onMessage(Message msg);
+    void onUninstall(TwasiUninstallEvent e);
+
+    void onCommand(TwasiCommandEvent e);
+
+    void onMessage(TwasiMessageEvent e);
 
     List<String> getRegisteredCommands();
 

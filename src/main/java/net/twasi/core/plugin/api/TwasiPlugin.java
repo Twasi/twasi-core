@@ -1,13 +1,9 @@
 package net.twasi.core.plugin.api;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Message.Command;
-import net.twasi.core.models.Message.Message;
 import net.twasi.core.plugin.PluginConfig;
+import net.twasi.core.plugin.api.events.*;
 import net.twasi.core.translations.TwasiTranslation;
 import net.twasi.core.webinterface.lib.RequestHandler;
 
@@ -15,32 +11,28 @@ import java.util.List;
 
 public abstract class TwasiPlugin implements TwasiPluginInterface {
 
-    protected PluginConfig config;
+    private PluginConfig config;
     private TwasiTranslation translations;
     private HttpServer webServer;
 
-    public void onEnable() {
+    public void onActivate(TwasiActivateEvent e) {}
 
+    public void onDeactivate(TwasiDeactivateEvent e) {}
+
+    public void onEnable(TwasiEnableEvent e) {}
+
+    public void onDisable(TwasiDisableEvent e) {}
+
+    public void onInstall(TwasiInstallEvent e) {}
+
+    public void onUninstall(TwasiUninstallEvent e) {}
+
+    public void onCommand(TwasiCommandEvent e) {
+        TwasiLogger.log.debug("Plugin '" + getConfig().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
     }
 
-    public void onDisable() {
-
-    }
-
-    public void onInstall(TwasiInterface inf) {
-
-    }
-
-    public void onUninstall(TwasiInterface inf) {
-
-    }
-
-    public void onCommand(Command command) {
-        TwasiLogger.log.debug("Plugin '" + getConfig().getName() + "' has registered command '" + command.getCommandName() + "' but has no handler.");
-    }
-
-    public void onMessage(Message msg) {
-        TwasiLogger.log.debug("Plugin '" + getConfig().getName() + "' has registered to messages events but has no handler.");
+    public void onMessage(TwasiMessageEvent e) {
+        TwasiLogger.log.debug("Plugin '" + getConfig().getName() + "' has registered to message events but has no handler.");
     }
 
     public void setConfig(PluginConfig config) {

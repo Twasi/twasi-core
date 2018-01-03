@@ -3,12 +3,16 @@ package net.twasi.core.plugin;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.api.TwasiPlugin;
+import net.twasi.core.plugin.api.events.TwasiEnableEvent;
 import net.twasi.core.services.InstanceManagerService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Plugin manager does manage the lifecycle of all plugins
+ */
 public class PluginManager {
 
     private List<TwasiPlugin> plugins = new ArrayList<>();
@@ -16,6 +20,7 @@ public class PluginManager {
     /**
      * Registers a plugin and calls it's install events.
      * Does check that plugins aren't registerd twice.
+     * Afterwards enables it for all installed instances.
      * @param plugin The plugin to register
      * @return if the plugin was registered successfully
      */
@@ -26,16 +31,11 @@ public class PluginManager {
         }
 
         plugins.add(plugin);
-        plugin.onEnable();
 
-        // TODO if plugin enabling/disabling system is enabled this should be checked here
-        // all plugins will be enabled for everyone until then
         for(TwasiInterface twasiInterface : InstanceManagerService.getService().getInterfaces()) {
-            try {
-                plugin.onInstall(twasiInterface);
-            } catch (Exception e) {
-                TwasiLogger.log.error(e);
-                e.printStackTrace();
+            if (twasiInterface.getStreamer().getUser().getInstalledPlugins().contains(plugin.getConfig().getName())) {
+                // It is installed, call onEnable
+                plugin.onEnable(new TwasiEnableEvent(twasiInterface));
             }
         }
 

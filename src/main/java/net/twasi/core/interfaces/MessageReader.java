@@ -2,7 +2,7 @@ package net.twasi.core.interfaces;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Message.Message;
+import net.twasi.core.models.Message.TwasiMessage;
 
 public class MessageReader implements Runnable {
     private TwasiInterface twasiInterface;
@@ -15,7 +15,7 @@ public class MessageReader implements Runnable {
     public void run() {
         while (!twasiInterface.getSocket().isClosed()) {
             try {
-                Message message = twasiInterface.getCommunicationHandler().readMessage();
+                TwasiMessage message = twasiInterface.getCommunicationHandler().readMessage();
                 if (message == null) {
                     continue;
                 }

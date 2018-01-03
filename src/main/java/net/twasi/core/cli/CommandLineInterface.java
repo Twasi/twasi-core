@@ -41,7 +41,7 @@ public class CommandLineInterface {
                     break;
 
                 default:
-                    System.out.println("Command not found. Use /help for help.");
+                    System.out.println("TwasiCommand not found. Use /help for help.");
             }
         };
     }

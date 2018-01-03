@@ -7,7 +7,7 @@ import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.MessageDispatcher;
-import net.twasi.core.models.Message.Message;
+import net.twasi.core.models.Message.TwasiMessage;
 import net.twasi.core.models.Streamer;
 
 import java.io.*;
@@ -45,13 +45,13 @@ public class TwitchInterface extends TwasiInterface {
             }
 
             @Override
-            public Message readMessage() {
+            public TwasiMessage readMessage() {
                 try {
                     String line = reader.readLine();
                     if (line == null) {
                         return null;
                     }
-                    return Message.parse(line, getInterface());
+                    return TwasiMessage.parse(line, getInterface());
                 } catch (IOException e) {
                     if (e.getMessage().equals("Socket closed")) {
                         TwasiLogger.log.info("Connection to Socket lost for Interface " + getStreamer().getUser().getTwitchAccount().getUserName());

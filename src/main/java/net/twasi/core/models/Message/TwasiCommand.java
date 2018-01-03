@@ -4,8 +4,8 @@ import net.twasi.core.config.Config;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.interfaces.api.TwasiInterface;
 
-public class Command extends Message {
-    public Command(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
+public class TwasiCommand extends TwasiMessage {
+    public TwasiCommand(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
         super(message, type, sender, inf);
     }
 

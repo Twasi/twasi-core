@@ -18,6 +18,7 @@ public class User {
 
     @Id
     private ObjectId id;
+
     private TwitchAccount twitchAccount;
     private TwitchAccount twitchBotAccount;
 
@@ -26,9 +27,12 @@ public class User {
     private Language language;
 
     private GlobalConfig config;
+
     private List<Permissions> permissions;
 
     private List<EventMessage> events;
+
+    private List<String> installedPlugins;
 
     public User() {
         if (Config.getCatalog() != null) {
@@ -134,6 +138,13 @@ public class User {
             events = new ArrayList<>();
         }
         return events;
+    }
+
+    public List<String> getInstalledPlugins() {
+        if (installedPlugins == null) {
+            installedPlugins = new ArrayList<>();
+        }
+        return installedPlugins;
     }
 
     public void setEvents(List<EventMessage> events) {

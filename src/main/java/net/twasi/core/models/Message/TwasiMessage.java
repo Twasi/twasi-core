@@ -1,23 +1,21 @@
 package net.twasi.core.models.Message;
 
 import net.twasi.core.config.Config;
-import net.twasi.core.database.Database;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.interfaces.api.TwasiInterface;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-public class Message {
+public class TwasiMessage {
 
     protected MessageType type;
     protected String message;
     protected TwitchAccount sender;
     protected TwasiInterface twasiInterface;
 
-    public Message(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
+    public TwasiMessage(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
         this.message = message;
         this.type = type;
         this.sender = sender;
@@ -43,11 +41,11 @@ public class Message {
         return message.startsWith(Config.getCatalog().bot.prefix);
     }
 
-    public Command toCommand() {
+    public TwasiCommand toCommand() {
         if (!isCommand()) {
             return null;
         }
-        return new Command(message, type,sender, twasiInterface);
+        return new TwasiCommand(message, type,sender, twasiInterface);
     }
 
     public TwasiInterface getTwasiInterface() {
@@ -58,7 +56,7 @@ public class Message {
         twasiInterface.getCommunicationHandler().sendMessage(text);
     }
 
-    public static Message parse(String ircLine, TwasiInterface inf) {
+    public static TwasiMessage parse(String ircLine, TwasiInterface inf) {
         // System.out.println(ircLine);
         String message = null;
         TwitchAccount sender = null;
@@ -122,6 +120,6 @@ public class Message {
             return null;
         }
 
-        return new Message(message, type, sender, inf);
+        return new TwasiMessage(message, type, sender, inf);
     }
 }
