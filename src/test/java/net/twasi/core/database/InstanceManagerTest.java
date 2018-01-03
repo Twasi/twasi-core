@@ -1,5 +1,7 @@
 package net.twasi.core.database;
 
+import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.database.models.User;
 import net.twasi.core.instances.InstanceManager;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
@@ -14,6 +16,8 @@ public class InstanceManagerTest {
     @Test
     public void registerInterfaceTest() {
         InstanceManager instanceManager = new InstanceManager();
+        User user = new User();
+        user.setTwitchAccount(new TwitchAccount());
 
         TwasiInterface interfaceOne = new TwasiInterface() {
             @Override
@@ -48,7 +52,7 @@ public class InstanceManagerTest {
 
             @Override
             public Streamer getStreamer() {
-                return null;
+                return new Streamer(user);
             }
 
             @Override
@@ -94,7 +98,7 @@ public class InstanceManagerTest {
 
             @Override
             public Streamer getStreamer() {
-                return null;
+                return new Streamer(user);
             }
 
             @Override

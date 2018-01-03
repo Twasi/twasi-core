@@ -17,7 +17,7 @@ public class TranslationsTest {
 
         Assert.assertEquals("unknown.translation.key", translation.getTranslation(user, "unknown.translation.key"));
         Assert.assertEquals("This string is only known by english language.", translation.getTranslation(user, "only.english.known"));
-        Assert.assertEquals("Dieser Text ist nur hier verfügbar.", translation.getTranslation(user, "only.german.known"));
+        Assert.assertEquals("Dieser Text ist nur hier verf&uuml;gbar.", translation.getTranslation(user, "only.german.known"));
         Assert.assertEquals("Bei beiden bekannt.", translation.getTranslation(user, "known.by.both"));
         Assert.assertEquals("Known by both.", translation.getTranslation(Language.EN_GB, "known.by.both"));
 
