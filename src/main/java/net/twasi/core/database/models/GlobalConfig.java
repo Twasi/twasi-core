@@ -33,7 +33,6 @@ public class GlobalConfig {
         GlobalConfig config = new GlobalConfig();
         config.setActivated(true);
         config.setLanguage(Language.DE_DE);
-        Database.getStore().save(config);
         return config;
     }
 }
