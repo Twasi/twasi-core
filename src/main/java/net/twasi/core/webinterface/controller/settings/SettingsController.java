@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.Database;
 import net.twasi.core.database.models.GlobalConfig;
+import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.store.UserStore;
 import net.twasi.core.webinterface.dto.ApiDTO;
@@ -56,12 +57,12 @@ public class SettingsController extends RequestHandler {
 
         SettingsViewDTO(GlobalConfig config) {
             super(true);
-            language = config.getLanguage();
+            language = config.getLanguage().toString();
         }
     }
 
     class SettingsInputDTO {
-        String language;
+        Language language;
 
         boolean isValid() {
             return language != null;

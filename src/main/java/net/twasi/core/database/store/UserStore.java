@@ -8,6 +8,7 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.InstanceManagerService;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,23 +45,26 @@ public class UserStore {
      * Returns a user by TwitchID
      */
     public static User getOrCreate(TwitchAccount account) {
-        List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
-        if (users.size() == 0) {
+        // List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
+        User user = getById(account.getTwitchId());
+        if (user == null) {
             // User not registered.
-            User user = new User();
+            user = new User();
             user.setTwitchAccount(account);
             Database.getStore().save(user);
+            users.add(user);
             return user;
         }
-        return users.get(0);
+        return user;
     }
 
     public static User getById(String twitchid) {
-        List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", twitchid).asList();
+        /* List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", twitchid).asList();
         if (users.size() == 0) {
             return null;
         }
-        return users.get(0);
+        return users.get(0); */
+        return users.stream().filter(user -> user.getTwitchAccount().getTwitchId().equalsIgnoreCase(twitchid)).findFirst().orElse(null);
     }
 
     public static void updateUser(User user) {

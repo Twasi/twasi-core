@@ -35,13 +35,11 @@ public class InstanceManager {
      * Starts and register all interfaces for the User array.
      * This should be called after startup to initially start all users.
      * @param users The list of Users
-     * @return if all users were started successfully.
      */
-    public boolean startForAllUsers(List<User> users) {
+    public void startForAllUsers(List<User> users) {
         for(User u : users) {
             start(u);
         }
-        return true;
     }
 
     public boolean hasRegisteredInstance(User user) {

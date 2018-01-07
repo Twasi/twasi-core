@@ -53,7 +53,7 @@ public class TwasiTranslation {
     }
 
     public String getTranslation(User user, String translationKey) {
-        return getTranslation(user.getLanguage(), translationKey);
+        return getTranslation(user.getConfig().getLanguage(), translationKey);
     }
 
     public String getTranslation(User user, String translationKey, Object... objects) {

@@ -7,7 +7,7 @@ import org.mongodb.morphia.annotations.Entity;
 public class GlobalConfig {
 
     private boolean isActivated;
-    private String language;
+    private Language language;
 
     public GlobalConfig() {
 
@@ -21,18 +21,18 @@ public class GlobalConfig {
         isActivated = activated;
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 
-    public static GlobalConfig getDefault() {
+    static GlobalConfig getDefault() {
         GlobalConfig config = new GlobalConfig();
         config.setActivated(true);
-        config.setLanguage("DE_DE");
+        config.setLanguage(Language.DE_DE);
         Database.getStore().save(config);
         return config;
     }

@@ -1,9 +1,9 @@
 package net.twasi.core.plugin;
 
+import net.twasi.core.database.store.UserStore;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.api.TwasiPlugin;
-import net.twasi.core.plugin.api.events.TwasiEnableEvent;
+import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.services.InstanceManagerService;
 
 import java.util.ArrayList;
@@ -18,27 +18,23 @@ public class PluginManager {
     private List<TwasiPlugin> plugins = new ArrayList<>();
 
     /**
-     * Registers a plugin and calls it's install events.
+     * Registers a plugin
      * Does check that plugins aren't registerd twice.
      * Afterwards enables it for all installed instances.
      * @param plugin The plugin to register
      * @return if the plugin was registered successfully
      */
-    public boolean registerPlugin(TwasiPlugin plugin) {
+    boolean registerPlugin(TwasiPlugin plugin) {
         if (plugins.contains(plugin)) {
-            TwasiLogger.log.info("Tried to register plugin " + plugin.getConfig().getName() + " twice. Skipped.");
+            TwasiLogger.log.info("Tried to register plugin " + plugin.getDescription().getName() + " twice. Skipped.");
             return false;
         }
-
         plugins.add(plugin);
 
-        for(TwasiInterface twasiInterface : InstanceManagerService.getService().getInterfaces()) {
-            if (twasiInterface.getStreamer().getUser().getInstalledPlugins().contains(plugin.getConfig().getName())) {
-                // It is installed, call onEnable
-                plugin.onEnable(new TwasiEnableEvent(twasiInterface));
-            }
-        }
-
+        UserStore.getUsers().stream().filter(user -> user.getInstalledPlugins().contains(plugin.getName())).parallel().forEach(user -> {
+            TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
+            inf.enableUserPlugin(plugin);
+        });
         return true;
     }
 
@@ -53,7 +49,7 @@ public class PluginManager {
      */
     public List<TwasiPlugin> getByCommand(String command) {
         return plugins.stream().filter(
-                plugin -> plugin.getConfig().getCommands().stream().map(
+                plugin -> plugin.getDescription().getCommands().stream().map(
                         String::toLowerCase).collect(Collectors.toList()
                 ).contains(command.toLowerCase())
         ).collect(Collectors.toList());
@@ -64,6 +60,6 @@ public class PluginManager {
      * @return a list of all plugins matching (empty if none)
      */
     public List<TwasiPlugin> getMessagePlugins() {
-        return plugins.stream().filter(plugin -> plugin.getConfig().handlesMessages()).collect(Collectors.toList());
+        return plugins.stream().filter(plugin -> plugin.getDescription().handlesMessages()).collect(Collectors.toList());
     }
 }

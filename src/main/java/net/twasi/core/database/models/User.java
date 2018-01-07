@@ -6,7 +6,6 @@ import net.twasi.core.database.models.permissions.Permissions;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,6 @@ public class User {
     private TwitchAccount twitchBotAccount;
 
     private String JWTSecret;
-
-    private Language language;
 
     private GlobalConfig config;
 
@@ -107,21 +104,13 @@ public class User {
 
     public List<Permissions> getPermissions() {
         if (permissions == null) {
-            return new ArrayList<>();
+            permissions = new ArrayList<>();
         }
         return permissions;
     }
 
     public void setPermissions(List<Permissions> permissions) {
         this.permissions = permissions;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
     }
 
     public boolean hasPermission(TwitchAccount account, String permissionKey) {

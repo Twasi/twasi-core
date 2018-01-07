@@ -1,6 +1,5 @@
 package net.twasi.core.plugin.api.events;
 
-import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.TwasiMessage;
 
 public class TwasiMessageEvent {
@@ -15,4 +14,7 @@ public class TwasiMessageEvent {
         return message;
     }
 
+    public TwasiMessage getMessage() {
+        return message;
+    }
 }

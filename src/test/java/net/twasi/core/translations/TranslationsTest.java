@@ -11,7 +11,7 @@ public class TranslationsTest {
 
     @Test
     public void testTranslation() {
-        user.setLanguage(Language.DE_DE);
+        user.getConfig().setLanguage(Language.DE_DE);
 
         TwasiTranslation translation = new TwasiTranslation(getClass().getClassLoader());
 

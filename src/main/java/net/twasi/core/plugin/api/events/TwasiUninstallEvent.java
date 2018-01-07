@@ -1,17 +1,9 @@
 package net.twasi.core.plugin.api.events;
 
-import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
 
-public class TwasiUninstallEvent {
-
-    private TwasiInterface twasiInterface;
-
-    public TwasiUninstallEvent(TwasiInterface twasiInterface) {
-        this.twasiInterface = twasiInterface;
+public class TwasiUninstallEvent extends TwasiEvent {
+    public TwasiUninstallEvent(TwasiUserPlugin userPlugin) {
+        super(userPlugin);
     }
-
-    public TwasiInterface getTwasiInterface() {
-        return twasiInterface;
-    }
-
 }

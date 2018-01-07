@@ -1,40 +1,40 @@
 package net.twasi.core.plugin;
 
-import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.java.JavaPluginLoader;
-import net.twasi.core.services.PluginManagerService;
-
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 
-class PluginLoader {
+/**
+ * Represents a plugin loader, which handles direct access to specific types
+ * of plugins
+ */
+public interface PluginLoader {
 
-    PluginLoader() {
+    /**
+     * Loads the plugin contained in the specified file
+     *
+     * @param file File to attempt to load
+     * @return Plugin that was contained in the specified file, or null if
+     *     unsuccessful
+     * @throws Exception Thrown when the specified file is not a
+     *     plugin
+     */
+    public TwasiPlugin loadPlugin(File file) throws Exception;
 
-        if (!new File("plugins").isDirectory()) {
-            TwasiLogger.log.info("Plugins directory not found, creating.");
-            if (!new File("plugins").mkdir()) TwasiLogger.log.error("Could not create plugins directory.");
-        }
+    /**
+     * Enables the specified plugin
+     * <p>
+     * Attempting to enable a plugin that is already enabled will have no
+     * effect
+     *
+     * @param plugin Plugin to enable
+     */
+    public void enablePlugin(Plugin plugin);
 
-        File[] pluginJars = new File("plugins").listFiles((dir, name) -> name.endsWith(".jar"));
-
-        assert pluginJars != null;
-        for(File plugin : pluginJars) {
-            TwasiLogger.log.debug("Loading plugin " + plugin);
-
-            try {
-                JavaPluginLoader pluginLoader = new JavaPluginLoader(plugin);
-                PluginManagerService.getService().registerPlugin(pluginLoader.getPlugin());
-            } catch (Exception e) {
-                TwasiLogger.log.error(e);
-                e.printStackTrace();
-            }
-        }
-        TwasiLogger.log.info(PluginManagerService.getService().getPlugins().size() + " plugin(s) loaded.");
-        TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(
-                PluginManagerService.getService().getPlugins().stream().map(plugin -> plugin.getConfig().getName()).toArray()
-        ));
-    }
-
+    /**
+     * Disables the specified plugin
+     * <p>
+     * Attempting to disable a plugin that is not enabled will have no effect
+     *
+     * @param plugin Plugin to disable
+     */
+    public void disablePlugin(Plugin plugin);
 }

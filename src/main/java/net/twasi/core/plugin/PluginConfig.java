@@ -1,5 +1,9 @@
 package net.twasi.core.plugin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import java.io.InputStream;
 import java.util.List;
 
 public class PluginConfig {
@@ -11,6 +15,13 @@ public class PluginConfig {
     public String main;
     public String helpText;
     public boolean messageHandler;
+
+    public static PluginConfig fromInputStream(InputStream stream) throws Exception {
+        // Parse
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+
+        return mapper.readValue(stream, PluginConfig.class);
+    }
 
     public List<String> commands;
     public List<String> permissions;

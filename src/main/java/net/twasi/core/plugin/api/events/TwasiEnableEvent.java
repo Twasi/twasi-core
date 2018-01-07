@@ -1,16 +1,9 @@
 package net.twasi.core.plugin.api.events;
 
-import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
 
-public class TwasiEnableEvent {
-
-    private TwasiInterface twasiInterface;
-
-    public TwasiEnableEvent(TwasiInterface twasiInterface) {
-        this.twasiInterface = twasiInterface;
-    }
-
-    public TwasiInterface getTwasiInterface() {
-        return twasiInterface;
+public class TwasiEnableEvent extends TwasiEvent {
+    public TwasiEnableEvent(TwasiUserPlugin userPlugin) {
+        super(userPlugin);
     }
 }
