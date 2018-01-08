@@ -30,7 +30,7 @@ public class PluginController extends RequestHandler {
 
         List<TwasiPlugin> plugins = PluginManagerService.getService().getPlugins();
 
-        PluginListDTO dto = new PluginListDTO(plugins);
+        PluginListDTO dto = new PluginListDTO(plugins, getUser(t));
 
         Commons.writeDTO(t, dto, 200);
     }
@@ -106,9 +106,10 @@ public class PluginController extends RequestHandler {
     class PluginListDTO extends ApiDTO {
         List<SinglePluginDTO> plugins;
 
-        PluginListDTO(List<TwasiPlugin> plugins) {
+        PluginListDTO(List<TwasiPlugin> plugins, User user) {
             super(true);
-            this.plugins = plugins.stream().map(SinglePluginDTO::new).collect(Collectors.toList());
+
+            this.plugins = plugins.stream().map(plugin -> new SinglePluginDTO(plugin, user.getInstalledPlugins().contains(plugin.getName()))).collect(Collectors.toList());
         }
 
         class SinglePluginDTO {
@@ -116,12 +117,14 @@ public class PluginController extends RequestHandler {
             String author;
             String description;
             String version;
+            boolean isInstalled;
 
-            SinglePluginDTO(TwasiPlugin plugin) {
+            SinglePluginDTO(TwasiPlugin plugin, Boolean isInstalled) {
                 name = plugin.getDescription().name;
                 author = plugin.getDescription().author;
                 description = plugin.getDescription().description;
                 version = plugin.getDescription().version;
+                this.isInstalled = isInstalled;
             }
         }
     }
