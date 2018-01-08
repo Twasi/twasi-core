@@ -45,27 +45,62 @@ public class PluginController extends RequestHandler {
 
         PluginInstallDTO dto = new Gson().fromJson(new InputStreamReader(t.getRequestBody()), PluginInstallDTO.class);
 
-        if (user.getInstalledPlugins().contains(dto.pluginName)) {
-            Commons.writeDTO(t, new BadRequestDTO("Plugin is already installed."), 400);
+        if (dto == null || dto.action == null) {
+            Commons.writeDTO(t, new BadRequestDTO("Invalid data submitted"), 400);
             return;
         }
 
-        if (PluginManagerService.getService().getPlugins().stream().noneMatch(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName))) {
-            Commons.writeDTO(t, new BadRequestDTO("This plugin is not available on this instance."), 400);
-            return;
+        if (dto.action == PluginInstallDTO.ActionType.INSTALL) {
+            // Installation
+            if (user.getInstalledPlugins().contains(dto.pluginName)) {
+                Commons.writeDTO(t, new BadRequestDTO("Plugin is already installed."), 400);
+                return;
+            }
+
+            if (PluginManagerService.getService().getPlugins().stream().noneMatch(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName))) {
+                Commons.writeDTO(t, new BadRequestDTO("This plugin is not available on this instance."), 400);
+                return;
+            }
+
+            TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
+            inf.installPlugin(PluginManagerService.getService().getPlugins().stream().filter(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName)).findFirst().get());
+
+            user.getInstalledPlugins().add(dto.pluginName);
+            Database.getStore().save(user);
+
+            Commons.writeDTO(t, new SuccessDTO("Plugin installed"), 200);
+        } else if (dto.action == PluginInstallDTO.ActionType.UNINSTALL) {
+            // Uninstallation
+            if (!user.getInstalledPlugins().contains(dto.pluginName)) {
+                Commons.writeDTO(t, new BadRequestDTO("Plugin is not installed."), 400);
+                return;
+            }
+
+            if (PluginManagerService.getService().getPlugins().stream().noneMatch(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName))) {
+                Commons.writeDTO(t, new BadRequestDTO("This plugin is not available on this instance."), 400);
+                return;
+            }
+
+            TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
+            inf.uninstallPlugin(PluginManagerService.getService().getPlugins().stream().filter(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName)).findFirst().get());
+
+            user.getInstalledPlugins().remove(dto.pluginName);
+            Database.getStore().save(user);
+
+            Commons.writeDTO(t, new SuccessDTO("Plugin uninstalled"), 200);
+        } else {
+            Commons.writeDTO(t, new BadRequestDTO("Unknown action"), 400);
         }
-
-        TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
-        inf.installPlugin(PluginManagerService.getService().getPlugins().stream().filter(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName)).findFirst().get());
-
-        user.getInstalledPlugins().add(dto.pluginName);
-        Database.getStore().save(user);
-
-        Commons.writeDTO(t, new SuccessDTO("Plugin installed"), 200);
     }
 
-    class PluginInstallDTO {
+    static class PluginInstallDTO {
         String pluginName;
+        ActionType action;
+
+        enum ActionType {
+            INSTALL,
+            UNINSTALL
+        }
     }
 
     class PluginListDTO extends ApiDTO {

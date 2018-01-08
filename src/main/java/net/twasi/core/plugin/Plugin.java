@@ -1,6 +1,7 @@
 package net.twasi.core.plugin;
 
 
+import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
 
@@ -82,7 +83,7 @@ public interface Plugin {
      * Returns the user Plugin used by this core extension
      * @return the user plugin class
      */
-    public Class getUserPluginClass();
+    public Class<? extends TwasiUserPlugin> getUserPluginClass();
 
     /**
      * Registers a new route to the API
