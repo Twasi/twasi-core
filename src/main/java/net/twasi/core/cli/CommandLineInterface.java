@@ -1,9 +1,19 @@
 package net.twasi.core.cli;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.twasi.core.database.store.UserStore;
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 
+import java.util.List;
 import java.util.Scanner;
 
+import net.twasi.core.plugin.TwasiPlugin;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.services.InstanceManagerService;
 import org.apache.log4j.Level;
 
 public class CommandLineInterface {
@@ -11,9 +21,9 @@ public class CommandLineInterface {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         TwasiLogger.log.info("Started Twasi CLI. Use /help for a list of commands.");
+        System.out.print("> ");
 
         while(scanner.hasNextLine()) {
-            System.out.print("> ");
             String input = scanner.nextLine();
             String[] params = input.split(" ");
 
@@ -40,9 +50,29 @@ public class CommandLineInterface {
                     }
                     break;
 
+                case "/dump":
+                case "/formdump":
+                    Gson gson;
+                    if (params[0].equals("/dump")) {
+                        gson = new GsonBuilder().create();
+                    } else {
+                        gson = new GsonBuilder().setPrettyPrinting().create();
+                    }
+                    if (params.length == 1) {
+                        System.out.println("Missing object");
+                    } else if (params.length == 2) {
+                        if (params[1].equalsIgnoreCase("users")) {
+                            System.out.println(gson.toJson(UserStore.getUsers()));
+                        } else {
+                            System.out.println("Unknown object: " + params[1]);
+                        }
+                    }
+                    break;
+
                 default:
                     System.out.println("TwasiCommand not found. Use /help for help.");
             }
+            System.out.print("> ");
         };
     }
 

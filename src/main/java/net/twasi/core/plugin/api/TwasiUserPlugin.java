@@ -1,6 +1,5 @@
 package net.twasi.core.plugin.api;
 
-import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
@@ -11,10 +10,10 @@ import java.util.List;
 
 public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
 
-    private TwasiPlugin corePlugin;
+    private transient TwasiPlugin corePlugin;
 
-    private TwasiInterface twasiInterface;
-    private TwasiTranslation translations;
+    private transient TwasiInterface twasiInterface;
+    private transient TwasiTranslation translations;
 
     public void onEnable(TwasiEnableEvent e) {}
 

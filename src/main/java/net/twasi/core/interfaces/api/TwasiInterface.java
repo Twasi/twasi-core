@@ -26,7 +26,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         }
 
         try {
-            TwasiUserPlugin userPlugin = (TwasiUserPlugin) plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
+            TwasiUserPlugin userPlugin = plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
 
             LifecycleManagement.initiate(userPlugin, this, plugin);
             LifecycleManagement.handleInstall(userPlugin);
@@ -41,7 +41,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     public void enableUserPlugin(TwasiPlugin plugin) {
         try {
-            TwasiUserPlugin userPlugin = (TwasiUserPlugin) plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
+            TwasiUserPlugin userPlugin = plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
 
             LifecycleManagement.initiate(userPlugin, this, plugin);
             LifecycleManagement.handleEnable(userPlugin);

@@ -2,7 +2,7 @@ package net.twasi.core.interfaces.api;
 
 public abstract class CommunicationHandler implements CommunicationHandlerInterface {
 
-    private TwasiInterface twasiInterface;
+    private transient TwasiInterface twasiInterface;
 
     public CommunicationHandler(TwasiInterface inf) {
         twasiInterface = inf;

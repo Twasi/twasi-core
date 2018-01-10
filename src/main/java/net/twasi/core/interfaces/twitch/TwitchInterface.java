@@ -7,7 +7,6 @@ import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.MessageDispatcher;
-import net.twasi.core.models.Message.TwasiMessage;
 import net.twasi.core.models.Streamer;
 
 import java.io.*;
@@ -30,40 +29,7 @@ public class TwitchInterface extends TwasiInterface {
     public TwitchInterface(Streamer streamer) {
         this.streamer = streamer;
 
-        this.handler = new CommunicationHandler(this) {
-            @Override
-            public boolean sendMessage(String message) {
-                try {
-                    writer.write("PRIVMSG " + streamer.getUser().getTwitchAccount().getChannel() + " :" + message + "\n");
-                    writer.flush();
-                    return true;
-                } catch (IOException e) {
-                    TwasiLogger.log.error(e);
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-
-            @Override
-            public TwasiMessage readMessage() {
-                try {
-                    String line = reader.readLine();
-                    if (line == null) {
-                        return null;
-                    }
-                    return TwasiMessage.parse(line, getInterface());
-                } catch (IOException e) {
-                    if (e.getMessage().equals("Socket closed")) {
-                        TwasiLogger.log.info("Connection to Socket lost for Interface " + getStreamer().getUser().getTwitchAccount().getUserName());
-                        return null;
-                    }
-
-                    TwasiLogger.log.error(e);
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        };
+        this.handler = new TwitchCommunicationHandler(this);
 
         this.dispatcher = new MessageDispatcher(this);
     }
@@ -153,5 +119,13 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public Socket getSocket() {
         return socket;
+    }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public BufferedWriter getWriter() {
+        return writer;
     }
 }

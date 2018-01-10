@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MessageDispatcher {
 
-    private TwasiInterface twasiInterface;
+    private transient TwasiInterface twasiInterface;
 
     public MessageDispatcher(TwasiInterface inf) {
         this.twasiInterface = inf;
