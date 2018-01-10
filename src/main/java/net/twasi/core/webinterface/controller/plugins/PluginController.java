@@ -17,9 +17,12 @@ import net.twasi.core.webinterface.lib.RequestHandler;
 
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PluginController extends RequestHandler {
+
+    int size = 4;
 
     @Override
     public void handleGet(HttpExchange t) {
@@ -28,7 +31,24 @@ public class PluginController extends RequestHandler {
             return;
         }
 
+        Map<String, String> params = Commons.parseQueryParams(t);
+
+        int page = Integer.valueOf((params.getOrDefault("page", "0")));
+        String q = params.getOrDefault("q", "");
+
         List<TwasiPlugin> plugins = PluginManagerService.getService().getPlugins();
+
+        if (!q.isEmpty()) {
+            plugins = plugins.stream().filter(plugin ->
+                    plugin.getDescription().getName().contains(q) ||
+                    plugin.getDescription().getAuthor().contains(q) ||
+                    plugin.getDescription().getDescription().contains(q)
+            ).collect(Collectors.toList());
+        }
+
+        if (plugins.size() > size) {
+            plugins = plugins.subList(page * size, (page + 1) * size);
+        }
 
         PluginListDTO dto = new PluginListDTO(plugins, getUser(t));
 

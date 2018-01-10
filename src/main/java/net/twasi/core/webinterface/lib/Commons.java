@@ -64,6 +64,9 @@ public class Commons {
     public static HashMap<String, String> parseQueryParams(HttpExchange t) {
         HashMap<String, String> params = new HashMap<>();
         String queryString = t.getRequestURI().getQuery();
+        if (queryString == null) {
+            return params;
+        }
         String[] pairs = queryString.split("&");
 
         for (String str : pairs) {
