@@ -31,6 +31,8 @@ public class User {
 
     private List<String> installedPlugins;
 
+    private AccountStatus status;
+
     public User() {
         if (Config.getCatalog() != null) {
             defaultAccount = new TwitchAccount(
@@ -145,15 +147,14 @@ public class User {
         Database.getStore().save(this);
     }
 
-    public boolean doAllPermissionKeysExist(List<String> keys) {
-        if (getPermissions() == null || getPermissions().size() == 0) {
-            return false;
+    public AccountStatus getStatus() {
+        if (status == null) {
+            status = AccountStatus.EMAIL_CONFIRMATION;
         }
-        for (Permissions perm : getPermissions()) {
-            if (!perm.doAllKeysExist(keys)) {
-                return false;
-            }
-        }
-        return true;
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 }

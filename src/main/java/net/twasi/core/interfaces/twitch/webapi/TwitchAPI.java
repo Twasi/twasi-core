@@ -68,6 +68,7 @@ public class TwitchAPI {
             TokenInfoDTO info = new Gson().fromJson(responseBody, TokenInfoDTO.class);
 
             acc = new TwitchAccount(info.getToken().getUserName(), token.toModel(), info.getToken().getUserId(), new ArrayList<>());
+            acc.setEmail(info.getToken().getEmail());
         } catch (IOException e) {
             TwasiLogger.log.error(e);
         } finally {

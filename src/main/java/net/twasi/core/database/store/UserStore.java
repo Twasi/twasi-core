@@ -7,6 +7,8 @@ import net.twasi.core.instances.InstanceManager;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.InstanceManagerService;
+import net.twasi.core.services.mail.MailService;
+import net.twasi.core.services.mail.MailTemplates;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,11 +50,15 @@ public class UserStore {
         // List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
         User user = getById(account.getTwitchId());
         if (user == null) {
-            // User not registered.
+            // Register new user
             user = new User();
             user.setTwitchAccount(account);
             Database.getStore().save(user);
             users.add(user);
+
+            // Send welcome mail
+            MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), "CONFIRM"));
+
             return user;
         }
         return user;

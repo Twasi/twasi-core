@@ -3,7 +3,7 @@
 echo Checking for MongoDB Server v.3.4 installation...
 IF EXIST C:\Program Files\MongoDB\Server\3.4\bin (
 echo MongoDB found. Skipping installation...
-GOTO SKIP_MONGODB
+REM GOTO SKIP_MONGODB
 )
 
 echo MongoDB NOT found.

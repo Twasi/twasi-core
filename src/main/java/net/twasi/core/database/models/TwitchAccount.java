@@ -14,6 +14,7 @@ public class TwitchAccount {
     private String userName;
     private AccessToken token;
     private String twitchId;
+    private String email;
 
     private List<PermissionGroups> groups;
 
@@ -60,6 +61,14 @@ public class TwitchAccount {
 
     public void setTwitchId(String twitchId) {
         this.twitchId = twitchId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<PermissionGroups> getGroups() {

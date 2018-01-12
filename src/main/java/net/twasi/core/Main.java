@@ -14,6 +14,7 @@ import net.twasi.core.plugin.PluginLoader;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.services.InstanceManagerService;
+import net.twasi.core.services.mail.MailService;
 import net.twasi.core.translations.TwasiTranslation;
 import net.twasi.core.webinterface.WebInterfaceApp;
 
