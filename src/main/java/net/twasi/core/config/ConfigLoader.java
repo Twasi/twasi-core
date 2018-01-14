@@ -44,8 +44,14 @@ class ConfigLoader {
                 writer.println("webinterface:");
                 writer.println("  port: 8000");
                 writer.println("  frontend: http://localhost:3000");
+                writer.println("  self: https://localhost:8000");
                 writer.println("bot:");
                 writer.println("  prefix: \"!\"");
+                writer.println("email:");
+                writer.println("  server: mail.yourserver.com");
+                writer.println("  port: 587");
+                writer.println("  user: noreply@yourserver.com");
+                writer.println("  password: MAIL_PASSWORD");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

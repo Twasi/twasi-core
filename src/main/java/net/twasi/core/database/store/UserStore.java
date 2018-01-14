@@ -3,15 +3,13 @@ package net.twasi.core.database.store;
 import net.twasi.core.database.Database;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
-import net.twasi.core.instances.InstanceManager;
-import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.services.mail.MailService;
 import net.twasi.core.services.mail.MailTemplates;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class manages users and performs database operations (update, read, create, delete)
@@ -45,6 +43,7 @@ public class UserStore {
 
     /**
      * Returns a user by TwitchID
+     * If the user doesn't exist he will be registered.
      */
     public static User getOrCreate(TwitchAccount account) {
         // List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
@@ -53,11 +52,15 @@ public class UserStore {
             // Register new user
             user = new User();
             user.setTwitchAccount(account);
-            Database.getStore().save(user);
+
+            String confirmationCode = user.getTwitchAccount().getUserName() + "_" + UUID.randomUUID().toString();
+            user.getTwitchAccount().setConfirmationCode(confirmationCode);
+
             users.add(user);
+            Database.getStore().save(user);
 
             // Send welcome mail
-            MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), "CONFIRM"));
+            MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), confirmationCode));
 
             return user;
         }

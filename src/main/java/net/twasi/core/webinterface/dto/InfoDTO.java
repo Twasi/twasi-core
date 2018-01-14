@@ -1,6 +1,7 @@
 package net.twasi.core.webinterface.dto;
 
 import net.twasi.core.database.models.AccountStatus;
+import net.twasi.core.database.models.User;
 
 public class InfoDTO extends ApiDTO {
     private String twitchid;
@@ -8,10 +9,10 @@ public class InfoDTO extends ApiDTO {
     private AccountStatus accountStatus;
 
 
-    public InfoDTO(boolean status, String twitchid, String username, AccountStatus accountStatus) {
+    public InfoDTO(boolean status, User user) {
         super(status);
-        this.twitchid = twitchid;
-        this.username = username;
-        this.accountStatus = accountStatus;
+        this.twitchid = user.getTwitchAccount().getTwitchId();
+        this.username = user.getTwitchAccount().getUserName();
+        this.accountStatus = user.getStatus();
     }
 }

@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.dto.auth;
+package net.twasi.core.interfaces.twitch.webapi.dto;
 
 import com.google.gson.annotations.SerializedName;
 

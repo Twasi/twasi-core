@@ -1,15 +1,11 @@
 package net.twasi.core.webinterface.lib;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.JWTService;
 import net.twasi.core.webinterface.dto.error.NotFoundDTO;
-
-import java.io.IOException;
-import java.util.List;
 
 public abstract class RequestHandler implements HttpHandler, HttpController {
     @Override

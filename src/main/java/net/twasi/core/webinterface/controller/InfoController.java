@@ -19,6 +19,6 @@ public class InfoController extends RequestHandler {
 
         User user = getUser(t);
 
-        Commons.writeDTO(t, new InfoDTO(true, user.getTwitchAccount().getTwitchId(), user.getTwitchAccount().getUserName(), user.getStatus()), 200);
+        Commons.writeDTO(t, new InfoDTO(true, user), 200);
     }
 }

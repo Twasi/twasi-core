@@ -8,7 +8,6 @@ import net.twasi.core.webinterface.controller.bot.StartController;
 import net.twasi.core.webinterface.controller.bot.StopController;
 import net.twasi.core.webinterface.controller.plugins.PluginController;
 import net.twasi.core.webinterface.controller.settings.SettingsController;
-import net.twasi.core.webinterface.controller.user.UserController;
 import net.twasi.core.webinterface.controller.user.UserEventsController;
 import net.twasi.core.webinterface.controller.user.UserRefreshController;
 
@@ -21,9 +20,6 @@ public class ApiRegistry {
 
         // Version
         server.createContext("/api/version", new VersionController());
-
-        // User
-        server.createContext("/api/user", new UserController());
 
         // Settings
         server.createContext("/api/settings", new SettingsController());

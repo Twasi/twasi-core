@@ -7,4 +7,5 @@ public class ConfigCatalog {
     public WebInterfaceConfig webinterface;
     public AuthCatalog auth;
     public BotCatalog bot;
+    public MailCatalog mail;
 }

@@ -15,6 +15,7 @@ public class TwitchAccount {
     private AccessToken token;
     private String twitchId;
     private String email;
+    private String confirmationCode;
 
     private List<PermissionGroups> groups;
 
@@ -77,5 +78,13 @@ public class TwitchAccount {
 
     public void setGroups(List<PermissionGroups> groups) {
         this.groups = groups;
+    }
+
+    public String getConfirmationCode() {
+        return confirmationCode;
+    }
+
+    public void setConfirmationCode(String confirmationCode) {
+        this.confirmationCode = confirmationCode;
     }
 }

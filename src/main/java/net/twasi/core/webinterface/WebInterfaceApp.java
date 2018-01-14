@@ -5,6 +5,7 @@ import net.twasi.core.config.Config;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.webinterface.registry.ApiRegistry;
 import net.twasi.core.webinterface.registry.AuthRegistry;
+import net.twasi.core.webinterface.registry.ConfirmRegistry;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -21,6 +22,7 @@ public class WebInterfaceApp {
             // Register all handlers
             ApiRegistry.register(server);
             AuthRegistry.register(server);
+            ConfirmRegistry.register(server);
 
             // Handle all other request static
             // server.createContext("/", new StaticHandler());

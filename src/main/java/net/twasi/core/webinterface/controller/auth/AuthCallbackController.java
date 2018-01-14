@@ -22,6 +22,7 @@ public class AuthCallbackController extends RequestHandler {
         AccessTokenDTO accessToken = TwitchAPIService.getService().getToken(code);
 
         TwitchAccount account = TwitchAPIService.getService().getTwitchAccountByToken(accessToken);
+        TwitchAPIService.getService().applyUserInfo(account);
 
         User user = UserStore.getOrCreate(account);
         String token = JWTService.getService().createNewToken(user);

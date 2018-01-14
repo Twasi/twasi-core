@@ -1,5 +1,6 @@
 package net.twasi.core.services.mail;
 
+import net.twasi.core.config.Config;
 import org.simplejavamail.mailer.Mailer;
 import org.simplejavamail.mailer.config.TransportStrategy;
 
@@ -14,7 +15,7 @@ public class MailService {
     private Mailer mailer;
 
     private MailService() {
-        mailer = new Mailer("mail.twasi.net", 587, "noreply@twasi.net", "PASSWORD", TransportStrategy.SMTP_TLS);
+        mailer = new Mailer(Config.getCatalog().mail.server, Config.getCatalog().mail.port, Config.getCatalog().mail.user, Config.getCatalog().mail.password, TransportStrategy.SMTP_TLS);
         mailer.setDebug(false);
         mailer.trustAllSSLHosts(true);
     }
