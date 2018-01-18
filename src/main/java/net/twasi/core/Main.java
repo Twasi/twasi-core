@@ -13,6 +13,7 @@ import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.plugin.PluginLoader;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.java.JavaPluginLoader;
+import net.twasi.core.services.AppStateService;
 import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.services.mail.MailService;
 import net.twasi.core.translations.TwasiTranslation;
@@ -48,7 +49,7 @@ public class Main {
         float time = (float) (System.currentTimeMillis() - start);
         double longTime = time / 1000;
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
-        AppState.setState(ApplicationState.OPERATING);
+        AppStateService.getService().setState(ApplicationState.OPERATING);
 
         WebInterfaceApp.start();
         cli.start();

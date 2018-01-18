@@ -8,13 +8,13 @@ public class AppState {
     /**
      * Current state of the application
      */
-    private static ApplicationState state = ApplicationState.STARTING;
+    private ApplicationState state = ApplicationState.STARTING;
 
     /**
      * Checks if the application is starting. If this is the case, no changes or operations should be accepted.
      * @return if the application is starting up
      */
-    public static boolean isStarting() {
+    public boolean isStarting() {
         return state == ApplicationState.STARTING;
     }
 
@@ -22,7 +22,7 @@ public class AppState {
      * Checks if the application is operating and ready for further operations
      * @return if the application is ready for operations
      */
-    public static boolean isOperating() {
+    public boolean isOperating() {
         return state == ApplicationState.OPERATING;
     }
 
@@ -30,15 +30,15 @@ public class AppState {
      * Checks if the application is shutting down. If this is the case, no changes or new operatinons should be accepted.
      * @return if the application is closing
      */
-    public static boolean isClosing() {
+    public boolean isClosing() {
         return state == ApplicationState.CLOSING;
     }
 
     /**
      * Sets the application state
      */
-    public static void setState(ApplicationState state) {
-        AppState.state = state;
+    public void setState(ApplicationState state) {
+        this.state = state;
     }
 
 }
