@@ -66,6 +66,10 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         return true;
     }
 
+    public List<TwasiUserPlugin> getPlugins() {
+        return userPlugins;
+    }
+
     public List<TwasiUserPlugin> getByCommand(String command) {
         return userPlugins.stream().filter(
                 plugin -> plugin.getCorePlugin().getDescription().getCommands().stream().map(

@@ -2,12 +2,17 @@ package net.twasi.core.database.models;
 
 import net.twasi.core.config.Config;
 import net.twasi.core.database.Database;
+import net.twasi.core.database.models.permissions.PermissionEntity;
+import net.twasi.core.database.models.permissions.PermissionEntityType;
+import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Entity("users")
@@ -106,7 +111,17 @@ public class User {
 
     public List<Permissions> getPermissions() {
         if (permissions == null) {
-            permissions = new ArrayList<>();
+            permissions = new ArrayList<>(Collections.singletonList(new Permissions(
+                    Collections.singletonList(
+                            new PermissionEntity(
+                                    PermissionEntityType.GROUP,
+                                    PermissionGroups.BROADCASTER,
+                                    null
+                            )
+                    ),
+                    Arrays.asList("twasi.admin", "twasi.full_panel", "twasi.user"),
+                    "twasi_admin"
+            )));
         }
         return permissions;
     }

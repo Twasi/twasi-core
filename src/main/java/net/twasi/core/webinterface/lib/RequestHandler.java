@@ -2,14 +2,19 @@ package net.twasi.core.webinterface.lib;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import io.prometheus.client.Counter;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.JWTService;
 import net.twasi.core.webinterface.dto.error.NotFoundDTO;
 
 public abstract class RequestHandler implements HttpHandler, HttpController {
+    private static final Counter requests = Counter.build()
+            .name("requests_total").help("Total requests.").register();
+
     @Override
     public void handle(HttpExchange httpExchange) {
+        requests.inc();
 
         if (!httpExchange.getHttpContext().getPath().equalsIgnoreCase(httpExchange.getRequestURI().getPath())) {
             Commons.writeDTO(httpExchange, new NotFoundDTO(), 404);

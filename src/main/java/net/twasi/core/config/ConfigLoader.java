@@ -43,6 +43,7 @@ class ConfigLoader {
                 writer.println("  issuer: Twasi");
                 writer.println("webinterface:");
                 writer.println("  port: 8000");
+                writer.println("  metricsPort: 8001");
                 writer.println("  frontend: http://localhost:3000");
                 writer.println("  self: https://localhost:8000");
                 writer.println("bot:");
