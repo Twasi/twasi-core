@@ -70,7 +70,7 @@ public class TwasiMessage {
             if (parts.length == 4) {
                 if (parts[2].equalsIgnoreCase("PRIVMSG")) {
                     type = MessageType.PRIVMSG;
-                    message = parts[3].split(":")[1];
+                    message = parts[3].split(":", 2)[1];
                     String senderName = parts[1].split("!")[0].substring(1);
 
                     // Every user is a viewer if we parse a message from him. TwitchID will be set when tags are parsed

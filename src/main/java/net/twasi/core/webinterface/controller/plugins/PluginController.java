@@ -83,7 +83,16 @@ public class PluginController extends RequestHandler {
             }
 
             TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
-            inf.installPlugin(PluginManagerService.getService().getPlugins().stream().filter(twasiPlugin -> twasiPlugin.getName().equalsIgnoreCase(dto.pluginName)).findFirst().get());
+            inf.installPlugin(PluginManagerService
+                    .getService()
+                    .getPlugins()
+                    .stream()
+                    .filter(twasiPlugin -> twasiPlugin
+                            .getName()
+                            .equalsIgnoreCase(dto.pluginName)
+                    )
+                    .findFirst().get()
+            );
 
             user.getInstalledPlugins().add(dto.pluginName);
             Database.getStore().save(user);

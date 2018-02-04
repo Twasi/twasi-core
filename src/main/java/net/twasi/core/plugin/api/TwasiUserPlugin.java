@@ -6,6 +6,7 @@ import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.events.*;
 import net.twasi.core.translations.TwasiTranslation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
@@ -57,6 +58,10 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
 
     public TwasiInterface getTwasiInterface() {
         return twasiInterface;
+    }
+
+    public List<TwasiVariable> getVariables() {
+        return new ArrayList<>();
     }
 
     public String getTranslation(String key, Object... objects) {

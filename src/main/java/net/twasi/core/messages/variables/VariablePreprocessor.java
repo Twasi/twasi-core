@@ -1,0 +1,72 @@
+package net.twasi.core.messages.variables;
+
+import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.models.Message.TwasiMessage;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.plugin.api.TwasiVariable;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class VariablePreprocessor {
+    public static String process(TwasiInterface inf, String text) {
+        // Check if at least 1 $ is contained
+        if (!text.contains("$")) {
+            // There could be no variables in this text
+            return text;
+        }
+
+        // Split text to words
+        String[] words = text.split(" ");
+
+        for(int i = 0; i < words.length; i++) {
+            if (words[i].startsWith("$")) {
+                String variable = words[i].substring(1);
+                String[] parameters = new String[0];
+
+                if (variable.contains("/")) {
+                    // There are paramters available
+                    String parameterString = variable.split("/", 2)[1];
+                    variable = variable.split("/", 2)[0];
+                    parameters = parameterString.split("/");
+                }
+                System.out.println(variable);
+                System.out.println(Arrays.toString(parameters));
+                String finalName = variable;
+                TwasiUserPlugin handlingPlugin = inf
+                        .getPlugins()
+                        .stream()
+                        .filter(plugin -> plugin
+                                .getVariables()
+                                .stream()
+                                .anyMatch(var -> var
+                                        .getNames()
+                                        .stream()
+                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
+                                )
+                        ).findFirst().orElse(null);
+                if (handlingPlugin == null) {
+                    words[i] = "ERROR_NOT_FOUND";
+                } else {
+                    TwasiVariable handlingVariable = handlingPlugin
+                            .getVariables()
+                            .stream()
+                            .filter(var -> var
+                                    .getNames()
+                                    .stream()
+                                    .anyMatch(name -> name.equalsIgnoreCase(finalName))
+                            ).findFirst().orElse(null);
+
+                    if (handlingVariable == null) {
+                        throw new RuntimeException("Error while trying to process variable " + variable + " for user plugin " + handlingPlugin.getCorePlugin().getName());
+                    }
+
+                    words[i] = handlingVariable.process(variable, inf, parameters);
+                }
+            }
+        }
+
+        return Arrays.stream(words).collect(Collectors.joining(" "));
+    }
+}
