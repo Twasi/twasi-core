@@ -1,6 +1,7 @@
 package net.twasi.core.messages.variables;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.models.Message.TwasiMessage;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class VariablePreprocessor {
-    public static String process(TwasiInterface inf, String text) {
+    public static String process(TwasiInterface inf, String text, TwasiMessage message) {
         // Check if at least 1 $ is contained
         if (!text.contains("$")) {
             // There could be no variables in this text
@@ -64,7 +65,7 @@ public class VariablePreprocessor {
                         throw new RuntimeException("Error while trying to process variable " + variable + " for user plugin " + handlingPlugin.getCorePlugin().getName());
                     }
 
-                    words[i] = handlingVariable.process(variable, inf, parameters);
+                    words[i] = handlingVariable.process(variable, inf, parameters, message);
                 }
             }
         }

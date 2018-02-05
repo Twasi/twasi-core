@@ -2,7 +2,6 @@ package net.twasi.core.interfaces.twitch;
 
 import net.twasi.core.interfaces.api.CommunicationHandler;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.messages.variables.VariablePreprocessor;
 import net.twasi.core.models.Message.TwasiMessage;
 
 import java.io.IOException;
@@ -15,7 +14,6 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
 
     @Override
     public boolean sendMessage(String message) {
-        message = VariablePreprocessor.process(getInterface(), message);
         return sendRawMessage("PRIVMSG " + getInterface().getStreamer().getUser().getTwitchAccount().getChannel() + " :" + message);
     }
 

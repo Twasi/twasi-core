@@ -4,6 +4,7 @@ import net.twasi.core.config.Config;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.messages.variables.VariablePreprocessor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,7 @@ public class TwasiMessage {
     }
 
     public void reply(String text) {
+        text = VariablePreprocessor.process(getTwasiInterface(), text, this);
         twasiInterface.getCommunicationHandler().sendMessage(text);
     }
 
