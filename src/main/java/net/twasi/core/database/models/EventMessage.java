@@ -15,7 +15,8 @@ public class EventMessage {
         this.type = type;
     }
 
-    public EventMessage() {}
+    public EventMessage() {
+    }
 
     public String getMessage() {
         return message;

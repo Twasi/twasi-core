@@ -150,10 +150,12 @@ public abstract class TwasiPlugin extends PluginBase {
     }
 
     @Override
-    public void onDeactivate() {}
+    public void onDeactivate() {
+    }
 
     @Override
-    public void onActivate() {}
+    public void onActivate() {
+    }
 
     @Override
     public final Logger getLogger() {
@@ -179,22 +181,25 @@ public abstract class TwasiPlugin extends PluginBase {
      * does not extend the class, where the intended plugin would have
      * resided in a different jar / classloader.
      *
-     * @param <T> a class that extends JavaPlugin
+     * @param <T>   a class that extends JavaPlugin
      * @param clazz the class desired
      * @return the plugin that provides and implements said class
      * @throws IllegalArgumentException if clazz is null
      * @throws IllegalArgumentException if clazz does not extend {@link
-     *     TwasiPlugin}
-     * @throws IllegalStateException if clazz was not provided by a plugin,
-     *     for example, if called with
-     *     <code>JavaPlugin.getPlugin(JavaPlugin.class)</code>
-     * @throws IllegalStateException if called from the static initializer for
-     *     given JavaPlugin
-     * @throws ClassCastException if plugin that provided the class does not
-     *     extend the class
+     *                                  TwasiPlugin}
+     * @throws IllegalStateException    if clazz was not provided by a plugin,
+     *                                  for example, if called with
+     *                                  <code>JavaPlugin.getPlugin(JavaPlugin.class)</code>
+     * @throws IllegalStateException    if called from the static initializer for
+     *                                  given JavaPlugin
+     * @throws ClassCastException       if plugin that provided the class does not
+     *                                  extend the class
      */
     public static <T extends TwasiPlugin> T getPlugin(Class<T> clazz) {
-        if (clazz == null) { TwasiLogger.log.error("Null class cannot have a plugin"); };
+        if (clazz == null) {
+            TwasiLogger.log.error("Null class cannot have a plugin");
+        }
+        ;
         if (!TwasiPlugin.class.isAssignableFrom(clazz)) {
             throw new IllegalArgumentException(clazz + " does not extend " + TwasiPlugin.class);
         }
@@ -216,10 +221,10 @@ public abstract class TwasiPlugin extends PluginBase {
      * @param clazz a class belonging to a plugin
      * @return the plugin that provided the class
      * @throws IllegalArgumentException if the class is not provided by a
-     *     JavaPlugin
+     *                                  JavaPlugin
      * @throws IllegalArgumentException if class is null
-     * @throws IllegalStateException if called from the static initializer for
-     *     given JavaPlugin
+     * @throws IllegalStateException    if called from the static initializer for
+     *                                  given JavaPlugin
      */
     public static TwasiPlugin getProvidingPlugin(Class<?> clazz) {
         if (clazz == null) {

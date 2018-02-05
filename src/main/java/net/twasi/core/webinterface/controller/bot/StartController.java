@@ -2,7 +2,6 @@ package net.twasi.core.webinterface.controller.bot;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.User;
-import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.webinterface.dto.ApiDTO;
 import net.twasi.core.webinterface.dto.error.ErrorDTO;

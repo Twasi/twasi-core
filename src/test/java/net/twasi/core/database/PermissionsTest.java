@@ -1,6 +1,5 @@
 package net.twasi.core.database;
 
-import net.twasi.core.config.Config;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.permissions.PermissionEntity;

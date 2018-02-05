@@ -19,7 +19,7 @@ public class PluginDiscovery {
         File[] pluginJars = new File("plugins").listFiles((dir, name) -> name.endsWith(".jar"));
 
         assert pluginJars != null;
-        for(File pluginFile : pluginJars) {
+        for (File pluginFile : pluginJars) {
             Plugin plugin;
             try {
                 plugin = loader.loadPlugin(pluginFile);

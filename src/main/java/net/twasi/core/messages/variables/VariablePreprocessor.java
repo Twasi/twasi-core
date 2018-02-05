@@ -1,12 +1,10 @@
 package net.twasi.core.messages.variables;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.models.Message.TwasiMessage;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class VariablePreprocessor {
@@ -20,7 +18,7 @@ public class VariablePreprocessor {
         // Split text to words
         String[] words = text.split(" ");
 
-        for(int i = 0; i < words.length; i++) {
+        for (int i = 0; i < words.length; i++) {
             if (words[i].startsWith("$")) {
                 String variable = words[i].substring(1);
                 String[] parameters = new String[0];
@@ -37,8 +35,6 @@ public class VariablePreprocessor {
                         parameters = parameterString.split(",");
                     }
                 }
-                System.out.println(variable);
-                System.out.println(Arrays.toString(parameters));
                 String finalName = variable;
                 TwasiUserPlugin handlingPlugin = inf
                         .getPlugins()

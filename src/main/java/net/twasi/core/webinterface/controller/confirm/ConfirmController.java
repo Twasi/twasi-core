@@ -22,7 +22,7 @@ public class ConfirmController extends RequestHandler {
         Map<String, String> params = Commons.parseQueryParams(t);
 
         if (!params.containsKey("code")) {
-            Commons.writeString(t, "Kein Code gefunden. Bitte versuche es erneut, oder fordere im <a href=\""+ Config.getCatalog().webinterface.frontend+"\">Panel</a> eine neue E-Mail an.", 400);
+            Commons.writeString(t, "Kein Code gefunden. Bitte versuche es erneut, oder fordere im <a href=\"" + Config.getCatalog().webinterface.frontend + "\">Panel</a> eine neue E-Mail an.", 400);
             return;
         }
 
@@ -32,7 +32,7 @@ public class ConfirmController extends RequestHandler {
         List<User> availableUsers = UserStore.getUsers().stream().filter(user -> user.getTwitchAccount().getConfirmationCode().equals(code)).collect(Collectors.toList());
 
         if (availableUsers.size() != 1) {
-            Commons.writeString(t, "Dieser Code ist nicht korrekt. Bitte versuche es erneut, oder fordere im <a href=\""+ Config.getCatalog().webinterface.frontend+"\">Panel</a> eine neue E-Mail an.",400);
+            Commons.writeString(t, "Dieser Code ist nicht korrekt. Bitte versuche es erneut, oder fordere im <a href=\"" + Config.getCatalog().webinterface.frontend + "\">Panel</a> eine neue E-Mail an.", 400);
             return;
         }
 

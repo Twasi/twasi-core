@@ -8,6 +8,7 @@ public class TwitchAPIService {
 
     /**
      * Get the current instance of the InstanceManager
+     *
      * @return current InstanceManager
      */
     public static TwitchAPI getService() {

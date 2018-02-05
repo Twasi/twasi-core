@@ -9,7 +9,10 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class TwitchInterface extends TwasiInterface {

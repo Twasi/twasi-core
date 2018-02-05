@@ -42,7 +42,8 @@
                     <baseImage>java</baseImage>
                     <!-- Set the work dir to use in volumes -->
                     <workdir>/data</workdir>
-                    <entryPoint>["java", "-jar", "/home/${project.build.finalName}-jar-with-dependencies.jar"]</entryPoint>
+                    <entryPoint>["java", "-jar", "/home/${project.build.finalName}-jar-with-dependencies.jar"]
+                    </entryPoint>
                     <!-- copy the service's jar file from target into the root directory of the image -->
                     <resources>
                         <resource>
@@ -73,7 +74,7 @@
             <url>https://artifactory.twasi.net/artifactory/libs-release</url>
         </repository>
         <repository>
-            <snapshots />
+            <snapshots/>
             <id>snapshots</id>
             <name>libs-snapshot</name>
             <url>https://artifactory.twasi.net/artifactory/libs-snapshot</url>
@@ -91,9 +92,9 @@
     <dependencies>
         <!-- Log4J -->
         <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
         <!-- SnakeYML -->
         <dependency>

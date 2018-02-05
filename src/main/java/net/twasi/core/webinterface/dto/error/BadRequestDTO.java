@@ -5,5 +5,7 @@ public class BadRequestDTO extends ErrorDTO {
         super(false, "Bad request. Check submitted data.");
     }
 
-    public BadRequestDTO(String msg) { super(false, msg); }
+    public BadRequestDTO(String msg) {
+        super(false, msg);
+    }
 }

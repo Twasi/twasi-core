@@ -3,7 +3,6 @@ package net.twasi.core.plugin;
 import net.twasi.core.database.store.UserStore;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.services.InstanceManagerService;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ public class PluginManager {
      * Registers a plugin
      * Does check that plugins aren't registerd twice.
      * Afterwards enables it for all installed instances.
+     *
      * @param plugin The plugin to register
      * @return if the plugin was registered successfully
      */
@@ -44,6 +44,7 @@ public class PluginManager {
 
     /**
      * Returns all plugins which have registered the command
+     *
      * @param command The command to search plugins for
      * @return a list of all plugins matching (empty if none)
      */
@@ -57,6 +58,7 @@ public class PluginManager {
 
     /**
      * Returns all plugins which have subscribed to the message event
+     *
      * @return a list of all plugins matching (empty if none)
      */
     public List<TwasiPlugin> getMessagePlugins() {

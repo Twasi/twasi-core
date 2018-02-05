@@ -5,7 +5,6 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.webinterface.dto.ApiDTO;
-import net.twasi.core.webinterface.dto.error.ErrorDTO;
 import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;
 import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;

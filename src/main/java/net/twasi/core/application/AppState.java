@@ -12,6 +12,7 @@ public class AppState {
 
     /**
      * Checks if the application is starting. If this is the case, no changes or operations should be accepted.
+     *
      * @return if the application is starting up
      */
     public boolean isStarting() {
@@ -20,6 +21,7 @@ public class AppState {
 
     /**
      * Checks if the application is operating and ready for further operations
+     *
      * @return if the application is ready for operations
      */
     public boolean isOperating() {
@@ -28,6 +30,7 @@ public class AppState {
 
     /**
      * Checks if the application is shutting down. If this is the case, no changes or new operatinons should be accepted.
+     *
      * @return if the application is closing
      */
     public boolean isClosing() {

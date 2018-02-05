@@ -57,7 +57,9 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
     }
 
     @Override
-    public void handlePut(HttpExchange t) { Commons.handleUnallowedMethod(t); }
+    public void handlePut(HttpExchange t) {
+        Commons.handleUnallowedMethod(t);
+    }
 
     private String getToken(HttpExchange t) {
         String authorizationHeader = t.getRequestHeaders().getFirst("Authorization");

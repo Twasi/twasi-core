@@ -37,6 +37,7 @@ public class UserStore {
 
     /**
      * Get a list of all users
+     *
      * @return a list of all users
      */
     public static List<User> getUsers() {

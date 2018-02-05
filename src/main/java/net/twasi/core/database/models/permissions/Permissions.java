@@ -18,7 +18,8 @@ public class Permissions {
 
     private String name;
 
-    public Permissions() {}
+    public Permissions() {
+    }
 
     public Permissions(List<PermissionEntity> entities, List<String> keys, String name) {
         this.entities = entities;

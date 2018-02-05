@@ -41,8 +41,8 @@ public class PluginController extends RequestHandler {
         if (!q.isEmpty()) {
             plugins = plugins.stream().filter(plugin ->
                     plugin.getDescription().getName().contains(q) ||
-                    plugin.getDescription().getAuthor().contains(q) ||
-                    plugin.getDescription().getDescription().contains(q)
+                            plugin.getDescription().getAuthor().contains(q) ||
+                            plugin.getDescription().getDescription().contains(q)
             ).collect(Collectors.toList());
         }
 

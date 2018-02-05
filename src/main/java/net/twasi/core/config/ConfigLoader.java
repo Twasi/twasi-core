@@ -16,7 +16,7 @@ class ConfigLoader {
 
     ConfigLoader() {
         if (!new File("twasi.yml").exists()) {
-            try{
+            try {
                 PrintWriter writer = new PrintWriter("twasi.yml", "UTF-8");
                 writer.println("# This is the default Twasi configuration.\n");
                 writer.println("# The default database connection");

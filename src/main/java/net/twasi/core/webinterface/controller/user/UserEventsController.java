@@ -24,7 +24,7 @@ public class UserEventsController extends RequestHandler {
 
         List<EventMessage> messages = user.getEvents();
         Collections.reverse(messages);
-        if (messages.size() >= 10){
+        if (messages.size() >= 10) {
             messages = messages.subList(0, 10);
         }
 

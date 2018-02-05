@@ -17,6 +17,7 @@ public class InstanceManager {
 
     /**
      * Registers a single interface (e.g. if someone starts the bot aferwards)
+     *
      * @param inf The interface to register
      * @return if the interface was registered successfully
      */
@@ -34,10 +35,11 @@ public class InstanceManager {
     /**
      * Starts and register all interfaces for the User array.
      * This should be called after startup to initially start all users.
+     *
      * @param users The list of Users
      */
     public void startForAllUsers(List<User> users) {
-        for(User u : users) {
+        for (User u : users) {
             start(u);
         }
     }

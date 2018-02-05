@@ -31,11 +31,11 @@ public class MailTemplates {
 
         mail.addNamedToRecipients(name, email);
         mail.setSubject("Willkommen bei Twasi");
-        mail.setTextHTML("Heyho "+name+",<br />" +
+        mail.setTextHTML("Heyho " + name + ",<br />" +
                 "<br />" +
                 "das Twasi-Team heißt dich herzlich Willkommen bei Twasi, deinem Chatbot von der Community für die Community!<br />" +
                 "<br />" +
-                "Um deine E-Mail Adresse zu bestätigen, klicke auf den folgenden Link: "+ Config.getCatalog().webinterface.self + "/confirm?code=" + confirmationCode +"<br />" +
+                "Um deine E-Mail Adresse zu bestätigen, klicke auf den folgenden Link: " + Config.getCatalog().webinterface.self + "/confirm?code=" + confirmationCode + "<br />" +
                 "<br />" +
                 "Warum solltest du deine E-Mail Adresse bestätigen? Deine E-Mail Adresse wird für später kommende Features erforderlich sein.<br />" +
                 "<br />" +

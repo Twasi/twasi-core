@@ -1,5 +1,11 @@
 package net.twasi.core.plugin.java;
 
+import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.plugin.Plugin;
+import net.twasi.core.plugin.PluginConfig;
+import net.twasi.core.plugin.PluginLoader;
+import net.twasi.core.plugin.TwasiPlugin;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,12 +17,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.Plugin;
-import net.twasi.core.plugin.PluginConfig;
-import net.twasi.core.plugin.PluginLoader;
-import net.twasi.core.plugin.TwasiPlugin;
 
 /**
  * Represents a Java plugin loader, allowing plugins in the form of .jar
@@ -113,7 +113,8 @@ public final class JavaPluginLoader implements PluginLoader {
             for (PluginClassLoader loader : loaders) {
                 try {
                     cachedClass = loader.findClass(name, false);
-                } catch (ClassNotFoundException cnfe) {}
+                } catch (ClassNotFoundException cnfe) {
+                }
                 if (cachedClass != null) {
                     return cachedClass;
                 }
@@ -122,7 +123,7 @@ public final class JavaPluginLoader implements PluginLoader {
         return null;
     }
 
-     void setClass(final String name, final Class<?> clazz) {
+    void setClass(final String name, final Class<?> clazz) {
         if (!classes.containsKey(name)) {
             classes.put(name, clazz);
 
@@ -133,7 +134,7 @@ public final class JavaPluginLoader implements PluginLoader {
         }
     }
 
-     private void removeClass(String name) {
+    private void removeClass(String name) {
         classes.remove(name);
 
         /* try {
@@ -237,7 +238,10 @@ public final class JavaPluginLoader implements PluginLoader {
     } */
 
     public void enablePlugin(final Plugin plugin) {
-        if(!(plugin instanceof TwasiPlugin)) { plugin.getLogger().error("Plugin is not associated with this PluginLoader"); };
+        if (!(plugin instanceof TwasiPlugin)) {
+            plugin.getLogger().error("Plugin is not associated with this PluginLoader");
+        }
+        ;
 
         if (!plugin.isActivated()) {
             plugin.getLogger().info("Enabling " + plugin.getDescription().getName());
@@ -264,7 +268,7 @@ public final class JavaPluginLoader implements PluginLoader {
     }
 
     public void disablePlugin(Plugin plugin) {
-       if (!(plugin instanceof TwasiPlugin)) TwasiLogger.log.error("Plugin is not associated with this PluginLoader");
+        if (!(plugin instanceof TwasiPlugin)) TwasiLogger.log.error("Plugin is not associated with this PluginLoader");
 
         if (plugin.isActivated()) {
             String message = String.format("Disabling %s", plugin.getDescription().getName());

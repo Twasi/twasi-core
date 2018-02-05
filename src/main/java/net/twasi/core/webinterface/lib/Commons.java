@@ -15,7 +15,9 @@ public class Commons {
 
     public static void handleUnallowedMethod(HttpExchange t) {
         writeDTO(t, new UnallowedMethodDTO(), 405);
-    };
+    }
+
+    ;
 
     public static void writeString(HttpExchange t, String s, int code) {
         try {

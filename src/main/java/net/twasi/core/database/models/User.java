@@ -46,7 +46,9 @@ public class User {
                     new ArrayList<>()
             );
         }
-    };
+    }
+
+    ;
 
     public ObjectId getId() {
         return id;

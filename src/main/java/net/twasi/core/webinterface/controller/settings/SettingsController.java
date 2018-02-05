@@ -6,7 +6,6 @@ import net.twasi.core.database.Database;
 import net.twasi.core.database.models.GlobalConfig;
 import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.store.UserStore;
 import net.twasi.core.webinterface.dto.ApiDTO;
 import net.twasi.core.webinterface.dto.error.BadRequestDTO;
 import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;

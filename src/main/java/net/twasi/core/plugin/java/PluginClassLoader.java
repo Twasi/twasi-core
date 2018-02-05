@@ -35,7 +35,7 @@ public final class PluginClassLoader extends URLClassLoader {
     private IllegalStateException pluginState;
 
     PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginConfig description, final File dataFolder, final File file) throws Exception, IOException, MalformedURLException {
-        super(new URL[] {file.toURI().toURL()}, parent);
+        super(new URL[]{file.toURI().toURL()}, parent);
         if (loader == null) {
             throw new Exception("Loader can't be null");
         }
@@ -152,8 +152,12 @@ public final class PluginClassLoader extends URLClassLoader {
     }
 
     public synchronized void initialize(TwasiPlugin twasiPlugin) {
-        if (twasiPlugin == null) { throw new IllegalStateException( "Initializing plugin cannot be null"); };
-        if(twasiPlugin.getClass().getClassLoader() != this) throw new IllegalStateException("Cannot initialize plugin outside of this class loader");
+        if (twasiPlugin == null) {
+            throw new IllegalStateException("Initializing plugin cannot be null");
+        }
+        ;
+        if (twasiPlugin.getClass().getClassLoader() != this)
+            throw new IllegalStateException("Cannot initialize plugin outside of this class loader");
         if (this.plugin != null || this.pluginInit != null) {
             throw new IllegalArgumentException("Plugin already initialized!", pluginState);
         }
@@ -161,6 +165,6 @@ public final class PluginClassLoader extends URLClassLoader {
         pluginState = new IllegalStateException("Initial initialization");
         this.pluginInit = twasiPlugin;
 
-        twasiPlugin.init(loader,  description, file, new File(""), this);
+        twasiPlugin.init(loader, description, file, new File(""), this);
     }
 }

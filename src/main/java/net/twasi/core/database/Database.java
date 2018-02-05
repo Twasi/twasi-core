@@ -5,11 +5,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.store.UserStore;
-import net.twasi.core.logger.TwasiLoggerFactory;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.logging.MorphiaLoggerFactory;
-import org.mongodb.morphia.mapping.DefaultCreator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -71,5 +68,7 @@ public class Database {
     /**
      * @return morpia to perform operations on morpia
      */
-    public static Morphia getMorphia() { return morphia; }
+    public static Morphia getMorphia() {
+        return morphia;
+    }
 }

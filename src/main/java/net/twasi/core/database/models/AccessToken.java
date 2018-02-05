@@ -7,7 +7,8 @@ public class AccessToken {
     private int expiresIn;
     private String[] scope;
 
-    public AccessToken() {}
+    public AccessToken() {
+    }
 
     public AccessToken(String accessToken, String refreshToken, int expiresIn, String[] scope) {
         this.accessToken = accessToken;

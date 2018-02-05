@@ -45,7 +45,7 @@ public class TwasiMessage {
         if (!isCommand()) {
             return null;
         }
-        return new TwasiCommand(message, type,sender, twasiInterface);
+        return new TwasiCommand(message, type, sender, twasiInterface);
     }
 
     public TwasiInterface getTwasiInterface() {
@@ -81,7 +81,7 @@ public class TwasiMessage {
                     for (String tag : splittedTags) {
                         String[] keyValue = tag.split("=");
                         if (keyValue.length == 2) {
-                            switch(keyValue[0]) {
+                            switch (keyValue[0]) {
                                 case "mod":
                                     if (keyValue[1].equals("1")) {
                                         if (!sender.getGroups().contains(PermissionGroups.MODERATOR))

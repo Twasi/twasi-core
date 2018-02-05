@@ -33,7 +33,9 @@ public interface Plugin {
      * @param filename Filename of the resource
      * @return File if found, otherwise null
      */
-    public InputStream getResource(String filename);;
+    public InputStream getResource(String filename);
+
+    ;
 
     /**
      * Gets the associated PluginLoader responsible for this plugin
@@ -81,6 +83,7 @@ public interface Plugin {
 
     /**
      * Returns the user Plugin used by this core extension
+     *
      * @return the user plugin class
      */
     public Class<? extends TwasiUserPlugin> getUserPluginClass();

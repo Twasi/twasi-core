@@ -2,7 +2,6 @@ package net.twasi.core.webinterface.controller;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.User;
-import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.webinterface.dto.InfoDTO;
 import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;
 import net.twasi.core.webinterface.lib.Commons;

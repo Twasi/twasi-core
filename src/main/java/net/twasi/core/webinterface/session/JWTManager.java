@@ -16,7 +16,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Date;
-import java.util.List;
 
 public class JWTManager {
 
@@ -46,9 +45,9 @@ public class JWTManager {
         final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         SecureRandom rnd = new SecureRandom();
 
-        StringBuilder sb = new StringBuilder( 32 );
-        for( int i = 0; i < 32; i++ )
-            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+        StringBuilder sb = new StringBuilder(32);
+        for (int i = 0; i < 32; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
         String randomString = sb.toString();
 
         return DatatypeConverter.printBase64Binary(randomString.getBytes());
@@ -72,7 +71,7 @@ public class JWTManager {
         try {
             DecodedJWT decodedJWT = JWT.decode(jwt);
             userId = decodedJWT.getClaim("twitchid").asString();
-        } catch (JWTDecodeException exception){
+        } catch (JWTDecodeException exception) {
             TwasiLogger.log.info(exception);
             return false;
         }

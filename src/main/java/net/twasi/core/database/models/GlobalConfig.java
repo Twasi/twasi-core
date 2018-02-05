@@ -1,6 +1,5 @@
 package net.twasi.core.database.models;
 
-import net.twasi.core.database.Database;
 import org.mongodb.morphia.annotations.Entity;
 
 @Entity("globalConfigs")

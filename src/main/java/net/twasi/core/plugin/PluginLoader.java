@@ -13,9 +13,9 @@ public interface PluginLoader {
      *
      * @param file File to attempt to load
      * @return Plugin that was contained in the specified file, or null if
-     *     unsuccessful
+     * unsuccessful
      * @throws Exception Thrown when the specified file is not a
-     *     plugin
+     *                   plugin
      */
     public TwasiPlugin loadPlugin(File file) throws Exception;
 

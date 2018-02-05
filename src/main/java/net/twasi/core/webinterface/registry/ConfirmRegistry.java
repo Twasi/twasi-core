@@ -5,7 +5,7 @@ import net.twasi.core.webinterface.controller.confirm.ConfirmController;
 
 public class ConfirmRegistry {
 
-    public static void register (HttpServer httpServer) {
+    public static void register(HttpServer httpServer) {
 
         // Confirm
         httpServer.createContext("/confirm", new ConfirmController());

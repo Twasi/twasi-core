@@ -19,7 +19,8 @@ public class TwitchAccount {
 
     private List<PermissionGroups> groups;
 
-    public TwitchAccount() {}
+    public TwitchAccount() {
+    }
 
     public TwitchAccount(String userName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
         this.userName = userName;

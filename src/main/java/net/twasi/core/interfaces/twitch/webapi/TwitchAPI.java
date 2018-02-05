@@ -3,10 +3,10 @@ package net.twasi.core.interfaces.twitch.webapi;
 import com.google.gson.Gson;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
 import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.webinterface.dto.auth.AccessTokenDTO;
-import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -92,8 +92,6 @@ public class TwitchAPI {
 
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseBody = httpclient.execute(httpget, responseHandler);
-
-            System.out.println(responseBody);
 
             UserInfoDTO info = new Gson().fromJson(responseBody, UserInfoDTO.class);
 

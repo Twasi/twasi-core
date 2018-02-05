@@ -23,8 +23,8 @@ public class StaticHandler implements HttpHandler {
         if (file.isFile()) {
             // Object exists and is a file: accept with response code 200.
             String mime = "text/html";
-            if(path.substring(path.length()-3).equals(".js")) mime = "application/javascript";
-            if(path.substring(path.length()-3).equals("css")) mime = "text/css";
+            if (path.substring(path.length() - 3).equals(".js")) mime = "application/javascript";
+            if (path.substring(path.length() - 3).equals("css")) mime = "text/css";
 
             Headers h = t.getResponseHeaders();
             h.set("Content-Type", mime);
@@ -35,7 +35,7 @@ public class StaticHandler implements HttpHandler {
             final byte[] buffer = new byte[0x10000];
             int count = 0;
             while ((count = fs.read(buffer)) >= 0) {
-                os.write(buffer,0,count);
+                os.write(buffer, 0, count);
             }
             fs.close();
             os.close();
@@ -53,7 +53,7 @@ public class StaticHandler implements HttpHandler {
                 final byte[] buffer = new byte[0x10000];
                 int count = 0;
                 while ((count = fs.read(buffer)) >= 0) {
-                    os.write(buffer,0,count);
+                    os.write(buffer, 0, count);
                 }
                 fs.close();
                 os.close();

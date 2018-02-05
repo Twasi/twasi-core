@@ -16,13 +16,17 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     private transient TwasiInterface twasiInterface;
     private transient TwasiTranslation translations;
 
-    public void onEnable(TwasiEnableEvent e) {}
+    public void onEnable(TwasiEnableEvent e) {
+    }
 
-    public void onDisable(TwasiDisableEvent e) {}
+    public void onDisable(TwasiDisableEvent e) {
+    }
 
-    public void onInstall(TwasiInstallEvent e) {}
+    public void onInstall(TwasiInstallEvent e) {
+    }
 
-    public void onUninstall(TwasiUninstallEvent e) {}
+    public void onUninstall(TwasiUninstallEvent e) {
+    }
 
     public void onCommand(TwasiCommandEvent e) {
         TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");

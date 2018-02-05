@@ -8,6 +8,7 @@ public class InstanceManagerService {
 
     /**
      * Get the current instance of the InstanceManager
+     *
      * @return current InstanceManager
      */
     public static InstanceManager getService() {

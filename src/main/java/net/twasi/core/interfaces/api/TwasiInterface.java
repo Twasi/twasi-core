@@ -4,7 +4,6 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
-import net.twasi.core.translations.TwasiTranslation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     /**
      * Installs a certain user plugin for the given user
+     *
      * @param plugin The plugin to install
      * @return if it was installed successfully
      */
