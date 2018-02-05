@@ -25,11 +25,17 @@ public class VariablePreprocessor {
                 String variable = words[i].substring(1);
                 String[] parameters = new String[0];
 
-                if (variable.contains("/")) {
-                    // There are paramters available
-                    String parameterString = variable.split("/", 2)[1];
-                    variable = variable.split("/", 2)[0];
-                    parameters = parameterString.split("/");
+                if (variable.contains("(")) {
+                    // Special case: $variable()
+                    if (variable.endsWith("()")) {
+                        variable = variable.substring(0, variable.length() - 2);
+                    } else {
+                        // There are parameters available
+                        variable = variable.substring(0, variable.length() - 1);
+                        String parameterString = variable.split("\\(", 2)[1];
+                        variable = variable.split("\\(", 2)[0];
+                        parameters = parameterString.split(",");
+                    }
                 }
                 System.out.println(variable);
                 System.out.println(Arrays.toString(parameters));

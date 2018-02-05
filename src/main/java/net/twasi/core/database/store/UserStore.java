@@ -1,6 +1,8 @@
 package net.twasi.core.database.store;
 
+import net.twasi.core.config.Config;
 import net.twasi.core.database.Database;
+import net.twasi.core.database.models.AccountStatus;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
@@ -53,14 +55,18 @@ public class UserStore {
             user = new User();
             user.setTwitchAccount(account);
 
-            String confirmationCode = user.getTwitchAccount().getUserName() + "_" + UUID.randomUUID().toString();
-            user.getTwitchAccount().setConfirmationCode(confirmationCode);
+            if (Config.getCatalog().mail.enabled) {
+                String confirmationCode = user.getTwitchAccount().getUserName() + "_" + UUID.randomUUID().toString();
+                user.getTwitchAccount().setConfirmationCode(confirmationCode);
+
+                // Send welcome mail
+                MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), confirmationCode));
+            } else {
+                user.setStatus(AccountStatus.OK);
+            }
 
             users.add(user);
             Database.getStore().save(user);
-
-            // Send welcome mail
-            MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), confirmationCode));
 
             return user;
         }

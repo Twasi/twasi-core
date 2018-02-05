@@ -28,7 +28,7 @@ public class Database {
      */
     public static void connect() {
         // Apply custom logger
-        MorphiaLoggerFactory.registerLogger(TwasiLoggerFactory.class);
+        // MorphiaLoggerFactory.registerLogger(TwasiLoggerFactory.class);
         // Disable Mongo Debugging
         System.setProperty("DEBUG.MONGO", "false");
 

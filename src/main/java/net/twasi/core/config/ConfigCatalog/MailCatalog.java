@@ -7,4 +7,6 @@ public class MailCatalog {
     public String user;
     public String password;
 
+    public boolean enabled;
+
 }
