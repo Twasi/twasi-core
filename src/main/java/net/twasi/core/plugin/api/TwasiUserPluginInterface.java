@@ -31,7 +31,7 @@ public interface TwasiUserPluginInterface {
      *
      * @param e Event data
      */
-    void onUninstall(TwasiUninstallEvent e);
+    void onUninstall(TwasiInstallEvent e);
 
     /**
      * Called when a command is written in the chat

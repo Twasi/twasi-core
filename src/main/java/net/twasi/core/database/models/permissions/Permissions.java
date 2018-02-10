@@ -6,6 +6,7 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -59,34 +60,68 @@ public class Permissions {
         this.name = name;
     }
 
+    /**
+     * Checks if a permission key is contained in this permission. If it is, it checks if the twitch account has access.
+     *
+     * Allows the use of wildcards:
+     * commands.mod.add -> commands.mod.*
+     *
+     * @param account
+     * @param permissionKey
+     * @return
+     */
     public boolean hasPermission(TwitchAccount account, String permissionKey) {
-        if (!getKeys().contains(permissionKey)) {
-            return false;
-        }
+        Boolean accountIsContained = false;
         for (PermissionEntity entity : getEntities()) {
             if (entity.getType() == PermissionEntityType.SINGLE) {
                 if (entity.getAccount().getTwitchId().equals(account.getTwitchId())) {
-                    return true;
+                    accountIsContained = true;
                 }
             }
             if (entity.getType() == PermissionEntityType.GROUP) {
                 if (account.getGroups().contains(entity.getGroup())) {
+                    accountIsContained = true;
+                }
+            }
+        }
+
+        if (!accountIsContained) {
+            // The account isn't even known in this permission, how can he have it granted?
+            return false;
+        }
+
+        for(String key : getKeys()) {
+            if (key.equalsIgnoreCase(permissionKey)) {
+                // Perfect match
+                return true;
+            }
+
+            String[] keyGroups = key.split("\\.");
+            String[] inputGroups = permissionKey.split("\\.");
+
+            if (keyGroups.length < inputGroups.length) {
+                continue;
+            }
+
+            for(int i = 0; i < keyGroups.length; i++) {
+                if (keyGroups[i].equals("*")) {
+                    // The group matches (Wildcard)
                     return true;
+                }
+                if (!keyGroups[i].equalsIgnoreCase(inputGroups[i])) {
+                    // Something doesn't match
+                    break;
                 }
             }
         }
         return false;
     }
 
-    public boolean doAllKeysExist(List<String> keys) {
-        List<String> toCheck = new ArrayList<>(keys);
+    public void addKey(String key) {
+        getKeys().add(key);
+    }
 
-        for (String key : getKeys()) {
-            if (toCheck.contains(key)) {
-                toCheck.remove(key);
-            }
-        }
-
-        return toCheck.size() == 0;
+    public void removeKey(String key) {
+        getKeys().remove(key);
     }
 }

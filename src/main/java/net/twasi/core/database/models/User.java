@@ -113,7 +113,7 @@ public class User {
 
     public List<Permissions> getPermissions() {
         if (permissions == null) {
-            permissions = new ArrayList<>(Collections.singletonList(new Permissions(
+            permissions = new ArrayList<>(Arrays.asList(new Permissions(
                     Collections.singletonList(
                             new PermissionEntity(
                                     PermissionEntityType.GROUP,
@@ -123,6 +123,26 @@ public class User {
                     ),
                     Arrays.asList("twasi.admin", "twasi.full_panel", "twasi.user"),
                     "twasi_admin"
+            ), new Permissions(
+                    Collections.singletonList(
+                            new PermissionEntity(
+                                    PermissionEntityType.GROUP,
+                                    PermissionGroups.MODERATOR,
+                                    null
+                            )
+                    ),
+                    Arrays.asList("twasi.moderation", "twasi.mod_panel", "twasi.user"),
+                    "twasi_mod"
+            ), new Permissions(
+                    Collections.singletonList(
+                            new PermissionEntity(
+                                    PermissionEntityType.GROUP,
+                                    PermissionGroups.VIEWER,
+                                    null
+                            )
+                    ),
+                    Collections.singletonList("twasi.user"),
+                    "twasi_user"
             )));
         }
         return permissions;
@@ -173,5 +193,13 @@ public class User {
 
     public void setStatus(AccountStatus status) {
         this.status = status;
+    }
+
+    public Permissions getPermissionByName(String name) {
+        return getPermissions()
+                .stream()
+                .filter(perm -> perm.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 }
