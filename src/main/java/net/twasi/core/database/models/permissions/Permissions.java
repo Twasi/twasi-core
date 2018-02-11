@@ -66,9 +66,9 @@ public class Permissions {
      * Allows the use of wildcards:
      * commands.mod.add -> commands.mod.*
      *
-     * @param account
-     * @param permissionKey
-     * @return
+     * @param account The twitchaccount to check permission for
+     * @param permissionKey The key to check
+     * @return if the user has permission for the given key
      */
     public boolean hasPermission(TwitchAccount account, String permissionKey) {
         Boolean accountIsContained = false;
