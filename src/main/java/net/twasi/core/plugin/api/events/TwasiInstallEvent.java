@@ -10,6 +10,9 @@ public class TwasiInstallEvent extends TwasiEvent {
 
     public TwasiInstallEvent(TwasiUserPlugin userPlugin, Permissions defaultGroup, Permissions moderatorsGroup, Permissions adminGroup) {
         super(userPlugin);
+        this.defaultGroup = defaultGroup;
+        this.moderatorsGroup = moderatorsGroup;
+        this.adminGroup = adminGroup;
     }
 
     public Permissions getDefaultGroup() {

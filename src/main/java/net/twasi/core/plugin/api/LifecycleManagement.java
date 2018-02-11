@@ -7,7 +7,6 @@ import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.events.TwasiDisableEvent;
 import net.twasi.core.plugin.api.events.TwasiEnableEvent;
 import net.twasi.core.plugin.api.events.TwasiInstallEvent;
-import net.twasi.core.plugin.api.events.TwasiUninstallEvent;
 import net.twasi.core.translations.TwasiTranslation;
 
 public class LifecycleManagement {
