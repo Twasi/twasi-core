@@ -5,8 +5,10 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.store.UserStore;
+import net.twasi.core.logger.TwasiLoggerFactory;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.logging.MorphiaLoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -25,24 +27,30 @@ public class Database {
      */
     public static void connect() {
         // Apply custom logger
-        // MorphiaLoggerFactory.registerLogger(TwasiLoggerFactory.class);
+        MorphiaLoggerFactory.registerLogger(TwasiLoggerFactory.class);
         // Disable Mongo Debugging
         System.setProperty("DEBUG.MONGO", "false");
 
         morphia = new Morphia();
-
-        // tell Morphia where to find your classes
-        // can be called multiple times with different packages or classes
         morphia.mapPackage("net.twasi.database.models");
 
         // Connect with given credentials
         Morphia morphia = new Morphia();
         ServerAddress addr = new ServerAddress(Config.getCatalog().database.hostname, Config.getCatalog().database.port);
-        List<MongoCredential> credentialsList = new ArrayList<MongoCredential>();
-        MongoCredential credentia = MongoCredential.createCredential(
-                Config.getCatalog().database.user, Config.getCatalog().database.database, Config.getCatalog().database.password.toCharArray());
-        credentialsList.add(credentia);
-        MongoClient client = new MongoClient(addr, credentialsList);
+        MongoClient client;
+
+        // Use authentication?
+        if (Config.getCatalog().database.authentication != null &&
+                Config.getCatalog().database.authentication.user != null &&
+                Config.getCatalog().database.authentication.password != null) {
+            List<MongoCredential> credentialsList = new ArrayList<>();
+            MongoCredential credential = MongoCredential.createCredential(
+                    Config.getCatalog().database.authentication.user, Config.getCatalog().database.database, Config.getCatalog().database.authentication.password.toCharArray());
+            credentialsList.add(credential);
+            client = new MongoClient(addr, credentialsList);
+        } else {
+            client = new MongoClient(addr);
+        }
 
         // Create the store
         store = morphia.createDatastore(client, Config.getCatalog().database.database);
