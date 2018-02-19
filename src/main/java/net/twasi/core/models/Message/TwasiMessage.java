@@ -14,7 +14,7 @@ public class TwasiMessage {
     protected MessageType type;
     protected String message;
     protected TwitchAccount sender;
-    protected TwasiInterface twasiInterface;
+    private TwasiInterface twasiInterface;
 
     public TwasiMessage(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
         this.message = message;
@@ -36,10 +36,7 @@ public class TwasiMessage {
     }
 
     public boolean isCommand() {
-        if (message == null) {
-            return false;
-        }
-        return message.startsWith(Config.getCatalog().bot.prefix);
+        return message != null && message.startsWith(Config.getCatalog().bot.prefix);
     }
 
     public TwasiCommand toCommand() {
@@ -59,7 +56,6 @@ public class TwasiMessage {
     }
 
     public static TwasiMessage parse(String ircLine, TwasiInterface inf) {
-        // System.out.println(ircLine);
         String message = null;
         TwitchAccount sender = null;
         MessageType type = null;

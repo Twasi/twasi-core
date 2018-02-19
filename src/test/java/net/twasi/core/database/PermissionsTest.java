@@ -65,22 +65,9 @@ public class PermissionsTest {
                                 botDeveloper
                         )
                 ),
-                Arrays.asList("commands.add", "commands.edit", "commands.delete"),
+                Arrays.asList("commands.mod.*", "commands.user.execute"),
                 "commands"
         );
-        permission.setName("commands");
-        permission.setKeys(Arrays.asList("commands.add", "commands.edit", "commands.delete"));
-
-        permission.setEntities(new ArrayList<>());
-
-        PermissionEntity mods = new PermissionEntity();
-        mods.setType(PermissionEntityType.GROUP);
-        mods.setGroup(PermissionGroups.MODERATOR);
-        PermissionEntity botDev = new PermissionEntity();
-        botDev.setType(PermissionEntityType.SINGLE);
-        botDev.setAccount(botDeveloper);
-        permission.getEntities().add(mods);
-        permission.getEntities().add(botDev);
         examplePermissions.add(permission);
 
         user.setPermissions(examplePermissions);
@@ -88,24 +75,24 @@ public class PermissionsTest {
 
     @Test
     public void grantsPermissionByGroup() {
-        Boolean hasAddPermission = user.hasPermission(moderator, "commands.add");
-        Boolean hasEditPermission = user.hasPermission(moderator, "commands.edit");
-        Boolean hasDeletePermission = user.hasPermission(moderator, "commands.delete");
-
-        Assert.assertTrue(hasAddPermission);
-        Assert.assertTrue(hasEditPermission);
-        Assert.assertTrue(hasDeletePermission);
+        checkForUser(moderator);
     }
 
     @Test
     public void grantsPermissionByAccount() {
-        Boolean hasAddPermission = user.hasPermission(botDeveloper, "commands.add");
-        Boolean hasEditPermission = user.hasPermission(botDeveloper, "commands.edit");
-        Boolean hasDeletePermission = user.hasPermission(botDeveloper, "commands.delete");
+        checkForUser(botDeveloper);
+    }
+
+    private void checkForUser(TwitchAccount moderator) {
+        Boolean hasAddPermission = user.hasPermission(moderator, "commands.mod.add");
+        Boolean hasEditPermission = user.hasPermission(moderator, "commands.mod.edit");
+        Boolean hasDeletePermission = user.hasPermission(moderator, "commands.mod.delete");
+        Boolean hasUnknownPermission = user.hasPermission(moderator, "commands.unknown.doNothing");
 
         Assert.assertTrue(hasAddPermission);
         Assert.assertTrue(hasEditPermission);
         Assert.assertTrue(hasDeletePermission);
+        Assert.assertFalse(hasUnknownPermission);
     }
 
     @Test
@@ -113,9 +100,11 @@ public class PermissionsTest {
         Boolean hasAddPermission = user.hasPermission(viewer, "commands.add");
         Boolean hasEditPermission = user.hasPermission(viewer, "commands.edit");
         Boolean hasDeletePermission = user.hasPermission(viewer, "commands.delete");
+        Boolean hasUnknownPermission = user.hasPermission(moderator, "commands.unknown.doNothing");
 
         Assert.assertFalse(hasAddPermission);
         Assert.assertFalse(hasEditPermission);
         Assert.assertFalse(hasDeletePermission);
+        Assert.assertFalse(hasUnknownPermission);
     }
 }

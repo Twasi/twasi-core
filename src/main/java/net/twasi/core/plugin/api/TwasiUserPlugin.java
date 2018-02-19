@@ -25,7 +25,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     public void onInstall(TwasiInstallEvent e) {
     }
 
-    public void onUninstall(TwasiUninstallEvent e) {
+    public void onUninstall(TwasiInstallEvent e) {
     }
 
     public void onCommand(TwasiCommandEvent e) {
