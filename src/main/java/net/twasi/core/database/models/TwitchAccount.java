@@ -14,6 +14,7 @@ public class TwitchAccount {
     private String userName;
     private AccessToken token;
     private String twitchId;
+    private String avatar;
     private String email;
     private String confirmationCode;
 
@@ -87,5 +88,13 @@ public class TwitchAccount {
 
     public void setConfirmationCode(String confirmationCode) {
         this.confirmationCode = confirmationCode;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

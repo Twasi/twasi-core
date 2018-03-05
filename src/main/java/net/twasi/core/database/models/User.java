@@ -113,7 +113,7 @@ public class User {
 
     public List<Permissions> getPermissions() {
         if (permissions == null) {
-            permissions = new ArrayList<>(Arrays.asList(new Permissions(
+            permissions = new ArrayList<>(new ArrayList<>(Arrays.asList(new Permissions(
                     Collections.singletonList(
                             new PermissionEntity(
                                     PermissionEntityType.GROUP,
@@ -121,7 +121,7 @@ public class User {
                                     null
                             )
                     ),
-                    Arrays.asList("twasi.admin", "twasi.full_panel", "twasi.user"),
+                    new ArrayList<>(Arrays.asList("twasi.admin", "twasi.full_panel", "twasi.user")),
                     "twasi_admin"
             ), new Permissions(
                     Collections.singletonList(
@@ -131,7 +131,7 @@ public class User {
                                     null
                             )
                     ),
-                    Arrays.asList("twasi.moderation", "twasi.mod_panel", "twasi.user"),
+                    new ArrayList<>(Arrays.asList("twasi.moderation", "twasi.mod_panel", "twasi.user")),
                     "twasi_mod"
             ), new Permissions(
                     Collections.singletonList(
@@ -141,9 +141,9 @@ public class User {
                                     null
                             )
                     ),
-                    Collections.singletonList("twasi.user"),
+                    new ArrayList<>(Collections.singletonList("twasi.user")),
                     "twasi_user"
-            )));
+            ))));
         }
         return permissions;
     }

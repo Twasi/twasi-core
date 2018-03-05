@@ -96,6 +96,7 @@ public class TwitchAPI {
             UserInfoDTO info = new Gson().fromJson(responseBody, UserInfoDTO.class);
 
             account.setEmail(info.getEmail());
+            account.setAvatar(info.getLogo());
         } catch (IOException e) {
             TwasiLogger.log.error(e);
         } finally {
