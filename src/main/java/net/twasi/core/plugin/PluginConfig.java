@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PluginConfig {
@@ -47,6 +48,9 @@ public class PluginConfig {
     }
 
     public List<String> getPermissions() {
+        if (permissions == null) {
+            permissions = new ArrayList<>();
+        }
         return permissions;
     }
 
@@ -55,6 +59,9 @@ public class PluginConfig {
     }
 
     public List<String> getCommands() {
+        if (commands == null) {
+            commands = new ArrayList<>();
+        }
         return commands;
     }
 
