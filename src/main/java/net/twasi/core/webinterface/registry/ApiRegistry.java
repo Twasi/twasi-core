@@ -1,41 +1,44 @@
 package net.twasi.core.webinterface.registry;
 
-import com.sun.net.httpserver.HttpServer;
-import net.twasi.core.webinterface.controller.InfoController;
 import net.twasi.core.webinterface.controller.VersionController;
-import net.twasi.core.webinterface.controller.bot.BotInfoController;
-import net.twasi.core.webinterface.controller.bot.StartController;
-import net.twasi.core.webinterface.controller.bot.StopController;
-import net.twasi.core.webinterface.controller.plugins.PluginController;
-import net.twasi.core.webinterface.controller.settings.SettingsController;
-import net.twasi.core.webinterface.controller.user.UserEventsController;
-import net.twasi.core.webinterface.controller.user.UserRefreshController;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerCollection;
 
 public class ApiRegistry {
 
-    public static void register(HttpServer server) {
+    public static HandlerCollection register() {
+        HandlerCollection col = new ContextHandlerCollection();
 
         // Info
-        server.createContext("/api", new InfoController());
+        /* ContextHandler infoContext = new ContextHandler();
+        infoContext.setContextPath("/api");
+        infoContext.setHandler(new InfoController());
+        server.setHandler(infoContext); */
 
         // Version
-        server.createContext("/api/version", new VersionController());
+        ContextHandler versionContext = new ContextHandler();
+        versionContext.setContextPath("/api/version");
+        versionContext.setHandler(new VersionController());
+        col.addHandler(versionContext);
 
         // Settings
-        server.createContext("/api/settings", new SettingsController());
+        // server.createContext("/api/settings", new SettingsController());
 
         // Refresh
-        server.createContext("/api/user/refresh", new UserRefreshController());
+        // server.createContext("/api/user/refresh", new UserRefreshController());
         // Events
-        server.createContext("/api/user/events", new UserEventsController());
+        // server.createContext("/api/user/events", new UserEventsController());
 
         // Bot
-        server.createContext("/api/bot", new BotInfoController());
-        server.createContext("/api/bot/start", new StartController());
-        server.createContext("/api/bot/stop", new StopController());
+        // server.createContext("/api/bot", new BotInfoController());
+        // server.createContext("/api/bot/start", new StartController());
+        // server.createContext("/api/bot/stop", new StopController());
 
         // Plugins
-        server.createContext("/api/plugins", new PluginController());
+        // server.createContext("/api/plugins", new PluginController());
+        return col;
     }
 
 }

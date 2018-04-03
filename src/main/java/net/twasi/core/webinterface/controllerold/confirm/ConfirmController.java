@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.confirm;
+package net.twasi.core.webinterface.controllerold.confirm;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.config.Config;

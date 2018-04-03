@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.plugins;
+package net.twasi.core.webinterface.controllerold.plugins;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -14,10 +14,12 @@ import net.twasi.core.webinterface.dto.error.BadRequestDTO;
 import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;
 import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.util.MultiMap;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PluginController extends RequestHandler {
@@ -25,16 +27,16 @@ public class PluginController extends RequestHandler {
     int size = 4;
 
     @Override
-    public void handleGet(HttpExchange t) {
-        if (!isAuthenticated(t)) {
-            Commons.writeDTO(t, new UnauthorizedDTO(), 401);
+    public void handleGet(Request req, HttpServletResponse res) {
+        if (!isAuthenticated(req)) {
+            Commons.writeDTO(res, new UnauthorizedDTO(), 401);
             return;
         }
 
-        Map<String, String> params = Commons.parseQueryParams(t);
+        MultiMap<String> params = req.getQueryParameters();
 
-        int page = Integer.valueOf((params.getOrDefault("page", "0")));
-        String q = params.getOrDefault("q", "");
+        int page = Integer.valueOf((params.getString("page")));
+        String q = params.getString("q");
 
         List<TwasiPlugin> plugins = PluginManagerService.getService().getPlugins();
 

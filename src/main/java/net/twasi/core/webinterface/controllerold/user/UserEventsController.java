@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.user;
+package net.twasi.core.webinterface.controllerold.user;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.EventMessage;

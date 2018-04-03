@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller;
+package net.twasi.core.webinterface.controllerold;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.User;

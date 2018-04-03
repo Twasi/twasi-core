@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.bot;
+package net.twasi.core.webinterface.controllerold.bot;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.database.models.User;
@@ -9,7 +9,7 @@ import net.twasi.core.webinterface.dto.error.UnauthorizedDTO;
 import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 
-public class StopController extends RequestHandler {
+public class StartController extends RequestHandler {
 
     @Override
     public void handlePost(HttpExchange t) {
@@ -20,21 +20,21 @@ public class StopController extends RequestHandler {
 
         User user = getUser(t);
 
-        if (!InstanceManagerService.getService().hasRegisteredInstance(user)) {
-            Commons.writeDTO(t, new ErrorDTO(false, "Bot not running."), 500);
+        if (InstanceManagerService.getService().hasRegisteredInstance(user)) {
+            Commons.writeDTO(t, new ErrorDTO(false, "Bot already running."), 500);
             return;
         }
 
-        InstanceManagerService.getService().stop(user);
+        InstanceManagerService.getService().start(user);
 
-        Commons.writeDTO(t, new StopControllerSuccessDTO(InstanceManagerService.getService().hasRegisteredInstance(user)), 200);
+        Commons.writeDTO(t, new StartControllerSuccessDTO(InstanceManagerService.getService().hasRegisteredInstance(user)), 200);
     }
 }
 
-class StopControllerSuccessDTO extends ApiDTO {
+class StartControllerSuccessDTO extends ApiDTO {
     boolean isRunning;
 
-    public StopControllerSuccessDTO(Boolean isRunning) {
+    public StartControllerSuccessDTO(Boolean isRunning) {
         super(true);
         this.isRunning = isRunning;
     }

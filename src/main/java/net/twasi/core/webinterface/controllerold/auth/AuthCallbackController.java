@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.auth;
+package net.twasi.core.webinterface.controllerold.auth;
 
 import com.sun.net.httpserver.HttpExchange;
 import net.twasi.core.config.Config;

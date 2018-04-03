@@ -9,7 +9,7 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.AppStateService;
 import net.twasi.core.services.InstanceManagerService;
-import net.twasi.core.webinterface.WebInterfaceApp;
+import net.twasi.core.graphql.WebInterfaceApp;
 
 public class Main {
 

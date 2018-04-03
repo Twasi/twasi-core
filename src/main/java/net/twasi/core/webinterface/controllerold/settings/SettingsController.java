@@ -1,4 +1,4 @@
-package net.twasi.core.webinterface.controller.settings;
+package net.twasi.core.webinterface.controllerold.settings;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
