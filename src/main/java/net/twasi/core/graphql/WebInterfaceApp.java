@@ -5,9 +5,8 @@ import io.prometheus.client.hotspot.DefaultExports;
 import net.twasi.core.config.Config;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.webinterface.metrics.CustomMetrics;
-import net.twasi.core.webinterface.registry.ApiRegistry;
+import net.twasi.core.webinterface.registry.AuthRegistry;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.ServletHandler;
 
@@ -34,7 +33,7 @@ public class WebInterfaceApp {
             server.setHandler(handlers);
 
             // Register all handlers
-            handlers.addHandler(ApiRegistry.register());
+            handlers.addHandler(AuthRegistry.register());
             //AuthRegistry.register(server);
             //ConfirmRegistry.register(server);
 

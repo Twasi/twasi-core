@@ -1,14 +1,14 @@
 package net.twasi.core.graphql;
 
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.store.UserStore;
-import net.twasi.core.graphql.model.UserDTO;
+import net.twasi.core.graphql.model.*;
 import net.twasi.core.graphql.repository.UserRepository;
+import net.twasi.core.services.JWTService;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class Query implements GraphQLRootResolver {
+public class Query implements GraphQLQueryResolver {
 
     private final UserRepository userRepository;
 
@@ -16,7 +16,15 @@ public class Query implements GraphQLRootResolver {
         this.userRepository = userRepository;
     }
 
-    public List<UserDTO> allUsers() {
-        return userRepository.getAllUsers();
+    public ViewerDTO viewer(String token) {
+        UserDTO userDTO = new UserDTO("MyId", new TwitchAccountDTO("Name", "Twitchid", "Avagar", "Email"), new ArrayList<>(), new ArrayList<>());
+
+        User user = JWTService.getService().getUserFromToken(token);
+
+        if (user == null) {
+            return null;
+        }
+
+        return new ViewerDTO(userDTO, new BotStatusDTO(true));
     }
 }

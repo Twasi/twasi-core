@@ -1,15 +1,28 @@
 package net.twasi.core.webinterface.registry;
 
-import com.sun.net.httpserver.HttpServer;
+import net.twasi.core.webinterface.controller.auth.AuthCallbackController;
+import net.twasi.core.webinterface.controller.auth.AuthController;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
 
 public class AuthRegistry {
 
-    public static void register(HttpServer server) {
+    public static HandlerCollection register() {
+        HandlerCollection collection = new HandlerCollection();
+
         // Authenticate
-        // server.createContext("/auth", new AuthController());
+        ContextHandler authHandler = new ContextHandler();
+        authHandler.setContextPath("/auth");
+        authHandler.setHandler(new AuthController());
+        collection.addHandler(authHandler);
 
         // Callback
-        // server.createContext("/auth/callback", new AuthCallbackController());
+        ContextHandler authCallbackHandler = new ContextHandler();
+        authCallbackHandler.setContextPath("/auth/callback");
+        authCallbackHandler.setHandler(new AuthCallbackController());
+        collection.addHandler(authCallbackHandler);
+
+        return collection;
     }
 
 }

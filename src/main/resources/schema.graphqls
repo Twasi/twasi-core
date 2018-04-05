@@ -1,10 +1,45 @@
 type User {
     id: String!
+    twitchAccount: TwitchAccount!
+    installedPlugins: [String]!
+    events: [EventMessage]!
+}
+
+type EventMessage {
+    message: String!
+    messageType: EventMessageType!,
+    createdAt: String!
+}
+
+enum EventMessageType {
+    ERROR,
+    INFO,
+    WARNING
+}
+
+type Config {
+    language: String!
+    isActivated: Boolean!
+}
+
+type Viewer {
+    user: User
+    status: BotStatus
+}
+
+type BotStatus {
+    isRunning: Boolean!
+}
+
+type TwitchAccount {
     name: String!
+    twitchid: String!
+    avatar: String!
+    email: String!
 }
 
 type Query {
-    allUsers: [User]
+    viewer(token: String): Viewer
 }
 
 schema {

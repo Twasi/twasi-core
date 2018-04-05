@@ -12,8 +12,8 @@ public class UserRepository {
     public UserRepository() {
         users = new ArrayList<>();
         //add some users to start off with
-        users.add(new UserDTO("ID1", "Lars"));
-        users.add(new UserDTO("ID2", "Test"));
+        //users.add(new UserDTO("ID1", "Lars"));
+        //users.add(new UserDTO("ID2", "Test"));
     }
 
     public List<UserDTO> getAllUsers() {
