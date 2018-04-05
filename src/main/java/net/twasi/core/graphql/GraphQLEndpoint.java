@@ -9,7 +9,6 @@ import net.twasi.core.logger.TwasiLogger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
@@ -21,11 +20,6 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     private static GraphQLSchema buildSchema() {
         UserRepository userRepository = new UserRepository();
         try {
-            //SchemaParser schemaParser = new SchemaParser();
-            //TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(getSchema("schema.graphqls"));
-
-            //SchemaParser
-
             return SchemaParser.newParser()
                     .file("schema.graphqls")
                     .resolvers(new Query(userRepository))
@@ -35,10 +29,6 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
             TwasiLogger.log.error("Cannot initialize SchemaParser", t);
             return null;
         }
-    }
-
-    private static File getSchema(String name) {
-        return new File(GraphQLEndpoint.class.getClassLoader().getResource(name).getFile());
     }
 
     @Override

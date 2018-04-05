@@ -91,6 +91,9 @@ public class TwitchAccount {
     }
 
     public String getAvatar() {
+        if (avatar == null) {
+            return "https://static-cdn.jtvnw.net/jtv_user_pictures/eb858cdd0224da3d-profile_image-300x300.png";
+        }
         return avatar;
     }
 

@@ -1,5 +1,7 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.User;
+
 import java.util.List;
 
 public class UserDTO {
@@ -30,5 +32,9 @@ public class UserDTO {
 
     public List<EventMessageDTO> getEvents() {
         return eventMessages;
+    }
+
+    public static UserDTO fromUser(User user) {
+        return new UserDTO(user.getId().toString(), TwitchAccountDTO.fromTwitchAccount(user.getTwitchAccount()), user.getInstalledPlugins(), EventMessageDTO.fromEvents(user.getEvents()));
     }
 }

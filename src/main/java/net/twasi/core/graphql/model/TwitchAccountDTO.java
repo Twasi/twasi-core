@@ -1,5 +1,7 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.TwitchAccount;
+
 public class TwitchAccountDTO {
     private String name;
     private String twitchid;
@@ -27,5 +29,9 @@ public class TwitchAccountDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public static TwitchAccountDTO fromTwitchAccount(TwitchAccount twitchAccount) {
+        return new TwitchAccountDTO(twitchAccount.getUserName(), twitchAccount.getTwitchId(), twitchAccount.getAvatar(), twitchAccount.getEmail());
     }
 }

@@ -10,17 +10,17 @@ public class AuthRegistry {
     public static HandlerCollection register() {
         HandlerCollection collection = new HandlerCollection();
 
+        // Callback
+        ContextHandler authCallbackHandler = new ContextHandler();
+        authCallbackHandler.setContextPath("/authcallback");
+        authCallbackHandler.setHandler(new AuthCallbackController());
+        collection.addHandler(authCallbackHandler);
+
         // Authenticate
         ContextHandler authHandler = new ContextHandler();
         authHandler.setContextPath("/auth");
         authHandler.setHandler(new AuthController());
         collection.addHandler(authHandler);
-
-        // Callback
-        ContextHandler authCallbackHandler = new ContextHandler();
-        authCallbackHandler.setContextPath("/auth/callback");
-        authCallbackHandler.setHandler(new AuthCallbackController());
-        collection.addHandler(authCallbackHandler);
 
         return collection;
     }

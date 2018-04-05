@@ -11,6 +11,7 @@ import net.twasi.core.services.InstanceManagerService;
 import net.twasi.core.services.JWTService;
 import net.twasi.core.services.TwitchAPIService;
 import net.twasi.core.webinterface.dto.auth.AccessTokenDTO;
+import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.eclipse.jetty.server.Request;
 
@@ -21,7 +22,7 @@ public class AuthCallbackController extends RequestHandler {
 
     @Override
     public void handleGet(Request req, HttpServletResponse res) {
-        String code = req.getQueryParameters().getString("code");
+        String code = req.getParameter("code");
         AccessTokenDTO accessToken = TwitchAPIService.getService().getToken(code);
 
         TwitchAccount account = TwitchAPIService.getService().getTwitchAccountByToken(accessToken);
@@ -36,7 +37,8 @@ public class AuthCallbackController extends RequestHandler {
 
         try {
             res.sendRedirect(Config.getCatalog().webinterface.frontend + "?jwt=" + token);
-        } catch (IOException e) {
+            //Commons.writeString(res, Config.getCatalog().webinterface.frontend + "?jwt=" + token, 200);
+        } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect back to frontend", e);
         }
     }
