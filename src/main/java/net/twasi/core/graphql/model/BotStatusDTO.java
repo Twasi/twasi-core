@@ -10,4 +10,9 @@ public class BotStatusDTO {
     public boolean isRunning() {
         return isRunning;
     }
+
+    public BotStatusDTO changeStatus(Boolean isRunning) {
+        System.out.println(isRunning);
+        return new BotStatusDTO(isRunning);
+    }
 }

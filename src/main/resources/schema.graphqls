@@ -68,7 +68,8 @@ type Viewer {
 }
 
 type BotStatus {
-    isRunning: Boolean!
+    isRunning: Boolean!,
+    changeStatus(isRunning: Boolean): BotStatus
 }
 
 type TwitchAccount {
