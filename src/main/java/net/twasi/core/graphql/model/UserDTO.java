@@ -2,6 +2,7 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserDTO {
@@ -11,11 +12,23 @@ public class UserDTO {
     private final List<String> installedPlugins;
     private final List<EventMessageDTO> eventMessages;
 
-    public UserDTO(String id, TwitchAccountDTO twitchAccount, List<String> installedPlugins, List<EventMessageDTO> eventMessages) {
+    private final StreamDTO latestStream;
+    private final List<StreamDTO> streams;
+
+    private final CurrentUserStatsDTO currentStats;
+    private final AllTimeStatsDTO alltimeStats;
+
+    public UserDTO(String id, TwitchAccountDTO twitchAccount, List<String> installedPlugins, List<EventMessageDTO> eventMessages, StreamDTO latestStream, List<StreamDTO> streams, CurrentUserStatsDTO currentStats, AllTimeStatsDTO alltimeStats) {
         this.id = id;
         this.twitchAccount = twitchAccount;
         this.installedPlugins = installedPlugins;
         this.eventMessages = eventMessages;
+
+        this.latestStream = latestStream;
+        this.streams = streams;
+
+        this.currentStats = currentStats;
+        this.alltimeStats = alltimeStats;
     }
 
     public String getId() {
@@ -35,6 +48,33 @@ public class UserDTO {
     }
 
     public static UserDTO fromUser(User user) {
-        return new UserDTO(user.getId().toString(), TwitchAccountDTO.fromTwitchAccount(user.getTwitchAccount()), user.getInstalledPlugins(), EventMessageDTO.fromEvents(user.getEvents()));
+        StreamDTO stream = new StreamDTO("TwasiID", "TwitchID", new DurationDTO(100, 200), false, 0, 0, 0, 0);
+
+        return new UserDTO(
+                user.getId().toString(),
+                TwitchAccountDTO.fromTwitchAccount(user.getTwitchAccount()),
+                user.getInstalledPlugins(),
+                EventMessageDTO.fromEvents(user.getEvents()),
+                stream,
+                Collections.singletonList(stream),
+                new CurrentUserStatsDTO(0, 0, 0, 0),
+                new AllTimeStatsDTO(0, 0, 0)
+        );
+    }
+
+    public StreamDTO getLatestStream() {
+        return latestStream;
+    }
+
+    public List<StreamDTO> getStreams() {
+        return streams;
+    }
+
+    public CurrentUserStatsDTO getCurrentStats() {
+        return currentStats;
+    }
+
+    public AllTimeStatsDTO getAlltimeStats() {
+        return alltimeStats;
     }
 }
