@@ -1,6 +1,7 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.models.UserRank;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,9 @@ public class UserDTO {
     private final CurrentUserStatsDTO currentStats;
     private final AllTimeStatsDTO alltimeStats;
 
-    public UserDTO(String id, TwitchAccountDTO twitchAccount, List<String> installedPlugins, List<EventMessageDTO> eventMessages, StreamDTO latestStream, List<StreamDTO> streams, CurrentUserStatsDTO currentStats, AllTimeStatsDTO alltimeStats) {
+    private final UserRank rank;
+
+    public UserDTO(String id, TwitchAccountDTO twitchAccount, List<String> installedPlugins, List<EventMessageDTO> eventMessages, StreamDTO latestStream, List<StreamDTO> streams, CurrentUserStatsDTO currentStats, AllTimeStatsDTO alltimeStats, UserRank rank) {
         this.id = id;
         this.twitchAccount = twitchAccount;
         this.installedPlugins = installedPlugins;
@@ -29,6 +32,8 @@ public class UserDTO {
 
         this.currentStats = currentStats;
         this.alltimeStats = alltimeStats;
+
+        this.rank = rank;
     }
 
     public String getId() {
@@ -52,13 +57,14 @@ public class UserDTO {
 
         return new UserDTO(
                 user.getId().toString(),
-                TwitchAccountDTO.fromTwitchAccount(user.getTwitchAccount()),
+                new TwitchAccountDTO(user.getTwitchAccount()),
                 user.getInstalledPlugins(),
                 EventMessageDTO.fromEvents(user.getEvents()),
                 stream,
                 Collections.singletonList(stream),
                 new CurrentUserStatsDTO(0, 0, 0, 0),
-                new AllTimeStatsDTO(0, 0, 0)
+                new AllTimeStatsDTO(0, 0, 0),
+                UserRank.STREAMER
         );
     }
 
@@ -76,5 +82,9 @@ public class UserDTO {
 
     public AllTimeStatsDTO getAlltimeStats() {
         return alltimeStats;
+    }
+
+    public UserRank getRank() {
+        return rank;
     }
 }

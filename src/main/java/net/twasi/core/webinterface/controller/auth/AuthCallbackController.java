@@ -1,6 +1,7 @@
 package net.twasi.core.webinterface.controller.auth;
 
 import net.twasi.core.config.Config;
+import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.store.UserStore;
@@ -23,10 +24,9 @@ public class AuthCallbackController extends RequestHandler {
     @Override
     public void handleGet(Request req, HttpServletResponse res) {
         String code = req.getParameter("code");
-        AccessTokenDTO accessToken = TwitchAPIService.getService().getToken(code);
+        AccessToken accessToken = TwitchAPIService.getService().getToken(code);
 
         TwitchAccount account = TwitchAPIService.getService().getTwitchAccountByToken(accessToken);
-        TwitchAPIService.getService().applyUserInfo(account);
 
         User user = UserStore.getOrCreate(account);
         String token = JWTService.getService().createNewToken(user);

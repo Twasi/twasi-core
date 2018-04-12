@@ -12,7 +12,7 @@ public class AccessTokenDTO {
     private String refreshToken;
 
     @SerializedName("expires_in")
-    private int expiresIn;
+    private Long expiresIn;
 
     @SerializedName("scope")
     private String[] scope;
@@ -25,7 +25,7 @@ public class AccessTokenDTO {
         return refreshToken;
     }
 
-    public int getExpiresIn() {
+    public Long getExpiresIn() {
         return expiresIn;
     }
 

@@ -79,6 +79,10 @@
             <name>libs-snapshot</name>
             <url>https://artifactory.twasi.net/artifactory/libs-snapshot</url>
         </repository>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -215,6 +219,13 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>9.4.3.v20170317</version>
+        </dependency>
+
+        <!-- Twitch API -->
+        <dependency>
+            <groupId>com.github.twitch4j</groupId>
+            <artifactId>twitch4j</artifactId>
+            <version>v0.10.0</version>
         </dependency>
 
     </dependencies>

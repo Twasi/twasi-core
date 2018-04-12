@@ -1,16 +1,20 @@
 package net.twasi.core.database.models;
 
+import me.philippheuer.twitch4j.auth.model.OAuthCredential;
+
+import java.util.Calendar;
+
 public class AccessToken {
 
     private String accessToken;
     private String refreshToken;
-    private int expiresIn;
+    private Long expiresIn;
     private String[] scope;
 
     public AccessToken() {
     }
 
-    public AccessToken(String accessToken, String refreshToken, int expiresIn, String[] scope) {
+    public AccessToken(String accessToken, String refreshToken, Long expiresIn, String[] scope) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
@@ -37,11 +41,11 @@ public class AccessToken {
         this.refreshToken = refreshToken;
     }
 
-    public int getExpiresIn() {
+    public Long getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(int expiresIn) {
+    public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
     }
 
@@ -51,5 +55,17 @@ public class AccessToken {
 
     public void setScope(String[] scope) {
         this.scope = scope;
+    }
+
+    public OAuthCredential toCredential() {
+        OAuthCredential cred = new OAuthCredential();
+        cred.setToken(getAccessToken());
+        cred.setRefreshToken(getRefreshToken());
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(getExpiresIn());
+
+        cred.setTokenExpiresAt(cal);
+        return cred;
     }
 }

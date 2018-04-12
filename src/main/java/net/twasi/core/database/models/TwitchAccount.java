@@ -1,6 +1,8 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.models.permissions.PermissionGroups;
+import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
+import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -99,5 +101,16 @@ public class TwitchAccount {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public static TwitchAccount fromUser(UserInfoDTO user, TokenInfoDTO tokenInfo, AccessToken token) {
+        TwitchAccount acc = new TwitchAccount();
+
+        acc.setUserName(tokenInfo.getToken().getUserName());
+        acc.setAvatar(user.getLogo());
+        acc.setTwitchId(String.valueOf(tokenInfo.getToken().getUserId()));
+        acc.setEmail(user.getEmail());
+        acc.setToken(token);
+        return acc;
     }
 }

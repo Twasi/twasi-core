@@ -1,37 +1,40 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.database.models.User;
+import net.twasi.core.database.store.UserStore;
+import net.twasi.core.services.TwitchAPIService;
 
 public class TwitchAccountDTO {
-    private String name;
-    private String twitchid;
-    private String avatar;
-    private String email;
+    private TwitchAccount account;
 
-    public TwitchAccountDTO(String name, String twitchid, String avatar, String email) {
-        this.name = name;
-        this.twitchid = twitchid;
-        this.avatar = avatar;
-        this.email = email;
+    public TwitchAccountDTO(TwitchAccount account) {
+        this.account = account;
     }
 
     public String getName() {
-        return name;
+        return account.getUserName();
     }
 
     public String getTwitchid() {
-        return twitchid;
+        return account.getTwitchId();
     }
 
     public String getAvatar() {
-        return avatar;
+        return account.getAvatar();
     }
 
     public String getEmail() {
-        return email;
+        return account.getEmail();
     }
 
-    public static TwitchAccountDTO fromTwitchAccount(TwitchAccount twitchAccount) {
-        return new TwitchAccountDTO(twitchAccount.getUserName(), twitchAccount.getTwitchId(), twitchAccount.getAvatar(), twitchAccount.getEmail());
+    public TwitchAccountDTO update() {
+        this.account = TwitchAPIService.getService().getTwitchAccountByToken(account.getToken());
+
+        User user = UserStore.getById(account.getTwitchId());
+        user.setTwitchAccount(account);
+        UserStore.updateUser(user);
+
+        return this;
     }
 }

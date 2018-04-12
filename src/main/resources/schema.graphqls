@@ -5,6 +5,7 @@ type User {
     events: [EventMessage]!
     latestStream: Stream
     streams: [Stream]!
+    rank: UserRank
 
     currentStats: CurrentUserStats!
     alltimeStats: AllTimeStats!
@@ -57,6 +58,13 @@ enum EventMessageType {
     WARNING
 }
 
+enum UserRank {
+    STREAMER,
+    MODERATOR,
+    VIEWER,
+    TEAM
+}
+
 type Config {
     language: String!
     isActivated: Boolean!
@@ -77,6 +85,7 @@ type TwitchAccount {
     twitchid: String!
     avatar: String!
     email: String!
+    update: TwitchAccount
 }
 
 type Query {
