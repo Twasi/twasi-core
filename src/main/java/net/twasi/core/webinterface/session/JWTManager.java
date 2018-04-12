@@ -31,6 +31,7 @@ public class JWTManager {
                     .withIssuedAt(new Date())
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
+                    .withClaim("rank", user.getRank())
                     .sign(algorithm);
 
             user.setJWTSecret(secret);

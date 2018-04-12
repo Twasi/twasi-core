@@ -38,6 +38,8 @@ public class User {
 
     private AccountStatus status;
 
+    private String rank;
+
     public User() {
         if (Config.getCatalog() != null) {
             defaultAccount = new TwitchAccount(
@@ -201,5 +203,12 @@ public class User {
                 .filter(perm -> perm.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public String getRank() {
+        if (rank == null) {
+            rank = "Streamer";
+        }
+        return rank;
     }
 }
