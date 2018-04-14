@@ -82,6 +82,7 @@ type BotStatus {
 
 type TwitchAccount {
     name: String!
+    displayName: String!
     twitchid: String!
     avatar: String!
     email: String!

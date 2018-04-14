@@ -14,6 +14,7 @@ public class TwitchAccount {
     @Id
     private ObjectId id;
     private String userName;
+    private String displayName;
     private AccessToken token;
     private String twitchId;
     private String avatar;
@@ -25,8 +26,9 @@ public class TwitchAccount {
     public TwitchAccount() {
     }
 
-    public TwitchAccount(String userName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
+    public TwitchAccount(String userName, String displayName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
         this.userName = userName;
+        this.displayName = displayName;
         this.token = token;
         this.twitchId = twitchId;
         this.groups = groups;
@@ -99,6 +101,17 @@ public class TwitchAccount {
         return avatar;
     }
 
+    public String getDisplayName() {
+        if (displayName == null) {
+            return getUserName();
+        }
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
@@ -107,6 +120,7 @@ public class TwitchAccount {
         TwitchAccount acc = new TwitchAccount();
 
         acc.setUserName(tokenInfo.getToken().getUserName());
+        acc.setDisplayName(user.getDisplayName());
         acc.setAvatar(user.getLogo());
         acc.setTwitchId(String.valueOf(tokenInfo.getToken().getUserId()));
         acc.setEmail(user.getEmail());

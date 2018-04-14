@@ -1,18 +1,25 @@
 package net.twasi.core.graphql.model;
 
-public class BotStatusDTO {
-    private boolean isRunning;
+import net.twasi.core.database.models.User;
+import net.twasi.core.services.InstanceManagerService;
 
-    public BotStatusDTO(boolean isRunning) {
-        this.isRunning = isRunning;
+public class BotStatusDTO {
+    private User user;
+
+    public BotStatusDTO(User user) {
+        this.user = user;
     }
 
     public boolean isRunning() {
-        return isRunning;
+        return InstanceManagerService.getService().hasRegisteredInstance(user);
     }
 
     public BotStatusDTO changeStatus(Boolean isRunning) {
-        System.out.println(isRunning);
-        return new BotStatusDTO(isRunning);
+        if (isRunning) {
+            InstanceManagerService.getService().start(user);
+        } else {
+            InstanceManagerService.getService().stop(user);
+        }
+        return this;
     }
 }

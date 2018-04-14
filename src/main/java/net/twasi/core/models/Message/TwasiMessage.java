@@ -72,7 +72,7 @@ public class TwasiMessage {
                     String senderName = parts[1].split("!")[0].substring(1);
 
                     // Every user is a viewer if we parse a message from him. TwitchID will be set when tags are parsed
-                    sender = new TwitchAccount(senderName, null, null, new ArrayList<>(Collections.singleton(PermissionGroups.VIEWER)));
+                    sender = new TwitchAccount(senderName, null, null, null, new ArrayList<>(Collections.singleton(PermissionGroups.VIEWER)));
 
                     String tags = parts[0].split("@")[1];
                     String[] splittedTags = tags.split(";");

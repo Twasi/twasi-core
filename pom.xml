@@ -227,6 +227,11 @@
             <artifactId>twitch4j</artifactId>
             <version>v0.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.1</version>
+        </dependency>
 
     </dependencies>
 </project>

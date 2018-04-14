@@ -21,6 +21,7 @@ public class PermissionsTest {
     private static TwitchAccount botDeveloper = new TwitchAccount(
             "BotDeveloper",
             null,
+            null,
             "1",
             Arrays.asList(
                     PermissionGroups.VIEWER,
@@ -30,6 +31,7 @@ public class PermissionsTest {
     // moderator is a moderator. He has TwitchID 2.
     private static TwitchAccount moderator = new TwitchAccount(
             "MyCoolModerator",
+            null,
             null,
             "2",
             Arrays.asList(
@@ -41,6 +43,7 @@ public class PermissionsTest {
     // viewer is just a viewer with TwitchID 3.
     private static TwitchAccount viewer = new TwitchAccount(
             "MyKindViewer",
+            null,
             null,
             "3",
             Collections.singletonList(PermissionGroups.VIEWER)

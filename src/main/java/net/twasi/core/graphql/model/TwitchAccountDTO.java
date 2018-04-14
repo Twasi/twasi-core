@@ -28,6 +28,10 @@ public class TwitchAccountDTO {
         return account.getEmail();
     }
 
+    public String getDisplayName() {
+        return account.getDisplayName();
+    }
+
     public TwitchAccountDTO update() {
         this.account = TwitchAPIService.getService().getTwitchAccountByToken(account.getToken());
 

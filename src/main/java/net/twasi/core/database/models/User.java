@@ -43,7 +43,9 @@ public class User {
     public User() {
         if (Config.getCatalog() != null) {
             defaultAccount = new TwitchAccount(
-                    Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken),
+                    Config.getCatalog().twitch.defaultName,
+                    null,
+                    new AccessToken(Config.getCatalog().twitch.defaultToken),
                     Config.getCatalog().twitch.defaultUserId,
                     new ArrayList<>()
             );

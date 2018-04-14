@@ -68,4 +68,8 @@ public class AccessToken {
         cred.setTokenExpiresAt(cal);
         return cred;
     }
+
+    public void refresh() {
+
+    }
 }

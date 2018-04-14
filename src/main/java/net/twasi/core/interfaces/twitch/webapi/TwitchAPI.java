@@ -3,10 +3,8 @@ package net.twasi.core.interfaces.twitch.webapi;
 import com.google.gson.Gson;
 import me.philippheuer.twitch4j.TwitchClient;
 import me.philippheuer.twitch4j.TwitchClientBuilder;
-import me.philippheuer.twitch4j.auth.model.OAuthCredential;
 import me.philippheuer.twitch4j.auth.model.twitch.Authorize;
 import me.philippheuer.twitch4j.model.Token;
-import me.philippheuer.twitch4j.model.User;
 import net.twasi.core.config.Config;
 import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
@@ -51,11 +49,38 @@ public class TwitchAPI {
         return new AccessToken(auth.getAccessToken(), auth.getRefreshToken(), auth.getExpiresIn(), auth.getScope().toArray(new String[0]));
     }
 
+    public AccessToken refreshToken(AccessToken old) {
+        /* DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        try {
+            HttpGet httpget = new HttpGet("https://id.twitch.tv/oauth2/token");
+
+            httpget.setHeader("Accept", "application/vnd.twitchtv.v5+json");
+            httpget.setHeader("Authorization", "OAuth " + token.getAccessToken());
+            /* --data - urlencode
+                    ? grant_type = refresh_token
+                    & refresh_token =<your refresh token >
+                    & client_id =<your client ID >
+                    & client_secret =<your client secret >
+
+                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = httpclient.execute(httpget, responseHandler);
+
+            return new Gson().fromJson(responseBody, TokenInfoDTO.class);
+            return null;
+            catch (IOException e) {
+                e
+            }
+        }*/
+        return null;
+    }
+
     public TwitchAccount getTwitchAccountByToken(AccessToken token) {
         Token tokenValidation = client.getKrakenEndpoint().getToken(token.toCredential());
 
         if (!tokenValidation.getValid()) {
             TwasiLogger.log.info("Invalid token found.");
+            token.refresh();
             return null;
         }
 
