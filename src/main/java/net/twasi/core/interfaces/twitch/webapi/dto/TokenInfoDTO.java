@@ -19,9 +19,6 @@ public class TokenInfoDTO {
         @SerializedName("valid")
         private boolean valid;
 
-        @SerializedName("email")
-        private String email;
-
         public String getClientId() {
             return clientId;
         }
@@ -36,10 +33,6 @@ public class TokenInfoDTO {
 
         public boolean isValid() {
             return valid;
-        }
-
-        public String getEmail() {
-            return email;
         }
     }
 

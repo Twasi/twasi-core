@@ -1,43 +1,53 @@
 package net.twasi.core.webinterface.lib;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import io.prometheus.client.Counter;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.JWTService;
 import net.twasi.core.webinterface.dto.error.NotFoundDTO;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
-public abstract class RequestHandler implements HttpHandler, HttpController {
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public abstract class RequestHandler extends AbstractHandler implements HttpController {
     private static final Counter requests = Counter.build()
             .name("requests_total").help("Total requests.").register();
 
     @Override
-    public void handle(HttpExchange httpExchange) {
+    public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         requests.inc();
 
-        if (!httpExchange.getHttpContext().getPath().equalsIgnoreCase(httpExchange.getRequestURI().getPath())) {
+        /* if (!httpExchange.getHttpContext().getPath().equalsIgnoreCase(httpExchange.getRequestURI().getPath())) {
             Commons.writeDTO(httpExchange, new NotFoundDTO(), 404);
             return;
-        }
+        } */
 
         try {
-            switch (httpExchange.getRequestMethod().toLowerCase()) {
+            switch (baseRequest.getMethod().toLowerCase()) {
                 case "get":
-                    handleGet(httpExchange);
+                    handleGet(baseRequest, response);
                     break;
                 case "post":
-                    handlePost(httpExchange);
+                    handlePost(baseRequest, response);
                     break;
                 case "put":
-                    handlePut(httpExchange);
+                    handlePut(baseRequest, response);
                     break;
                 case "options":
-                    httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Authorization");
-                    Commons.handleOptions(httpExchange);
+                    response.setHeader("Access-Control-Allow-Headers", "Authorization");
+                    response.setHeader("Access-Control-Allow-Origin", "*");
+                    response.setHeader("Access-Control-Allow-Methods", "*");
+                    response.setStatus(200);
+                    baseRequest.setHandled(true);
+                    response.getWriter().println("OPTIONS OK");
                     break;
                 default:
-                    Commons.handleUnallowedMethod(httpExchange);
+                    Commons.handleUnallowedMethod(response);
                     break;
             }
         } catch (Throwable e) {
@@ -47,22 +57,25 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
     }
 
     @Override
-    public void handleGet(HttpExchange t) {
+    public void handleGet(Request r, HttpServletResponse t) {
+        r.setHandled(true);
         Commons.handleUnallowedMethod(t);
     }
 
     @Override
-    public void handlePost(HttpExchange t) {
+    public void handlePost(Request r, HttpServletResponse t) {
+        r.setHandled(true);
         Commons.handleUnallowedMethod(t);
     }
 
     @Override
-    public void handlePut(HttpExchange t) {
+    public void handlePut(Request r, HttpServletResponse t) {
+        r.setHandled(true);
         Commons.handleUnallowedMethod(t);
     }
 
-    private String getToken(HttpExchange t) {
-        String authorizationHeader = t.getRequestHeaders().getFirst("Authorization");
+    private String getToken(Request t) {
+        String authorizationHeader = t.getHeader("Authorization");
         if (authorizationHeader == null) {
             return null;
         }
@@ -80,14 +93,14 @@ public abstract class RequestHandler implements HttpHandler, HttpController {
         return splitted[1];
     }
 
-    protected boolean isAuthenticated(HttpExchange t) {
+    protected boolean isAuthenticated(Request t) {
         String jwt = getToken(t);
 
         return jwt != null && JWTService.getService().isValidToken(jwt);
 
     }
 
-    public User getUser(HttpExchange t) {
+    public User getUser(Request t) {
         return JWTService.getService().getUserFromToken(getToken(t));
     }
 }

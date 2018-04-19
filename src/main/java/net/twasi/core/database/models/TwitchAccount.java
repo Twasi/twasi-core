@@ -1,6 +1,8 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.models.permissions.PermissionGroups;
+import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
+import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -12,6 +14,7 @@ public class TwitchAccount {
     @Id
     private ObjectId id;
     private String userName;
+    private String displayName;
     private AccessToken token;
     private String twitchId;
     private String avatar;
@@ -23,8 +26,9 @@ public class TwitchAccount {
     public TwitchAccount() {
     }
 
-    public TwitchAccount(String userName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
+    public TwitchAccount(String userName, String displayName, AccessToken token, String twitchId, List<PermissionGroups> groups) {
         this.userName = userName;
+        this.displayName = displayName;
         this.token = token;
         this.twitchId = twitchId;
         this.groups = groups;
@@ -91,10 +95,36 @@ public class TwitchAccount {
     }
 
     public String getAvatar() {
+        if (avatar == null) {
+            return "https://static-cdn.jtvnw.net/jtv_user_pictures/eb858cdd0224da3d-profile_image-300x300.png";
+        }
         return avatar;
+    }
+
+    public String getDisplayName() {
+        if (displayName == null) {
+            return getUserName();
+        }
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public static TwitchAccount fromUser(UserInfoDTO user, TokenInfoDTO tokenInfo, AccessToken token) {
+        TwitchAccount acc = new TwitchAccount();
+
+        acc.setUserName(tokenInfo.getToken().getUserName());
+        acc.setDisplayName(user.getDisplayName());
+        acc.setAvatar(user.getLogo());
+        acc.setTwitchId(String.valueOf(tokenInfo.getToken().getUserId()));
+        acc.setEmail(user.getEmail());
+        acc.setToken(token);
+        return acc;
     }
 }

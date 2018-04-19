@@ -3,7 +3,6 @@ package net.twasi.core.plugin;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
-import net.twasi.core.webinterface.WebInterfaceApp;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
 
@@ -164,7 +163,7 @@ public abstract class TwasiPlugin extends PluginBase {
 
     @Override
     public void registerRoute(String path, RequestHandler handler) {
-        WebInterfaceApp.getServer().createContext(path, handler);
+        // TODO WebInterfaceApp.getServer().createContext(path, handler);
     }
 
     @Override

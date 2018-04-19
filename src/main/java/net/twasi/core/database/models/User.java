@@ -38,10 +38,14 @@ public class User {
 
     private AccountStatus status;
 
+    private String rank;
+
     public User() {
         if (Config.getCatalog() != null) {
             defaultAccount = new TwitchAccount(
-                    Config.getCatalog().twitch.defaultName, new AccessToken(Config.getCatalog().twitch.defaultToken),
+                    Config.getCatalog().twitch.defaultName,
+                    null,
+                    new AccessToken(Config.getCatalog().twitch.defaultToken),
                     Config.getCatalog().twitch.defaultUserId,
                     new ArrayList<>()
             );
@@ -201,5 +205,12 @@ public class User {
                 .filter(perm -> perm.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public String getRank() {
+        if (rank == null) {
+            rank = "Streamer";
+        }
+        return rank;
     }
 }

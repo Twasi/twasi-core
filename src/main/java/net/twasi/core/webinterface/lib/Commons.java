@@ -7,52 +7,50 @@ import net.twasi.core.webinterface.dto.ApiDTO;
 import net.twasi.core.webinterface.dto.error.BadRequestDTO;
 import net.twasi.core.webinterface.dto.error.UnallowedMethodDTO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 
 public class Commons {
 
-    public static void handleUnallowedMethod(HttpExchange t) {
+    public static void handleUnallowedMethod(HttpServletResponse t) {
         writeDTO(t, new UnallowedMethodDTO(), 405);
     }
 
-    ;
-
-    public static void writeString(HttpExchange t, String s, int code) {
+    public static void writeString(HttpServletResponse t, String s, int code) {
         try {
-            t.sendResponseHeaders(code, s.length());
-            OutputStream os = t.getResponseBody();
-            os.write(s.getBytes());
-            os.close();
+            t.setStatus(code);
+            t.getWriter().println(s);
+            t.getWriter().close();
         } catch (IOException e) {
             TwasiLogger.log.error(e);
         }
     }
 
-    public static void writeDTO(HttpExchange t, ApiDTO dto, int code) {
+    public static void writeDTO(HttpServletResponse t, ApiDTO dto, int code) {
         String json = new Gson().toJson(dto);
-        t.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-        t.getResponseHeaders().set("Content-Type", "application/json");
+        t.setHeader("Access-Control-Allow-Origin", "*");
+        t.setHeader("Content-Type", "application/json");
         writeString(t, json, code);
     }
 
-    public static void writeRedirect(HttpExchange t, String redirectTo) {
+    /* public static void writeRedirect(HttpExchange t, String redirectTo) {
         t.getResponseHeaders().set("Location", redirectTo);
         writeString(t, "<a href='" + redirectTo + "'>Click here</a>", 307);
-    }
+    }*/
 
-    public static void handleBadRequest(HttpExchange t) {
+    /* public static void handleBadRequest(HttpExchange t) {
         writeDTO(t, new BadRequestDTO(), 400);
-    }
+    }*/
 
-    static void handleOptions(HttpExchange t) {
+    /* static void handleOptions(HttpExchange t) {
         t.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         t.getResponseHeaders().set("Access-Control-Allow-Methods", "*");
         writeString(t, "", 200);
-    }
+    } */
 
-    public static HashMap<String, String> parseQueryParams(HttpExchange t) {
+    /* public static HashMap<String, String> parseQueryParams(HttpExchange t) {
         HashMap<String, String> params = new HashMap<>();
         String queryString = t.getRequestURI().getQuery();
         if (queryString == null) {
@@ -70,5 +68,5 @@ public class Commons {
             params.put(splittedString[0], splittedString[1]);
         }
         return params;
-    }
+    } */
 }

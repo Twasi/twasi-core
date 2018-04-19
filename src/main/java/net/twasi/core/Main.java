@@ -1,5 +1,6 @@
 package net.twasi.core;
 
+import ch.qos.logback.classic.Level;
 import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
 import net.twasi.core.config.Config;
@@ -9,7 +10,11 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.AppStateService;
 import net.twasi.core.services.InstanceManagerService;
-import net.twasi.core.webinterface.WebInterfaceApp;
+import net.twasi.core.graphql.WebInterfaceApp;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Enumeration;
 
 public class Main {
 
@@ -17,6 +22,10 @@ public class Main {
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
+
+        Logger root = (Logger) LoggerFactory
+                .getLogger(Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.OFF);
 
         TwasiLogger.log.info("Starting Twasi Core");
 

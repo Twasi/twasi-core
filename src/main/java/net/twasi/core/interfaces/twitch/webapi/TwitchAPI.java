@@ -1,24 +1,151 @@
 package net.twasi.core.interfaces.twitch.webapi;
 
 import com.google.gson.Gson;
+import me.philippheuer.twitch4j.TwitchClient;
+import me.philippheuer.twitch4j.TwitchClientBuilder;
+import me.philippheuer.twitch4j.auth.model.twitch.Authorize;
+import me.philippheuer.twitch4j.model.Token;
 import net.twasi.core.config.Config;
+import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
 import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.webinterface.dto.auth.AccessTokenDTO;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Optional;
 
 public class TwitchAPI {
+    private TwitchClient client;
+
+    public TwitchAPI() {
+        client = TwitchClientBuilder.init()
+                .withClientId(Config.getCatalog().twitch.clientId)
+                .withClientSecret(Config.getCatalog().twitch.clientSecret)
+                .build();
+    }
 
     public String getAuthURL() {
+        return "https://api.twitch.tv/kraken/oauth2/authorize" +
+                "?client_id=" + client.getClientId() +
+                "&redirect_uri=" + Config.getCatalog().twitch.redirectUri +
+                "&response_type=code" +
+                "&scope=channel_editor+user_read";
+    }
+
+    public AccessToken getToken(String code) {
+        Optional<Authorize> optionalAuth = client.getKrakenEndpoint().getOAuthToken("authorization_code", Config.getCatalog().twitch.redirectUri, code);
+
+        if (!optionalAuth.isPresent()) {
+            TwasiLogger.log.info("Cannot authorize: Code validation failed.");
+            return null;
+        }
+
+        Authorize auth = optionalAuth.get();
+        return new AccessToken(auth.getAccessToken(), auth.getRefreshToken(), auth.getExpiresIn(), auth.getScope().toArray(new String[0]));
+    }
+
+    public AccessToken refreshToken(AccessToken old) {
+        /* DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        try {
+            HttpGet httpget = new HttpGet("https://id.twitch.tv/oauth2/token");
+
+            httpget.setHeader("Accept", "application/vnd.twitchtv.v5+json");
+            httpget.setHeader("Authorization", "OAuth " + token.getAccessToken());
+            /* --data - urlencode
+                    ? grant_type = refresh_token
+                    & refresh_token =<your refresh token >
+                    & client_id =<your client ID >
+                    & client_secret =<your client secret >
+
+                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = httpclient.execute(httpget, responseHandler);
+
+            return new Gson().fromJson(responseBody, TokenInfoDTO.class);
+            return null;
+            catch (IOException e) {
+                e
+            }
+        }*/
+        return null;
+    }
+
+    public TwitchAccount getTwitchAccountByToken(AccessToken token) {
+        Token tokenValidation = client.getKrakenEndpoint().getToken(token.toCredential());
+
+        if (!tokenValidation.getValid()) {
+            TwasiLogger.log.info("Invalid token found.");
+            token.refresh();
+            return null;
+        }
+
+        UserInfoDTO userInfo = getUserInfo(token);
+        if (userInfo == null) {
+            TwasiLogger.log.info("Could not find user.");
+            return null;
+        }
+
+        TokenInfoDTO tokenInfo = getKrakenUser(token);
+
+        return TwitchAccount.fromUser(userInfo, tokenInfo, token);
+    }
+
+    private TokenInfoDTO getKrakenUser(AccessToken token) {
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        TwitchAccount acc = null;
+        try {
+            HttpGet httpget = new HttpGet("https://api.twitch.tv/kraken");
+
+            httpget.setHeader("Accept", "application/vnd.twitchtv.v5+json");
+            httpget.setHeader("Authorization", "OAuth " + token.getAccessToken());
+
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = httpclient.execute(httpget, responseHandler);
+
+            return new Gson().fromJson(responseBody, TokenInfoDTO.class);
+        } catch (IOException e) {
+            TwasiLogger.log.error(e);
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+            httpclient.close();
+        }
+        return null;
+    }
+
+    private UserInfoDTO getUserInfo(AccessToken token) {
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        TwitchAccount acc = null;
+        try {
+            HttpGet httpget = new HttpGet("https://api.twitch.tv/kraken/user");
+
+            httpget.setHeader("Accept", "application/vnd.twitchtv.v5+json");
+            httpget.setHeader("Authorization", "OAuth " + token.getAccessToken());
+
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = httpclient.execute(httpget, responseHandler);
+
+            return new Gson().fromJson(responseBody, UserInfoDTO.class);
+        } catch (IOException e) {
+            TwasiLogger.log.error(e);
+        } finally {
+            // When HttpClient instance is no longer needed,
+            // shut down the connection manager to ensure
+            // immediate deallocation of all system resources
+            httpclient.getConnectionManager().shutdown();
+            httpclient.close();
+        }
+        return null;
+    }
+
+    /* public String getAuthURL() {
         return "https://api.twitch.tv/kraken/oauth2/authorize" +
                 "?client_id=" + Config.getCatalog().twitch.clientId +
                 "&redirect_uri=" + Config.getCatalog().twitch.redirectUri +
@@ -107,5 +234,9 @@ public class TwitchAPI {
             httpclient.close();
         }
     }
+
+    public TwitchAccount updateAccount(TwitchAccount old) {
+
+    }*/
 
 }

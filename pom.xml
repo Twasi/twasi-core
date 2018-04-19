@@ -79,6 +79,10 @@
             <name>libs-snapshot</name>
             <url>https://artifactory.twasi.net/artifactory/libs-snapshot</url>
         </repository>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -114,13 +118,18 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>2.9.0</version>
         </dependency>
-        <!-- HttpServer -->
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.9.v20180320</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope>
         </dependency>
+
         <!-- Morphia (MongoDB) -->
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
@@ -188,6 +197,40 @@
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_pushgateway</artifactId>
             <version>0.1.0</version>
+        </dependency>
+
+        <!-- GraphQL -->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-tools</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-servlet</artifactId>
+            <version>4.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>9.4.3.v20170317</version>
+        </dependency>
+
+        <!-- Twitch API -->
+        <dependency>
+            <groupId>com.github.twitch4j</groupId>
+            <artifactId>twitch4j</artifactId>
+            <version>v0.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.1</version>
         </dependency>
 
     </dependencies>
