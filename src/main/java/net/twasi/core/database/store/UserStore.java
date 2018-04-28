@@ -46,10 +46,10 @@ public class UserStore {
 
     /**
      * Returns a user by TwitchID
-     * If the user doesn't exist he will be registered.
+     * If the user doesn't exist he will be created.
+     * A welcome mail will be sent if enabled in config.
      */
     public static User getOrCreate(TwitchAccount account) {
-        // List<User> users = Database.getStore().createQuery(User.class).filter("twitchAccount.twitchId =", account.getTwitchId()).asList();
         User user = getById(account.getTwitchId());
         if (user == null) {
             // Register new user
@@ -63,7 +63,7 @@ public class UserStore {
                 // Send welcome mail
                 MailService.getService().getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), confirmationCode));
             } else {
-                user.setStatus(AccountStatus.OK);
+                user.setStatus(AccountStatus.SETUP);
             }
 
             users.add(user);

@@ -23,6 +23,6 @@ public class Query implements GraphQLQueryResolver {
 
         UserDTO userDTO = UserDTO.fromUser(user);
 
-        return new ViewerDTO(userDTO, new BotStatusDTO(user));
+        return new ViewerDTO(userDTO, new BotStatusDTO(user), new UserStatusDTO(user));
     }
 }

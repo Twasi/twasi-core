@@ -190,7 +190,7 @@ public class User {
 
     public AccountStatus getStatus() {
         if (status == null) {
-            status = AccountStatus.EMAIL_CONFIRMATION;
+            status = AccountStatus.SETUP;
         }
         return status;
     }

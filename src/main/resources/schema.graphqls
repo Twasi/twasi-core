@@ -65,6 +65,14 @@ enum UserRank {
     TEAM
 }
 
+enum UserStatusType {
+    OK,
+    SETUP,
+    MIGRATION,
+    BANNED,
+    MAINTENANCE
+}
+
 type Config {
     language: String!
     isActivated: Boolean!
@@ -72,12 +80,22 @@ type Config {
 
 type Viewer {
     user: User
-    status: BotStatus
+    status: BotStatus,
+    userStatus: UserStatus,
+    appInfo: AppInfo
 }
 
 type BotStatus {
     isRunning: Boolean!,
     changeStatus(isRunning: Boolean): BotStatus
+}
+
+type AppInfo {
+    version: String!
+}
+
+type UserStatus {
+    status: UserStatusType
 }
 
 type TwitchAccount {

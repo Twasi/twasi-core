@@ -12,7 +12,7 @@ public enum AccountStatus {
      */
     OK,
 
-    /**
+    SETUP, /**
      * The user is banned and should not be able to:
      * - Access the Panel
      * - Use the bot in the chat
