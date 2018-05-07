@@ -6,9 +6,7 @@ import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +14,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity("users")
-public class User {
+public class User extends BaseEntity {
 
     private static TwitchAccount defaultAccount;
-
-    @Id
-    private ObjectId id;
 
     private TwitchAccount twitchAccount;
     private TwitchAccount twitchBotAccount;
@@ -50,16 +45,6 @@ public class User {
                     new ArrayList<>()
             );
         }
-    }
-
-    ;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public TwitchAccount getTwitchAccount() {
