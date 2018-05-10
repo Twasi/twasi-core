@@ -6,11 +6,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import net.twasi.core.config.Config;
-import net.twasi.core.database.Database;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.store.UserStore;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
@@ -27,7 +26,7 @@ public class JWTManager {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             token = JWT.create()
-                    .withIssuer(Config.getCatalog().auth.issuer)
+                    .withIssuer(ServiceRegistry.get(ConfigService.class).getCatalog().auth.issuer)
                     .withIssuedAt(new Date())
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())

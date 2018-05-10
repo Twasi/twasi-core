@@ -4,7 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.model.*;
 import net.twasi.core.graphql.repository.UserRepository;
-import net.twasi.core.services.JWTService;
+import net.twasi.core.services.providers.JWTService;
 
 public class Query implements GraphQLQueryResolver {
 

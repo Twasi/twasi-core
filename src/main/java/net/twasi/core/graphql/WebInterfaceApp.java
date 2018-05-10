@@ -2,8 +2,9 @@ package net.twasi.core.graphql;
 
 import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
-import net.twasi.core.config.Config;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.webinterface.metrics.CustomMetrics;
 import net.twasi.core.webinterface.registry.AuthRegistry;
 import org.eclipse.jetty.server.Server;
@@ -21,10 +22,10 @@ public class WebInterfaceApp {
         try {
             // Create server
             // server = HttpServer.create(new InetSocketAddress(Config.getCatalog().webinterface.port), 0);
-            server = new Server(Config.getCatalog().webinterface.port);
+            server = new Server(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
 
             // Create server for metrics
-            HTTPServer metricsServer = new HTTPServer("0.0.0.0", Config.getCatalog().webinterface.metricsPort);
+            HTTPServer metricsServer = new HTTPServer("0.0.0.0", ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.metricsPort);
 
             metrics = new CustomMetrics();
             DefaultExports.initialize();
@@ -61,7 +62,7 @@ public class WebInterfaceApp {
         try {
             server.start();
             //server.join();
-            TwasiLogger.log.info("Web interface started on port " + Config.getCatalog().webinterface.port);
+            TwasiLogger.log.info("Web interface started on port " + ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
         } catch (Exception e) {
             TwasiLogger.log.error("Error while starting webserver", e);
         }

@@ -1,6 +1,5 @@
 package net.twasi.core.plugin.api;
 
-import net.twasi.core.database.Database;
 import net.twasi.core.database.models.User;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.plugin.TwasiPlugin;

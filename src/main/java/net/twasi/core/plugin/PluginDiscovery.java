@@ -2,7 +2,7 @@ package net.twasi.core.plugin;
 
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
-import net.twasi.core.services.PluginManagerService;
+import net.twasi.core.services.providers.PluginManagerService;
 
 import java.io.File;
 import java.util.Arrays;

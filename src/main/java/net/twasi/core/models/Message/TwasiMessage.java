@@ -1,10 +1,11 @@
 package net.twasi.core.models.Message;
 
-import net.twasi.core.config.Config;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.variables.VariablePreprocessor;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,7 +37,7 @@ public class TwasiMessage {
     }
 
     public boolean isCommand() {
-        return message != null && message.startsWith(Config.getCatalog().bot.prefix);
+        return message != null && message.startsWith(ServiceRegistry.get(ConfigService.class).getCatalog().bot.prefix);
     }
 
     public TwasiCommand toCommand() {

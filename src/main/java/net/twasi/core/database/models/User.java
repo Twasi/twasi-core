@@ -1,11 +1,11 @@
 package net.twasi.core.database.models;
 
-import net.twasi.core.config.Config;
-import net.twasi.core.database.Database;
 import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
@@ -36,12 +36,12 @@ public class User extends BaseEntity {
     private String rank;
 
     public User() {
-        if (Config.getCatalog() != null) {
+        if (ServiceRegistry.get(ConfigService.class).getCatalog() != null) {
             defaultAccount = new TwitchAccount(
-                    Config.getCatalog().twitch.defaultName,
+                    ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultName,
                     null,
-                    new AccessToken(Config.getCatalog().twitch.defaultToken),
-                    Config.getCatalog().twitch.defaultUserId,
+                    new AccessToken(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultToken),
+                    ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultUserId,
                     new ArrayList<>()
             );
         }

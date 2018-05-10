@@ -3,7 +3,7 @@ package net.twasi.core.graphql.model;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.store.UserStore;
-import net.twasi.core.services.TwitchAPIService;
+import net.twasi.core.services.providers.TwitchAPIService;
 
 public class TwitchAccountDTO {
     private TwitchAccount account;

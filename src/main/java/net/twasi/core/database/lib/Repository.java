@@ -1,7 +1,8 @@
 package net.twasi.core.database.lib;
 
-import net.twasi.core.database.Database;
 import net.twasi.core.database.models.BaseEntity;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DatabaseService;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 
@@ -15,7 +16,7 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     protected EntityCache<T> cache = new EntityCache<>();
 
     public Repository() {
-        store = Database.getStore();
+        store = ServiceRegistry.get(DatabaseService.class).getStore();
         entityType = ((Class) ((ParameterizedType) getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0]);
     }

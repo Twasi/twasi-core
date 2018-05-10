@@ -1,7 +1,7 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
-import net.twasi.core.services.InstanceManagerService;
+import net.twasi.core.services.providers.InstanceManagerService;
 
 public class BotStatusDTO {
     private User user;

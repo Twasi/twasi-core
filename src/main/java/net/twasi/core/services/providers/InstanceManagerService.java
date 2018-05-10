@@ -1,4 +1,4 @@
-package net.twasi.core.services;
+package net.twasi.core.services.providers;
 
 import net.twasi.core.instances.InstanceManager;
 

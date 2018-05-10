@@ -1,6 +1,5 @@
 package net.twasi.core.interfaces.twitch;
 
-import net.twasi.core.config.Config;
 import net.twasi.core.interfaces.MessageReader;
 import net.twasi.core.interfaces.api.CommunicationHandler;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
@@ -8,6 +7,8 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -50,7 +51,7 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public boolean connect() {
         try {
-            socket = new Socket(Config.getCatalog().twitch.hostname, Config.getCatalog().twitch.port);
+            socket = new Socket(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname, ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -65,7 +66,7 @@ public class TwitchInterface extends TwasiInterface {
             String line = "";
             while ((line = this.reader.readLine()) != null) {
                 if (line.contains("004")) {
-                    TwasiLogger.log.debug("Connected: " + streamer.getUser().getTwitchAccount().getUserName() + " to " + Config.getCatalog().twitch.hostname + ":" + Config.getCatalog().twitch.port + " (Account: " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + ")");
+                    TwasiLogger.log.debug("Connected: " + streamer.getUser().getTwitchAccount().getUserName() + " to " + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname + ":" + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port + " (Account: " + streamer.getUser().getTwitchBotAccountOrDefault().getUserName() + ")");
                     break;
                 } else {
                     TwasiLogger.log.trace(line);

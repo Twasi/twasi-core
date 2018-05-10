@@ -1,9 +1,8 @@
 package net.twasi.core.plugin;
 
-import net.twasi.core.database.store.UserStore;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.services.InstanceManagerService;
+import net.twasi.core.services.providers.InstanceManagerService;
 
 import java.util.ArrayList;
 import java.util.List;

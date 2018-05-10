@@ -1,11 +1,9 @@
 package net.twasi.core.webinterface.lib;
 
-import com.sun.net.httpserver.HttpExchange;
 import io.prometheus.client.Counter;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.services.JWTService;
-import net.twasi.core.webinterface.dto.error.NotFoundDTO;
+import net.twasi.core.services.providers.JWTService;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 

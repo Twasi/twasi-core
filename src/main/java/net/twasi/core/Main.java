@@ -1,20 +1,18 @@
 package net.twasi.core;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
-import net.twasi.core.config.Config;
-import net.twasi.core.database.Database;
-import net.twasi.core.database.store.UserStore;
+import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
-import net.twasi.core.services.AppStateService;
-import net.twasi.core.services.InstanceManagerService;
-import net.twasi.core.graphql.WebInterfaceApp;
-import ch.qos.logback.classic.Logger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.AppStateService;
+import net.twasi.core.services.providers.DataService;
+import net.twasi.core.services.providers.DatabaseService;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.slf4j.LoggerFactory;
-
-import java.util.Enumeration;
 
 public class Main {
 
@@ -23,23 +21,26 @@ public class Main {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
 
+        TwasiLogger.log.info("Registering and starting services");
+        ServiceRegistry.register(new AppStateService());
+        ServiceRegistry.register(new ConfigService());
+        ServiceRegistry.register(new DatabaseService());
+        ServiceRegistry.register(new DataService());
+
         Logger root = (Logger) LoggerFactory
                 .getLogger(Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.OFF);
 
         TwasiLogger.log.info("Starting Twasi Core");
 
-        TwasiLogger.log.debug("Reading config");
-        Config.load();
-
-        TwasiLogger.log.info("Connecting to database " + Config.getCatalog().database.hostname);
-        Database.connect();
+        TwasiLogger.log.info("Connecting to database " + ServiceRegistry.get(ConfigService.class).getCatalog().database.hostname);
+        ServiceRegistry.get(DatabaseService.class).connect();
 
         TwasiLogger.log.info("Preparing webinterface");
         WebInterfaceApp.prepare();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
-        InstanceManagerService.getService().startForAllUsers(UserStore.getUsers());
+        //InstanceManagerService.getService().startForAllUsers(UserStore.getUsers());
 
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();

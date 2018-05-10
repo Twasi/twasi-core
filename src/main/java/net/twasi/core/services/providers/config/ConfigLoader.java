@@ -1,8 +1,8 @@
-package net.twasi.core.config;
+package net.twasi.core.services.providers.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import net.twasi.core.config.ConfigCatalog.ConfigCatalog;
+import net.twasi.core.services.providers.config.catalog.ConfigCatalog;
 import net.twasi.core.logger.TwasiLogger;
 import org.apache.log4j.Level;
 
@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 
 class ConfigLoader {
 
-    ConfigCatalog configCatalog;
+    private ConfigCatalog configCatalog;
 
     ConfigLoader() {
         if (!new File("twasi.yml").exists()) {
@@ -79,4 +79,7 @@ class ConfigLoader {
         System.out.println("Loglevel set to " + configCatalog.log.level);
     }
 
+    public ConfigCatalog getConfigCatalog() {
+        return configCatalog;
+    }
 }

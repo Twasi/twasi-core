@@ -1,4 +1,4 @@
-package net.twasi.core.config.ConfigCatalog;
+package net.twasi.core.services.providers.config.catalog;
 
 public class WebInterfaceConfig {
 

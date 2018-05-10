@@ -5,12 +5,13 @@ import me.philippheuer.twitch4j.TwitchClient;
 import me.philippheuer.twitch4j.TwitchClientBuilder;
 import me.philippheuer.twitch4j.auth.model.twitch.Authorize;
 import me.philippheuer.twitch4j.model.Token;
-import net.twasi.core.config.Config;
 import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
 import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -24,21 +25,21 @@ public class TwitchAPI {
 
     public TwitchAPI() {
         client = TwitchClientBuilder.init()
-                .withClientId(Config.getCatalog().twitch.clientId)
-                .withClientSecret(Config.getCatalog().twitch.clientSecret)
+                .withClientId(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId)
+                .withClientSecret(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientSecret)
                 .build();
     }
 
     public String getAuthURL() {
         return "https://api.twitch.tv/kraken/oauth2/authorize" +
                 "?client_id=" + client.getClientId() +
-                "&redirect_uri=" + Config.getCatalog().twitch.redirectUri +
+                "&redirect_uri=" + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.redirectUri +
                 "&response_type=code" +
                 "&scope=channel_editor+user_read";
     }
 
     public AccessToken getToken(String code) {
-        Optional<Authorize> optionalAuth = client.getKrakenEndpoint().getOAuthToken("authorization_code", Config.getCatalog().twitch.redirectUri, code);
+        Optional<Authorize> optionalAuth = client.getKrakenEndpoint().getOAuthToken("authorization_code", ServiceRegistry.get(ConfigService.class).getCatalog().twitch.redirectUri, code);
 
         if (!optionalAuth.isPresent()) {
             TwasiLogger.log.info("Cannot authorize: Code validation failed.");
