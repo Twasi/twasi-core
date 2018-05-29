@@ -2,7 +2,9 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.store.UserStore;
+import net.twasi.core.database.repositories.UserRepository;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.TwitchAPIService;
 
 public class TwitchAccountDTO {
@@ -35,9 +37,9 @@ public class TwitchAccountDTO {
     public TwitchAccountDTO update() {
         this.account = TwitchAPIService.getService().getTwitchAccountByToken(account.getToken());
 
-        User user = UserStore.getById(account.getTwitchId());
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(account.getTwitchId());
         user.setTwitchAccount(account);
-        UserStore.updateUser(user);
+        ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
 
         return this;
     }

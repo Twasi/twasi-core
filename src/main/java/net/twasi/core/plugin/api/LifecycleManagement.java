@@ -1,11 +1,14 @@
 package net.twasi.core.plugin.api;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.events.TwasiDisableEvent;
 import net.twasi.core.plugin.api.events.TwasiEnableEvent;
 import net.twasi.core.plugin.api.events.TwasiInstallEvent;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.translations.TwasiTranslation;
 
 public class LifecycleManagement {
@@ -20,14 +23,14 @@ public class LifecycleManagement {
         User user = userPlugin.getTwasiInterface().getStreamer().getUser();
         userPlugin.onEnable(new TwasiEnableEvent(userPlugin));
         userPlugin.onInstall(new TwasiInstallEvent(userPlugin, user.getPermissionByName("twasi_user"), user.getPermissionByName("twasi_mod"), user.getPermissionByName("twasi_admin")));
-        Database.getStore().save(user);
+        ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
     }
 
     public static void handleUninstall(TwasiUserPlugin userPlugin) {
         User user = userPlugin.getTwasiInterface().getStreamer().getUser();
         userPlugin.onDisable(new TwasiDisableEvent(userPlugin));
         userPlugin.onUninstall(new TwasiInstallEvent(userPlugin, user.getPermissionByName("twasi_user"), user.getPermissionByName("twasi_mod"), user.getPermissionByName("twasi_admin")));
-        Database.getStore().save(user);
+        ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
     }
 
     public static void handleEnable(TwasiUserPlugin plugin) {

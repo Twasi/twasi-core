@@ -30,10 +30,12 @@ public class PluginManager {
         }
         plugins.add(plugin);
 
-        UserStore.getUsers().stream().filter(user -> user.getInstalledPlugins().contains(plugin.getName())).parallel().forEach(user -> {
+        // TODO to support plugin registration at runtime
+        /* UserStore.getUsers().stream().filter(user -> user.getInstalledPlugins().contains(plugin.getName())).parallel().forEach(user -> {
             TwasiInterface inf = InstanceManagerService.getService().getByUser(user);
             inf.enableUserPlugin(plugin);
         });
+        return true; */
         return true;
     }
 

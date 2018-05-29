@@ -1,6 +1,7 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.InstanceManagerService;
 
 public class BotStatusDTO {
@@ -11,14 +12,14 @@ public class BotStatusDTO {
     }
 
     public boolean isRunning() {
-        return InstanceManagerService.getService().hasRegisteredInstance(user);
+        return ServiceRegistry.get(InstanceManagerService.class).hasRegisteredInstance(user);
     }
 
     public BotStatusDTO changeStatus(Boolean isRunning) {
         if (isRunning) {
-            InstanceManagerService.getService().start(user);
+            ServiceRegistry.get(InstanceManagerService.class).start(user);
         } else {
-            InstanceManagerService.getService().stop(user);
+            ServiceRegistry.get(InstanceManagerService.class).stop(user);
         }
         return this;
     }

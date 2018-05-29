@@ -1,6 +1,7 @@
 package net.twasi.core.database.lib;
 
 import net.twasi.core.database.models.BaseEntity;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DatabaseService;
 import org.bson.types.ObjectId;
@@ -8,6 +9,7 @@ import org.mongodb.morphia.Datastore;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Repository<T extends BaseEntity> implements IRepository<T> {
     protected Datastore store;
@@ -46,8 +48,14 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     }
 
     @Override
+    public void add(T entity) {
+        store.save(entity);
+    }
+
+    @Override
     public boolean commit(T term) {
         if (!cache.exist(term)) {
+            TwasiLogger.log.info("Tried to commit entity that is not in cache.");
             return false;
         }
         T cachedEntity = cache.get(term);
@@ -60,5 +68,10 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     public void commitAll() {
         //TODO: do all at once for performance boost?
         cache.getAll().forEach(this::commit);
+    }
+
+    public List<ObjectId> getAllIds() {
+        List<ObjectId> ids = (List<ObjectId>) store.find(entityType).asList().stream().map(e -> ((BaseEntity)e).getId()).collect(Collectors.toList());
+        return null;
     }
 }

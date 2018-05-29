@@ -1,14 +1,14 @@
 package net.twasi.core.webinterface.controller.auth;
 
-import net.twasi.core.config.Config;
 import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
-import net.twasi.core.database.store.UserStore;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.JWTService;
 import net.twasi.core.services.providers.TwitchAPIService;
@@ -27,11 +27,11 @@ public class AuthCallbackController extends RequestHandler {
 
         TwitchAccount account = TwitchAPIService.getService().getTwitchAccountByToken(accessToken);
 
-        User user = UserStore.getOrCreate(account);
-        String token = JWTService.getService().createNewToken(user);
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchAccountOrCreate(account);
+        String token = ServiceRegistry.get(JWTService.class).getManager().createNewToken(user);
 
-        if (!InstanceManagerService.getService().hasRegisteredInstance(user)) {
-            InstanceManagerService.getService().registerInterface(new TwitchInterface(new Streamer(user)));
+        if (!ServiceRegistry.get(InstanceManagerService.class).hasRegisteredInstance(user)) {
+            ServiceRegistry.get(InstanceManagerService.class).registerInterface(new TwitchInterface(new Streamer(user)));
         }
 
         try {

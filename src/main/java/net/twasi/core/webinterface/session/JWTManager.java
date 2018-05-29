@@ -7,8 +7,10 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.config.ConfigService;
 
 import javax.xml.bind.DatatypeConverter;
@@ -20,6 +22,8 @@ public class JWTManager {
 
     public String createNewToken(User user) {
         String token = null;
+
+        user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(user.getTwitchAccount().getTwitchId());
 
         try {
             String secret = generateNewSecret();
@@ -35,7 +39,7 @@ public class JWTManager {
                     .sign(algorithm);
 
             user.setJWTSecret(secret);
-            Database.getStore().save(user);
+            ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
         } catch (Exception e) {
             TwasiLogger.log.error(e);
         }
@@ -59,25 +63,25 @@ public class JWTManager {
             return null;
         } else {
             DecodedJWT decodedJWT = JWT.decode(jwt);
-            String userId = decodedJWT.getClaim("twitchid").asString();
-            return UserStore.getById(userId);
+            String twitchId = decodedJWT.getClaim("twitchid").asString();
+            return ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(twitchId);
         }
     }
 
     public boolean isValidToken(String jwt) {
-        String userId;
+        String twitchId;
 
         // First read out User of token. This has to be done before verification
         // because every user has another secret.
         try {
             DecodedJWT decodedJWT = JWT.decode(jwt);
-            userId = decodedJWT.getClaim("twitchid").asString();
+            twitchId = decodedJWT.getClaim("twitchid").asString();
         } catch (JWTDecodeException exception) {
             TwasiLogger.log.info(exception);
             return false;
         }
 
-        User user = UserStore.getById(userId);
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(twitchId);
 
         if (user == null) {
             return false;
@@ -86,7 +90,7 @@ public class JWTManager {
         try {
             Algorithm algorithm = Algorithm.HMAC256(user.getJWTSecret());
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(Config.getCatalog().auth.issuer)
+                    .withIssuer(ServiceRegistry.get(ConfigService.class).getCatalog().auth.issuer)
                     .build(); //Reusable verifier instance
             DecodedJWT decodedJWT = verifier.verify(jwt);
             return true;

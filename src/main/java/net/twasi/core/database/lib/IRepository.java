@@ -9,6 +9,8 @@ public interface IRepository<T> {
     T getById(String id);
     List<T> getAll();
 
+    void add(T entity);
+
     boolean commit(T entity);
     void commitAll();
 }

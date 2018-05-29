@@ -2,7 +2,10 @@ package net.twasi.core.webinterface.lib;
 
 import io.prometheus.client.Counter;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.JWTService;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -52,6 +55,10 @@ public abstract class RequestHandler extends AbstractHandler implements HttpCont
             TwasiLogger.log.error(e);
             e.printStackTrace();
         }
+
+        // Commit the user
+        User user = getUser(baseRequest);
+        ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
     }
 
     @Override
@@ -94,11 +101,11 @@ public abstract class RequestHandler extends AbstractHandler implements HttpCont
     protected boolean isAuthenticated(Request t) {
         String jwt = getToken(t);
 
-        return jwt != null && JWTService.getService().isValidToken(jwt);
+        return jwt != null && ServiceRegistry.get(JWTService.class).getManager().isValidToken(jwt);
 
     }
 
     public User getUser(Request t) {
-        return JWTService.getService().getUserFromToken(getToken(t));
+        return ServiceRegistry.get(JWTService.class).getManager().getUserFromToken(getToken(t));
     }
 }

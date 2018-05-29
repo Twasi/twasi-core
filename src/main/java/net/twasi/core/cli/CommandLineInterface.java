@@ -2,7 +2,6 @@ package net.twasi.core.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.twasi.core.database.store.UserStore;
 import net.twasi.core.logger.TwasiLogger;
 import org.apache.log4j.Level;
 
@@ -50,7 +49,7 @@ public class CommandLineInterface {
                     } else {
                         gson = new GsonBuilder().setPrettyPrinting().create();
                     }
-                    if (params.length == 1) {
+                    /* if (params.length == 1) {
                         System.out.println("Missing object");
                     } else if (params.length == 2) {
                         if (params[1].equalsIgnoreCase("users")) {
@@ -58,7 +57,7 @@ public class CommandLineInterface {
                         } else {
                             System.out.println("Unknown object: " + params[1]);
                         }
-                    }
+                    }*/
                     break;
 
                 default:
@@ -66,7 +65,6 @@ public class CommandLineInterface {
             }
             System.out.print("> ");
         }
-        ;
     }
 
 }

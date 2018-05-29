@@ -1,12 +1,16 @@
 package net.twasi.core.services.providers;
 
+import net.twasi.core.services.IService;
 import net.twasi.core.webinterface.session.JWTManager;
 
-public class JWTService {
+public class JWTService implements IService {
+    private JWTManager service;
 
-    private static JWTManager service = new JWTManager();
+    public JWTService() {
+        service = new JWTManager();
+    }
 
-    public static JWTManager getService() {
+    public JWTManager getManager() {
         return service;
     }
 

@@ -4,6 +4,9 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.model.*;
 import net.twasi.core.graphql.repository.UserRepository;
+import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.JWTService;
 
 public class Query implements GraphQLQueryResolver {
@@ -15,14 +18,26 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public ViewerDTO viewer(String token) {
-        User user = JWTService.getService().getUserFromToken(token);
+        try {
+            User user = ServiceRegistry.get(JWTService.class).getManager().getUserFromToken(token);
+            try {
+                ServiceRegistry.get(DataService.class).get(net.twasi.core.database.repositories.UserRepository.class).commit(user);
+            } catch (IllegalArgumentException ignored) {}
 
-        if (user == null) {
+            if (user == null) {
+                return null;
+            }
+
+            UserDTO userDTO = UserDTO.fromUser(user);
+
+            try {
+                ServiceRegistry.get(DataService.class).get(net.twasi.core.database.repositories.UserRepository.class).commit(user);
+            } catch (IllegalArgumentException ignored) {}
+
+            return new ViewerDTO(userDTO, new BotStatusDTO(user), new UserStatusDTO(user.getId()));
+        } catch (Throwable t) {
+            TwasiLogger.log.error("Fatal Error in GraphQL.", t);
             return null;
         }
-
-        UserDTO userDTO = UserDTO.fromUser(user);
-
-        return new ViewerDTO(userDTO, new BotStatusDTO(user), new UserStatusDTO(user));
     }
 }

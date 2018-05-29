@@ -2,24 +2,32 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.AccountStatus;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
+import org.bson.types.ObjectId;
 
 public class UserStatusDTO {
-    private UserStatusType status;
+    private ObjectId userId;
 
-    public UserStatusDTO(User user) {
-        if (user.getStatus() == AccountStatus.SETUP) {
-            this.status = UserStatusType.SETUP;
-        }
-        if (user.getStatus() == AccountStatus.BANNED) {
-            this.status = UserStatusType.BANNED;
-        }
-        if (user.getStatus() == AccountStatus.OK || user.getStatus() == AccountStatus.EMAIL_CONFIRMATION) {
-            this.status = UserStatusType.OK;
-        }
+    public UserStatusDTO(ObjectId userId) {
+        this.userId = userId;
     }
 
     public UserStatusType getStatus() {
-        return status;
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getById(userId);
+        ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
+
+        if (user.getStatus() == AccountStatus.SETUP) {
+            return UserStatusType.SETUP;
+        }
+        if (user.getStatus() == AccountStatus.BANNED) {
+            return UserStatusType.BANNED;
+        }
+        if (user.getStatus() == AccountStatus.OK || user.getStatus() == AccountStatus.EMAIL_CONFIRMATION) {
+            return UserStatusType.OK;
+        }
+        return UserStatusType.SETUP;
     }
 
     public enum UserStatusType {

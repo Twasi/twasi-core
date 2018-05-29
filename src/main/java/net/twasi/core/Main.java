@@ -8,9 +8,7 @@ import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.AppStateService;
-import net.twasi.core.services.providers.DataService;
-import net.twasi.core.services.providers.DatabaseService;
+import net.twasi.core.services.providers.*;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +24,8 @@ public class Main {
         ServiceRegistry.register(new ConfigService());
         ServiceRegistry.register(new DatabaseService());
         ServiceRegistry.register(new DataService());
+        ServiceRegistry.register(new JWTService());
+        ServiceRegistry.register(new InstanceManagerService());
 
         Logger root = (Logger) LoggerFactory
                 .getLogger(Logger.ROOT_LOGGER_NAME);
@@ -40,7 +40,7 @@ public class Main {
         WebInterfaceApp.prepare();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
-        //InstanceManagerService.getService().startForAllUsers(UserStore.getUsers());
+        ServiceRegistry.get(InstanceManagerService.class).startForAllUsers();
 
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();

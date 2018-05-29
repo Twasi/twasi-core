@@ -1,18 +1,12 @@
 package net.twasi.core.services.providers.mail;
 
+import net.twasi.core.services.IService;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.simplejavamail.mailer.Mailer;
 import org.simplejavamail.mailer.config.TransportStrategy;
 
-public class MailService {
-
-    private static MailService service = new MailService();
-
-    public static MailService getService() {
-        return service;
-    }
-
+public class MailService implements IService {
     private Mailer mailer;
 
     private MailService() {

@@ -24,6 +24,9 @@ public class EntityCache<T extends BaseEntity> {
     }
 
     public boolean exist(T entity) {
+        if (cache.size() == 0) {
+            return false;
+        }
         return cache.stream().anyMatch(item -> item.isSame(entity));
     }
 

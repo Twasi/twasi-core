@@ -169,8 +169,9 @@ public class User extends BaseEntity {
     }
 
     public void addMessage(EventMessage message) {
-        getEvents().add(message);
-        Database.getStore().save(this);
+        // TODO
+        /* getEvents().add(message);
+        Database.getStore().save(this);*/
     }
 
     public AccountStatus getStatus() {
