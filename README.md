@@ -23,7 +23,7 @@ The following list of feature plugins are planned:
 | [commands](https://github.com/Twasi/twasi-commands) | Create, edit, delete and execute custom commands. Powerful in combination with twasi-variables | Twasi team |
 | [common-variables](https://github.com/Twasi/common-variables) | Nice to have variables | Twasi-team |
 | [tokens](https://github.com/Twasi/twasi-tokens) | Award your viewers for their participation in your stream | Twasi-team |
-| [songrequests](https://github.com/Twasi/twasi-songrequests) | Let your viewers request their music. This plugin also provides an API for the player. Furhtermore, it allows to create giveaways or other games with the earned tokens | Twasi-team |
+| [songrequest](https://github.com/Twasi/twasi-songrequest) | Let your viewers request their music. This plugin also provides an API for the player | Twasi-team |
 | [message-logger](https://github.com/Twasi/twasi-message-logger) | Log messages in the database and access them via WebAPI including pagination. Also collect some neat chat statistics. | Twasi-team |
 | [stream-stats](https://github.com/Twasi/twasi-stream-stats) | Collect statistics for your stream and access them via WebAPI. You can generate some pretty awesome charts with this data! | Twasi-team |
 | [timed-messages](https://github.com/Twasi/twasi-timed-messages) | Repetitive write messages in the chat | Twasi-team |
