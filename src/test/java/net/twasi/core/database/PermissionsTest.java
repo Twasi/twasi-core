@@ -74,13 +74,6 @@ public class PermissionsTest {
                 "commands"
         );
         examplePermissions.add(permission);
-
-        try {
-            ServiceRegistry.register(new ConfigService());
-        } catch (IllegalArgumentException e) {
-            // ignored
-        }
-
         user = new User();
 
         user.setPermissions(examplePermissions);
