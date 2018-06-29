@@ -7,33 +7,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventMessageDTO {
-    private final String message;
-    private final EventMessageType messageType;
-    private final String createdAt;
+    private EventMessage msg;
 
-    public EventMessageDTO(String message, EventMessageType messageType, String createdAt) {
-        this.message = message;
-        this.messageType = messageType;
-        this.createdAt = createdAt;
+    public EventMessageDTO(EventMessage msg) {
+        this.msg = msg;
     }
 
     public String getMessage() {
-        return message;
+        return msg.getMessage();
     }
 
     public EventMessageType getMessageType() {
-        return messageType;
+        return msg.getType();
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return msg.getCreatedAt();
     }
 
     public static List<EventMessageDTO> fromEvents(List<EventMessage> events) {
         return events
                 .stream()
-                .map(event ->
-                        new EventMessageDTO(event.getMessage(), event.getType(), event.getCreatedAt())
-                ).collect(Collectors.toList());
+                .map(EventMessageDTO::new)
+                .collect(Collectors.toList());
     }
 }

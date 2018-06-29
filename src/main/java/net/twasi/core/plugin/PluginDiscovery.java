@@ -2,6 +2,7 @@ package net.twasi.core.plugin;
 
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
+import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.io.File;
@@ -24,16 +25,16 @@ public class PluginDiscovery {
             try {
                 plugin = loader.loadPlugin(pluginFile);
                 loader.enablePlugin(plugin);
-                PluginManagerService.getService().registerPlugin((TwasiPlugin) plugin);
+                ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
             } catch (Exception e) {
                 TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?");
                 e.printStackTrace();
             }
         }
 
-        TwasiLogger.log.info(PluginManagerService.getService().getPlugins().size() + " plugin(s) loaded.");
+        TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s) loaded.");
         TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(
-                PluginManagerService.getService().getPlugins().stream().map(plugin -> plugin.getDescription().getName()).toArray()
+                ServiceRegistry.get(PluginManagerService.class).getPlugins().stream().map(plugin -> plugin.getDescription().getName()).toArray()
         ));
     }
 

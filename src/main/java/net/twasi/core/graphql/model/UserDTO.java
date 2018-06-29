@@ -1,90 +1,95 @@
 package net.twasi.core.graphql.model;
 
+import graphql.ErrorType;
+import graphql.GraphQLError;
+import graphql.GraphQLException;
+import graphql.language.SourceLocation;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
+import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.plugin.TwasiPlugin;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.InstanceManagerService;
+import net.twasi.core.services.providers.PluginManagerService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class UserDTO {
+    private User user;
 
-    private final String id;
-    private final TwitchAccountDTO twitchAccount;
-    private final List<String> installedPlugins;
-    private final List<EventMessageDTO> eventMessages;
-
-    private final StreamDTO latestStream;
-    private final List<StreamDTO> streams;
-
-    private final CurrentUserStatsDTO currentStats;
-    private final AllTimeStatsDTO alltimeStats;
-
-    private final UserRank rank;
-
-    public UserDTO(String id, TwitchAccountDTO twitchAccount, List<String> installedPlugins, List<EventMessageDTO> eventMessages, StreamDTO latestStream, List<StreamDTO> streams, CurrentUserStatsDTO currentStats, AllTimeStatsDTO alltimeStats, UserRank rank) {
-        this.id = id;
-        this.twitchAccount = twitchAccount;
-        this.installedPlugins = installedPlugins;
-        this.eventMessages = eventMessages;
-
-        this.latestStream = latestStream;
-        this.streams = streams;
-
-        this.currentStats = currentStats;
-        this.alltimeStats = alltimeStats;
-
-        this.rank = rank;
+    public UserDTO(User user) {
+        this.user = user;
     }
 
     public String getId() {
-        return this.id;
+        return user.getId().toString();
     }
 
     public TwitchAccountDTO getTwitchAccount() {
-        return twitchAccount;
+        return new TwitchAccountDTO(user.getTwitchAccount());
     }
 
     public List<String> getInstalledPlugins() {
-        return installedPlugins;
+        return user.getInstalledPlugins();
     }
 
     public List<EventMessageDTO> getEvents() {
-        return eventMessages;
-    }
-
-    public static UserDTO fromUser(User user) {
-        StreamDTO stream = new StreamDTO("TwasiID", "TwitchID", new DurationDTO(100, 200), false, 0, 0, 0, 0);
-
-        return new UserDTO(
-                user.getId().toString(),
-                new TwitchAccountDTO(user.getTwitchAccount()),
-                user.getInstalledPlugins(),
-                EventMessageDTO.fromEvents(user.getEvents()),
-                stream,
-                Collections.singletonList(stream),
-                new CurrentUserStatsDTO(0, 0, 0, 0),
-                new AllTimeStatsDTO(0, 0, 0),
-                UserRank.STREAMER
-        );
+        return EventMessageDTO.fromEvents(user.getEvents());
     }
 
     public StreamDTO getLatestStream() {
-        return latestStream;
+        return null; // TODO
     }
 
     public List<StreamDTO> getStreams() {
-        return streams;
+        return new ArrayList<>(); // TODO
     }
 
     public CurrentUserStatsDTO getCurrentStats() {
-        return currentStats;
+        return null; // TODO
     }
 
     public AllTimeStatsDTO getAlltimeStats() {
-        return alltimeStats;
+        return null; // TODO
     }
 
     public UserRank getRank() {
-        return rank;
+        return UserRank.valueOf(user.getRank());
+    }
+
+    public PluginDetailsDTO installPlugin(String name) {
+        TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
+
+        TwasiInterface instance = ServiceRegistry.get(InstanceManagerService.class).getByUser(user);
+
+        if (instance == null) {
+            return null;
+        }
+
+        instance.installPlugin(plugin);
+
+        return new PluginDetailsDTO(
+                plugin.getDescription(),
+                ServiceRegistry.get(InstanceManagerService.class)
+                        .getByUser(user)
+                        .getPlugins()
+                        .stream()
+                        .anyMatch(p -> p.getCorePlugin().getName().equalsIgnoreCase(name)));
+    }
+
+    public PluginDetailsDTO uninstallPlugin(String name) {
+        TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
+        ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
+
+        return new PluginDetailsDTO(
+                plugin.getDescription(),
+                ServiceRegistry.get(InstanceManagerService.class)
+                        .getByUser(user)
+                        .getPlugins()
+                        .stream()
+                        .anyMatch(p -> p.getCorePlugin().getName().equalsIgnoreCase(name)));
     }
 }

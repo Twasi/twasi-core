@@ -36,7 +36,7 @@ public class User extends BaseEntity {
     private String rank;
 
     public User() {
-        if (ServiceRegistry.get(ConfigService.class).getCatalog() != null) {
+        if (ServiceRegistry.has(ConfigService.class)) {
             defaultAccount = new TwitchAccount(
                     ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultName,
                     null,

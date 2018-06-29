@@ -23,4 +23,8 @@ public class ServiceRegistry {
         }
         services.put(service.getClass(), service);
     }
+
+    public static boolean has(Class clazz) {
+        return services.containsKey(clazz);
+    }
 }

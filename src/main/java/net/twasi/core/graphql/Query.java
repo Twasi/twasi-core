@@ -28,7 +28,7 @@ public class Query implements GraphQLQueryResolver {
                 return null;
             }
 
-            UserDTO userDTO = UserDTO.fromUser(user);
+            UserDTO userDTO = new UserDTO(user);
 
             try {
                 ServiceRegistry.get(DataService.class).get(net.twasi.core.database.repositories.UserRepository.class).commit(user);

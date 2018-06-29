@@ -24,7 +24,7 @@ public class InstanceManagerTest {
         User user = new User();
         user.setTwitchAccount(new TwitchAccount());
 
-        TwasiInterface interfaceOne = new TwasiInterface() {
+        TwasiInterface interfaceOne = new TwasiInterface(user) {
             @Override
             public void onEnable() {
 
@@ -70,7 +70,7 @@ public class InstanceManagerTest {
                 return null;
             }
         };
-        TwasiInterface interfaceTwo = new TwasiInterface() {
+        TwasiInterface interfaceTwo = new TwasiInterface(user) {
             @Override
             public void onEnable() {
 

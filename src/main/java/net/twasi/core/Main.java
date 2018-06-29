@@ -23,6 +23,7 @@ public class Main {
         ServiceRegistry.register(new AppStateService());
         ServiceRegistry.register(new ConfigService());
         ServiceRegistry.register(new DatabaseService());
+        ServiceRegistry.register(new PluginManagerService());
         ServiceRegistry.register(new DataService());
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());

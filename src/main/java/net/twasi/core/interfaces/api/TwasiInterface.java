@@ -1,9 +1,14 @@
 package net.twasi.core.interfaces.api;
 
+import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
+import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +17,19 @@ import java.util.stream.Collectors;
 public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     private List<TwasiUserPlugin> userPlugins = new ArrayList<>();
+    private User user;
+
+    protected TwasiInterface(User user) {
+        this.user = user;
+
+        // Enable all currently installed plugins
+        user.getInstalledPlugins().forEach(name -> {
+            TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)
+                    .getByName(name);
+
+            enableUserPlugin(plugin);
+        });
+    }
 
     /**
      * Installs a certain user plugin for the given user
@@ -24,6 +42,12 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
             TwasiLogger.log.info("Tried to install userplugin " + plugin.getUserPluginClass() + " twice for Streamer " + getStreamer().getUser().getTwitchAccount().getUserName());
             return false;
         }
+
+        // Add to db
+        UserRepository userRepo = ServiceRegistry.get(DataService.class).get(UserRepository.class);
+        User u = userRepo.getById(user.getId());
+        u.getInstalledPlugins().add(plugin.getName());
+        userRepo.commit(u);
 
         try {
             TwasiUserPlugin userPlugin = plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();

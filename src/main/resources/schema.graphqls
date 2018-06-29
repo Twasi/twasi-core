@@ -2,6 +2,8 @@ type User {
     id: String!
     twitchAccount: TwitchAccount!
     installedPlugins: [String]!
+    installPlugin(name: String): PluginDetails
+    uninstallPlugin(name: String): PluginDetails
     events: [EventMessage]!
     latestStream: Stream
     streams: [Stream]!
@@ -82,7 +84,8 @@ type Viewer {
     user: User
     status: BotStatus,
     userStatus: UserStatus,
-    appInfo: AppInfo
+    appInfo: AppInfo,
+    plugins: [PluginDetails]
 }
 
 type BotStatus {
@@ -105,6 +108,16 @@ type TwitchAccount {
     avatar: String!
     email: String!
     update: TwitchAccount
+}
+
+type PluginDetails {
+    isInstalled: Boolean!
+    name: String!
+    description: String!
+    author: String!
+    version: String!
+    commands: [String]!
+    permissions: [String]!
 }
 
 type Query {

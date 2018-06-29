@@ -31,6 +31,8 @@ public class TwitchInterface extends TwasiInterface {
     private MessageDispatcher dispatcher;
 
     public TwitchInterface(Streamer streamer) {
+        super(streamer.getUser());
+
         this.streamer = streamer;
 
         this.handler = new TwitchCommunicationHandler(this);

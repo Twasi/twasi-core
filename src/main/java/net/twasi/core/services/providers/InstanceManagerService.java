@@ -52,7 +52,7 @@ public class InstanceManagerService implements IService {
     }
 
     public TwasiInterface getByUser(User user) {
-        return (TwasiInterface) interfaces.stream().filter(twasiInterface -> twasiInterface.getStreamer().getUser().getId().equals(user.getId())).toArray()[0];
+        return interfaces.stream().filter(twasiInterface -> twasiInterface.getStreamer().getUser().getId().equals(user.getId())).findFirst().orElse(null);
     }
 
     public boolean stop(User user) {

@@ -14,12 +14,6 @@ public class TranslationsTest {
 
     @BeforeClass
     public static void setUp() {
-        try {
-            ServiceRegistry.register(new ConfigService());
-        } catch (IllegalArgumentException e) {
-            // ignored
-        }
-
         user = new User();
     }
 

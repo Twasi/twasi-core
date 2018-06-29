@@ -1,5 +1,11 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.PluginManagerService;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ViewerDTO {
     private UserDTO user;
     private BotStatusDTO status;
@@ -26,5 +32,13 @@ public class ViewerDTO {
 
     public AppInfoDTO getAppInfo() {
         return appInfo;
+    }
+
+    public List<PluginDetailsDTO> getPlugins() {
+        return ServiceRegistry.get(PluginManagerService.class)
+                .getPlugins()
+                .stream()
+                .map(p -> new PluginDetailsDTO(p.getDescription(), user.getInstalledPlugins().contains(p.getName())))
+                .collect(Collectors.toList());
     }
 }
