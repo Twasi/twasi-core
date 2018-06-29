@@ -17,9 +17,6 @@ import java.net.Socket;
 public class InstanceManagerTest {
     @Test
     public void registerInterfaceTest() {
-        // Register services
-        ServiceRegistry.register(new ConfigService());
-
         InstanceManagerService instanceManager = new InstanceManagerService();
         User user = new User();
         user.setTwitchAccount(new TwitchAccount());
