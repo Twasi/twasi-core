@@ -4,7 +4,7 @@ Twasi Core is the Core Application of the Twasi Twitchbot. It hosts all the othe
 [![Build Status](https://travis-ci.org/Twasi/twasi-core.svg?branch=master)](https://travis-ci.org/Twasi/twasi-core)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=coverage)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
-[![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=duplicated_lines_density)
+[![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Lines of code](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=ncloc)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 
 ## Contents
