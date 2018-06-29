@@ -2,12 +2,26 @@ package net.twasi.core.translations;
 
 import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TranslationsTest {
 
-    static User user = new User();
+    static User user;
+
+    @BeforeClass
+    public static void setUp() {
+        try {
+            ServiceRegistry.register(new ConfigService());
+        } catch (IllegalArgumentException e) {
+            // ignored
+        }
+
+        user = new User();
+    }
 
     @Test
     public void testTranslation() {

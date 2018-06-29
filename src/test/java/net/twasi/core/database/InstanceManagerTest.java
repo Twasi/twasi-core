@@ -6,7 +6,9 @@ import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
+import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.InstanceManagerService;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,6 +17,9 @@ import java.net.Socket;
 public class InstanceManagerTest {
     @Test
     public void registerInterfaceTest() {
+        // Register services
+        ServiceRegistry.register(new ConfigService());
+
         InstanceManagerService instanceManager = new InstanceManagerService();
         User user = new User();
         user.setTwitchAccount(new TwitchAccount());

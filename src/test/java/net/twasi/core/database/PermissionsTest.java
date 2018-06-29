@@ -6,6 +6,8 @@ import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,7 +53,7 @@ public class PermissionsTest {
 
     private static List<Permissions> examplePermissions = new ArrayList<Permissions>();
 
-    private static User user = new User();
+    private static User user;
 
     @BeforeClass
     public static void setUp() {
@@ -72,6 +74,14 @@ public class PermissionsTest {
                 "commands"
         );
         examplePermissions.add(permission);
+
+        try {
+            ServiceRegistry.register(new ConfigService());
+        } catch (IllegalArgumentException e) {
+            // ignored
+        }
+
+        user = new User();
 
         user.setPermissions(examplePermissions);
     }
