@@ -71,6 +71,10 @@ public class JWTManager {
     public boolean isValidToken(String jwt) {
         String twitchId;
 
+        if (jwt == null) {
+            return false;
+        }
+
         // First read out User of token. This has to be done before verification
         // because every user has another secret.
         try {
