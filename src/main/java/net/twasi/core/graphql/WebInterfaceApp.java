@@ -17,6 +17,7 @@ public class WebInterfaceApp {
 
     private static Server server;
     private static CustomMetrics metrics;
+    private static HandlerCollection handlers = new HandlerCollection();
 
     public static void prepare() {
         try {
@@ -30,7 +31,6 @@ public class WebInterfaceApp {
             metrics = new CustomMetrics();
             DefaultExports.initialize();
 
-            HandlerCollection handlers = new HandlerCollection();
             server.setHandler(handlers);
 
             // Register all handlers
@@ -61,7 +61,6 @@ public class WebInterfaceApp {
         // Start server, show message
         try {
             server.start();
-            //server.join();
             TwasiLogger.log.info("Web interface started on port " + ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
         } catch (Exception e) {
             TwasiLogger.log.error("Error while starting webserver", e);
@@ -72,5 +71,7 @@ public class WebInterfaceApp {
         return server;
     }
 
-
+    public static HandlerCollection getHandlers() {
+        return handlers;
+    }
 }
