@@ -40,12 +40,12 @@ public class Main {
         TwasiLogger.log.info("Preparing webinterface");
         WebInterfaceApp.prepare();
 
-        TwasiLogger.log.debug("Loading interfaces and joining active channels");
-        ServiceRegistry.get(InstanceManagerService.class).startForAllUsers();
-
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();
         pd.discoverAll();
+
+        TwasiLogger.log.debug("Loading interfaces and joining active channels");
+        ServiceRegistry.get(InstanceManagerService.class).startForAllUsers();
 
         float time = (float) (System.currentTimeMillis() - start);
         double longTime = time / 1000;

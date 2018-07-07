@@ -40,10 +40,10 @@ public class InstanceManagerService implements IService {
      * This should be called after startup to initially start all users.
      */
     public void startForAllUsers() {
-        List<ObjectId> shouldRunIn = ServiceRegistry.get(DataService.class).get(UserRepository.class).getAllRunningIds();
+        List<User> shouldRunIn = ServiceRegistry.get(DataService.class).get(UserRepository.class).getAllRunning();
         TwasiLogger.log.info("Initial starting instances. Number of instances: " + shouldRunIn.size());
-        for (ObjectId id : shouldRunIn) {
-            //start(u);
+        for (User user : shouldRunIn) {
+            start(user);
         }
     }
 
