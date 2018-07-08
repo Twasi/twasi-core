@@ -20,14 +20,14 @@ public class LifecycleManagement {
     }
 
     public static void handleInstall(TwasiUserPlugin userPlugin) {
-        User user = userPlugin.getTwasiInterface().getStreamer().getUser();
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getById(userPlugin.getTwasiInterface().getStreamer().getUser().getId());
         userPlugin.onEnable(new TwasiEnableEvent(userPlugin));
         userPlugin.onInstall(new TwasiInstallEvent(userPlugin, user.getPermissionByName("twasi_user"), user.getPermissionByName("twasi_mod"), user.getPermissionByName("twasi_admin")));
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
     }
 
     public static void handleUninstall(TwasiUserPlugin userPlugin) {
-        User user = userPlugin.getTwasiInterface().getStreamer().getUser();
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getById(userPlugin.getTwasiInterface().getStreamer().getUser().getId());
         userPlugin.onDisable(new TwasiDisableEvent(userPlugin));
         userPlugin.onUninstall(new TwasiInstallEvent(userPlugin, user.getPermissionByName("twasi_user"), user.getPermissionByName("twasi_mod"), user.getPermissionByName("twasi_admin")));
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
