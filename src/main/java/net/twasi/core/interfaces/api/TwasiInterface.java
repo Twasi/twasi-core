@@ -86,6 +86,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         }
         TwasiUserPlugin userPlugin = userPlugins.stream().filter(uPlugin -> uPlugin.getClass().equals(plugin.getUserPluginClass())).findFirst().get();
 
+        LifecycleManagement.handleDisable(userPlugin);
         LifecycleManagement.handleUninstall(userPlugin);
 
         // Remove from db
