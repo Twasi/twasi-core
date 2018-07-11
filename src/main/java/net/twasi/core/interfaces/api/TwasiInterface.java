@@ -21,7 +21,9 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     protected TwasiInterface(User user) {
         this.user = user;
+    }
 
+    public void enableInstalledPlugins() {
         // Enable all currently installed plugins
         user.getInstalledPlugins().forEach(name -> {
             TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)

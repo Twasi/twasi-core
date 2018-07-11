@@ -79,6 +79,8 @@ public class InstanceManagerService implements IService {
             inf.onEnable();
             inf.connect();
 
+            inf.enableInstalledPlugins();
+
             registerInterface(inf);
             user.addMessage(new EventMessage("Instance started.", EventMessageType.INFO));
             return true;
