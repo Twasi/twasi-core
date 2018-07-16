@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Logger;
 import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
 import net.twasi.core.graphql.WebInterfaceApp;
+import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.ServiceRegistry;
@@ -27,6 +28,7 @@ public class Main {
         ServiceRegistry.register(new DataService());
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());
+        ServiceRegistry.register(new TwitchAPI());
 
         Logger root = (Logger) LoggerFactory
                 .getLogger(Logger.ROOT_LOGGER_NAME);
