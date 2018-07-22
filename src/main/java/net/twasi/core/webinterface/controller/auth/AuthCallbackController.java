@@ -4,10 +4,9 @@ import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
-import net.twasi.core.interfaces.twitch.TwitchInterface;
+import net.twasi.core.interfaces.twitch.TwitchConnectorInterface;
 import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Streamer;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
@@ -31,12 +30,11 @@ public class AuthCallbackController extends RequestHandler {
         String token = ServiceRegistry.get(JWTService.class).getManager().createNewToken(user);
 
         if (!ServiceRegistry.get(InstanceManagerService.class).hasRegisteredInstance(user)) {
-            ServiceRegistry.get(InstanceManagerService.class).registerInterface(new TwitchInterface(new Streamer(user)));
+            ServiceRegistry.get(InstanceManagerService.class).registerInterface(new TwitchConnectorInterface(user));
         }
 
         try {
             res.sendRedirect(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.frontend + "?jwt=" + token);
-            //Commons.writeString(res, Config.getCatalog().webinterface.frontend + "?jwt=" + token, 200);
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect back to frontend", e);
         }

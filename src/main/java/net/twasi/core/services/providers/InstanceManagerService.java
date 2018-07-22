@@ -5,12 +5,10 @@ import net.twasi.core.database.models.EventMessageType;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.interfaces.twitch.TwitchInterface;
+import net.twasi.core.interfaces.twitch.TwitchConnectorInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Streamer;
 import net.twasi.core.services.IService;
 import net.twasi.core.services.ServiceRegistry;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +72,7 @@ public class InstanceManagerService implements IService {
 
     public boolean start(User user) {
         if (user.getConfig().isActivated()) {
-            TwasiInterface inf = new TwitchInterface(new Streamer(user));
+            TwasiInterface inf = new TwitchConnectorInterface(user);
 
             inf.onEnable();
             inf.connect();

@@ -31,13 +31,7 @@ public interface TwasiInterfaceInterface {
      */
     boolean disconnect();
 
-    /**
-     * Called to join a certain channel of the streamer
-     *
-     * @param streamer Join this streamers channel
-     * @return if the channel was joined successfully
-     */
-    boolean join(Streamer streamer);
+    boolean isConnected();
 
     /**
      * Get the communication handler to read and send messages
@@ -58,13 +52,13 @@ public interface TwasiInterfaceInterface {
      *
      * @return dispatcher
      */
-    MessageDispatcher getDispatcher();
+    // MessageDispatcher getDispatcher();
 
     /**
      * Returns the socket
      *
      * @return socket
      */
-    Socket getSocket();
+    // Socket getSocket();
 
 }

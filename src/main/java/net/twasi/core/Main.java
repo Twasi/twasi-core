@@ -11,7 +11,11 @@ import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.*;
 import net.twasi.core.services.providers.config.ConfigService;
+import net.twasi.core.services.providers.connector.TwitchConnectorService;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public class Main {
 
@@ -29,6 +33,7 @@ public class Main {
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());
         ServiceRegistry.register(new TwitchAPI());
+        ServiceRegistry.register(new TwitchConnectorService());
 
         Logger root = (Logger) LoggerFactory
                 .getLogger(Logger.ROOT_LOGGER_NAME);
@@ -41,6 +46,15 @@ public class Main {
 
         TwasiLogger.log.info("Preparing webinterface");
         WebInterfaceApp.prepare();
+
+        // Establish connection to connector
+        try {
+            ServiceRegistry.get(TwitchConnectorService.class).connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TwasiLogger.log.error("Cannot connect to connector. Please fix this error and start again.");
+            System.exit(1);
+        }
 
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();

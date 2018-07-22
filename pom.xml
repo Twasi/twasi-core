@@ -238,5 +238,12 @@
             <version>1.2.1</version>
         </dependency>
 
+        <!-- RabbitMQ -->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
     </dependencies>
 </project>
