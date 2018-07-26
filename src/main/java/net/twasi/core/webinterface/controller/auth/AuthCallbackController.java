@@ -13,6 +13,7 @@ import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.JWTService;
 import net.twasi.core.services.providers.TwitchAPIService;
 import net.twasi.core.services.providers.config.ConfigService;
+import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.eclipse.jetty.server.Request;
 
@@ -35,8 +36,22 @@ public class AuthCallbackController extends RequestHandler {
         }
 
         try {
-            res.sendRedirect(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.frontend + "?jwt=" + token);
-            //Commons.writeString(res, Config.getCatalog().webinterface.frontend + "?jwt=" + token, 200);
+            String redirectTo;
+
+            // Decide where to redirect
+            String state = req.getParameter("state");
+
+            if (state == null ||
+                    !(state.equalsIgnoreCase("https://panel.twasi.net") ||
+                    state.equalsIgnoreCase("https://panel-beta.twasi.net") ||
+                    state.equalsIgnoreCase("http://localhost:3000"))) {
+                redirectTo = "https://panel.twasi.net";
+            } else {
+                redirectTo = state;
+            }
+
+            res.sendRedirect(redirectTo + "?jwt=" + token);
+            //Commons.writeString(res, redirectTo + "?jwt=" + token, 200);
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect back to frontend", e);
         }
