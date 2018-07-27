@@ -3,7 +3,6 @@ package net.twasi.core.webinterface.controller.auth;
 import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.TwitchAPIService;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.eclipse.jetty.server.Request;
 
