@@ -1,32 +1,59 @@
 package net.twasi.core.interfaces.twitch.webapi;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import me.philippheuer.twitch4j.TwitchClient;
 import me.philippheuer.twitch4j.TwitchClientBuilder;
 import me.philippheuer.twitch4j.auth.model.twitch.Authorize;
 import me.philippheuer.twitch4j.model.Token;
 import net.twasi.core.database.models.AccessToken;
 import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.interfaces.twitch.webapi.dto.TokenInfoDTO;
 import net.twasi.core.interfaces.twitch.webapi.dto.UserInfoDTO;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.IService;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
+import net.twasi.core.services.providers.DatabaseService;
 import net.twasi.core.services.providers.config.ConfigService;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class TwitchAPI {
+public class TwitchAPI implements IService {
     private TwitchClient client;
 
+    private String clientId;
+    private String clientSecret;
+
+    private HttpClient httpclient = HttpClients.createDefault();
+
     public TwitchAPI() {
+        clientId = ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId;
+        clientSecret = ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientSecret;
+
         client = TwitchClientBuilder.init()
-                .withClientId(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId)
-                .withClientSecret(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientSecret)
+                .withClientId(clientId)
+                .withClientSecret(clientSecret)
                 .build();
     }
 
@@ -73,7 +100,41 @@ public class TwitchAPI {
                 e
             }
         }*/
-        return null;
+
+        HttpPost post = new HttpPost("https://api.twitch.tv/kraken/oauth2/token");
+
+        post.setHeader("Accept", "application/vnd.twitchtv.v5+json");
+        // We don't need to add the oauth token here since it's expired
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+        params.add(new BasicNameValuePair("refresh_token", old.getRefreshToken()));
+        params.add(new BasicNameValuePair("client_id", clientId));
+        params.add(new BasicNameValuePair("client_secret", clientSecret));
+        try {
+            post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+            HttpResponse response = httpclient.execute(post);
+            HttpEntity entity = response.getEntity();
+
+            InputStream inputStream = entity.getContent();
+            String content = IOUtils.toString(inputStream, "UTF-8");
+
+            JsonObject json = new JsonParser().parse(content).getAsJsonObject();
+
+            JsonArray scopesJson = json.get("scope").getAsJsonArray();
+            List<String> scopes = new ArrayList<>();
+
+            for (JsonElement e : scopesJson) {
+                scopes.add(e.getAsString());
+            }
+
+            AccessToken newToken = new AccessToken(json.get("access_token").getAsString(), json.get("refresh_token").getAsString(), json.get("expires_in").getAsLong(), scopes.toArray(new String[0]));
+            return newToken;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public TwitchAccount getTwitchAccountByToken(AccessToken token) {
@@ -82,7 +143,7 @@ public class TwitchAPI {
         if (!tokenValidation.getValid()) {
             TwasiLogger.log.info("Invalid token found.");
             token.refresh();
-            return null;
+            // ServiceRegistry.get(DatabaseService.class).getStore().save(token);
         }
 
         UserInfoDTO userInfo = getUserInfo(token);
@@ -97,7 +158,6 @@ public class TwitchAPI {
     }
 
     private TokenInfoDTO getKrakenUser(AccessToken token) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         TwitchAccount acc = null;
         try {
             HttpGet httpget = new HttpGet("https://api.twitch.tv/kraken");
@@ -111,18 +171,11 @@ public class TwitchAPI {
             return new Gson().fromJson(responseBody, TokenInfoDTO.class);
         } catch (IOException e) {
             TwasiLogger.log.error(e);
-        } finally {
-            // When HttpClient instance is no longer needed,
-            // shut down the connection manager to ensure
-            // immediate deallocation of all system resources
-            httpclient.getConnectionManager().shutdown();
-            httpclient.close();
         }
         return null;
     }
 
     private UserInfoDTO getUserInfo(AccessToken token) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         TwitchAccount acc = null;
         try {
             HttpGet httpget = new HttpGet("https://api.twitch.tv/kraken/user");
@@ -136,12 +189,6 @@ public class TwitchAPI {
             return new Gson().fromJson(responseBody, UserInfoDTO.class);
         } catch (IOException e) {
             TwasiLogger.log.error(e);
-        } finally {
-            // When HttpClient instance is no longer needed,
-            // shut down the connection manager to ensure
-            // immediate deallocation of all system resources
-            httpclient.getConnectionManager().shutdown();
-            httpclient.close();
         }
         return null;
     }

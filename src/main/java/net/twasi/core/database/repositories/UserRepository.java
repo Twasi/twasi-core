@@ -43,7 +43,17 @@ public class UserRepository extends Repository<User> {
                 query.criteria("status").equal(AccountStatus.OK),
                 query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
         );
-        List<ObjectId> ids = (List<ObjectId>) query.asList().stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<ObjectId> ids = query.asList().stream().map(e -> e.getId()).collect(Collectors.toList());
         return ids;
+    }
+
+    public List<User> getAllRunning() {
+        Query<User> query = store.createQuery(User.class);
+        query.or(
+                query.criteria("status").equal(AccountStatus.OK),
+                query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
+        );
+        List<User> users = query.asList();
+        return users;
     }
 }

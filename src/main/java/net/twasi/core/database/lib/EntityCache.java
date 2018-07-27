@@ -9,7 +9,7 @@ public class EntityCache<T extends BaseEntity> {
     private List<T> cache;
 
     public EntityCache(List<T> entities) {
-        this.cache = entities;
+        this.cache = new ArrayList<>(entities);
     }
 
     public EntityCache() {

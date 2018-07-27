@@ -43,7 +43,7 @@ public class InstanceManagerTest {
             }
 
             @Override
-            public boolean join(Streamer streamer) {
+            public boolean isConnected() {
                 return false;
             }
 
@@ -55,16 +55,6 @@ public class InstanceManagerTest {
             @Override
             public Streamer getStreamer() {
                 return new Streamer(user);
-            }
-
-            @Override
-            public MessageDispatcher getDispatcher() {
-                return null;
-            }
-
-            @Override
-            public Socket getSocket() {
-                return null;
             }
         };
         TwasiInterface interfaceTwo = new TwasiInterface(user) {
@@ -89,7 +79,7 @@ public class InstanceManagerTest {
             }
 
             @Override
-            public boolean join(Streamer streamer) {
+            public boolean isConnected() {
                 return false;
             }
 
@@ -101,16 +91,6 @@ public class InstanceManagerTest {
             @Override
             public Streamer getStreamer() {
                 return new Streamer(user);
-            }
-
-            @Override
-            public MessageDispatcher getDispatcher() {
-                return null;
-            }
-
-            @Override
-            public Socket getSocket() {
-                return null;
             }
         };
 

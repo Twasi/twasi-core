@@ -1,6 +1,9 @@
 package net.twasi.core.database.models;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import me.philippheuer.twitch4j.auth.model.OAuthCredential;
+import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
+import net.twasi.core.services.ServiceRegistry;
 
 import java.util.Calendar;
 
@@ -29,6 +32,7 @@ public class AccessToken {
         return accessToken;
     }
 
+    @JsonSetter("access_token")
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
@@ -37,6 +41,7 @@ public class AccessToken {
         return refreshToken;
     }
 
+    @JsonSetter("refresh_token")
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
@@ -45,6 +50,7 @@ public class AccessToken {
         return expiresIn;
     }
 
+    @JsonSetter("expires_in")
     public void setExpiresIn(Long expiresIn) {
         this.expiresIn = expiresIn;
     }
@@ -53,6 +59,7 @@ public class AccessToken {
         return scope;
     }
 
+    @JsonSetter("scope")
     public void setScope(String[] scope) {
         this.scope = scope;
     }
@@ -70,6 +77,10 @@ public class AccessToken {
     }
 
     public void refresh() {
-
+        AccessToken newToken = ServiceRegistry.get(TwitchAPI.class).refreshToken(this);
+        setAccessToken(newToken.getAccessToken());
+        setRefreshToken(newToken.getRefreshToken());
+        setScope(newToken.getScope());
+        setExpiresIn(newToken.getExpiresIn());
     }
 }

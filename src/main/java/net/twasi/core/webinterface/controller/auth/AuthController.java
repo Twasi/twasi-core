@@ -1,8 +1,9 @@
 package net.twasi.core.webinterface.controller.auth;
 
+import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.TwitchAPIService;
-import net.twasi.core.webinterface.lib.Commons;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.eclipse.jetty.server.Request;
 
@@ -26,7 +27,7 @@ public class AuthController extends RequestHandler {
             } else {
                 state = "panel.twasi.net";
             }
-            res.sendRedirect(TwitchAPIService.getService().getAuthURL() + "&state=" + state);
+            res.sendRedirect(ServiceRegistry.get(TwitchAPI.class).getAuthURL() + "&state=" + state);
             //Commons.writeString(res, TwitchAPIService.getService().getAuthURL() + "?state=" + state, 200);
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect to twitch", e);

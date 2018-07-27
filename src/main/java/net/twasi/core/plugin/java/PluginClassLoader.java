@@ -27,6 +27,7 @@ public final class PluginClassLoader extends URLClassLoader {
     private final Map<String, Class<?>> classes = new HashMap<>();
     private final PluginConfig description;
     private final File file;
+    private final File dataFolder;
     private final JarFile jar;
     private final Manifest manifest;
     private final URL url;
@@ -46,6 +47,7 @@ public final class PluginClassLoader extends URLClassLoader {
         this.jar = new JarFile(file);
         this.manifest = jar.getManifest();
         this.url = file.toURI().toURL();
+        this.dataFolder = dataFolder;
 
         try {
             Class<?> jarClass;
@@ -165,6 +167,6 @@ public final class PluginClassLoader extends URLClassLoader {
         pluginState = new IllegalStateException("Initial initialization");
         this.pluginInit = twasiPlugin;
 
-        twasiPlugin.init(loader, description, file, new File(""), this);
+        twasiPlugin.init(loader, description, dataFolder, new File(""), this);
     }
 }

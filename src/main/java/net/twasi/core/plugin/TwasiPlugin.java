@@ -229,7 +229,6 @@ public abstract class TwasiPlugin extends PluginBase {
         if (clazz == null) {
             TwasiLogger.log.error("Null class cannot have a plugin");
         }
-        ;
         final ClassLoader cl = clazz.getClassLoader();
         if (!(cl instanceof PluginClassLoader)) {
             throw new IllegalArgumentException(clazz + " is not provided by " + PluginClassLoader.class);

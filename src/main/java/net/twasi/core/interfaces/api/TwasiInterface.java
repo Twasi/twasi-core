@@ -21,7 +21,9 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     protected TwasiInterface(User user) {
         this.user = user;
+    }
 
+    public void enableInstalledPlugins() {
         // Enable all currently installed plugins
         user.getInstalledPlugins().forEach(name -> {
             TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)
@@ -84,7 +86,14 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         }
         TwasiUserPlugin userPlugin = userPlugins.stream().filter(uPlugin -> uPlugin.getClass().equals(plugin.getUserPluginClass())).findFirst().get();
 
+        LifecycleManagement.handleDisable(userPlugin);
         LifecycleManagement.handleUninstall(userPlugin);
+
+        // Remove from db
+        UserRepository userRepo = ServiceRegistry.get(DataService.class).get(UserRepository.class);
+        User u = userRepo.getById(user.getId());
+        u.getInstalledPlugins().remove(plugin.getName());
+        userRepo.commit(u);
 
         userPlugins = userPlugins.stream().filter(uPlugin -> !userPlugin.getClass().equals(plugin.getUserPluginClass())).collect(Collectors.toList());
         return true;

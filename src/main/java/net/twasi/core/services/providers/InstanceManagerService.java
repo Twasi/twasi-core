@@ -5,12 +5,10 @@ import net.twasi.core.database.models.EventMessageType;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.interfaces.twitch.TwitchInterface;
+import net.twasi.core.interfaces.twitch.TwitchConnectorInterface;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Streamer;
 import net.twasi.core.services.IService;
 import net.twasi.core.services.ServiceRegistry;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +38,10 @@ public class InstanceManagerService implements IService {
      * This should be called after startup to initially start all users.
      */
     public void startForAllUsers() {
-        List<ObjectId> shouldRunIn = ServiceRegistry.get(DataService.class).get(UserRepository.class).getAllRunningIds();
+        List<User> shouldRunIn = ServiceRegistry.get(DataService.class).get(UserRepository.class).getAllRunning();
         TwasiLogger.log.info("Initial starting instances. Number of instances: " + shouldRunIn.size());
-        for (ObjectId id : shouldRunIn) {
-            //start(u);
+        for (User user : shouldRunIn) {
+            start(user);
         }
     }
 
@@ -74,10 +72,12 @@ public class InstanceManagerService implements IService {
 
     public boolean start(User user) {
         if (user.getConfig().isActivated()) {
-            TwasiInterface inf = new TwitchInterface(new Streamer(user));
+            TwasiInterface inf = new TwitchConnectorInterface(user);
 
             inf.onEnable();
             inf.connect();
+
+            inf.enableInstalledPlugins();
 
             registerInterface(inf);
             user.addMessage(new EventMessage("Instance started.", EventMessageType.INFO));
