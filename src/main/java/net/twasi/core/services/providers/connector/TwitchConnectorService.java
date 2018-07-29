@@ -11,16 +11,17 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class TwitchConnectorService implements IService {
-    public static final String MASTER_CTRL_NAME = "MASTER_CTRL";
+    public static final String MASTER_CTRL_NAME = "MASTER_CTRL_TOCONNECTOR";
+    public static final String MASTER_CTRL_RCV_NAME = "MASTER_CTRL_TOCORE";
     public static final String MESSAGE_IN_NAME = "MESSAGE_IN";
     public static final String MESSAGE_OUT_NAME = "MESSAGE_OUT";
 
     private ConnectionFactory factory;
     private Connection connection;
 
-    private Channel masterControlChannel;
-    private Channel messageInChannel;
-    private Channel messageOutChannel;
+    private Channel channel;
+
+    private ConnectorController controller;
 
     public TwitchConnectorService() {
 
@@ -35,14 +36,17 @@ public class TwitchConnectorService implements IService {
         connection = factory.newConnection();
 
         // Create and declare default channels
-        masterControlChannel = connection.createChannel();
-        masterControlChannel.queueDeclare(MASTER_CTRL_NAME, false, false, false, null);
+        channel = connection.createChannel();
 
-        messageInChannel = connection.createChannel();
-        messageInChannel.queueDeclare(MESSAGE_IN_NAME, false, false, false, null);
+        // Declare queues
+        channel.queueDeclare(MASTER_CTRL_NAME, false, false, false, null);
+        channel.queueDeclare(MASTER_CTRL_RCV_NAME, false, false, false, null);
+        channel.queueDeclare(MESSAGE_IN_NAME, false, false, false, null);
+        channel.queueDeclare(MESSAGE_OUT_NAME, false, false, false, null);
 
-        messageOutChannel = connection.createChannel();
-        messageOutChannel.queueDeclare(MESSAGE_OUT_NAME, false, false, false, null);
+        // Check connection
+        controller = new ConnectorController(channel);
+        controller.checkConnection(bool -> System.out.println(bool));
     }
 
 }

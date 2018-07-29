@@ -9,4 +9,5 @@ public class ConfigCatalog {
     public BotCatalog bot;
     public MailCatalog mail;
     public RabbitMQCatalog rabbitmq;
+    public InstanceCatalog instance;
 }
