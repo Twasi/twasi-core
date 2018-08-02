@@ -24,6 +24,10 @@ public class Main {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
 
+        Logger root = (Logger) LoggerFactory
+                .getLogger(Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.OFF);
+
         TwasiLogger.log.info("Registering and starting services");
         ServiceRegistry.register(new AppStateService());
         ServiceRegistry.register(new ConfigService());
@@ -34,10 +38,6 @@ public class Main {
         ServiceRegistry.register(new InstanceManagerService());
         ServiceRegistry.register(new TwitchAPI());
         ServiceRegistry.register(new TwitchConnectorService());
-
-        Logger root = (Logger) LoggerFactory
-                .getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(Level.OFF);
 
         TwasiLogger.log.info("Starting Twasi Core");
 

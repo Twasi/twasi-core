@@ -8,6 +8,8 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class TwitchConnectorService implements IService {
@@ -35,7 +37,7 @@ public class TwitchConnectorService implements IService {
         factory.setPassword(ServiceRegistry.getService(ConfigService.class).getCatalog().rabbitmq.password);
         connection = factory.newConnection();
 
-        // Create and declare default channels
+        // Create default channel
         channel = connection.createChannel();
 
         // Declare queues
@@ -47,6 +49,12 @@ public class TwitchConnectorService implements IService {
         // Check connection
         controller = new ConnectorController(channel);
         controller.checkConnection(bool -> System.out.println(bool));
+
+        List<IrcConnectionInfo> channels = new ArrayList<>();
+        channels.add(new IrcConnectionInfo("7777777", "Larcce"));
+        channels.add(new IrcConnectionInfo("77777732", "Test", "DieserBot", "oauth:daöasdfjsadölfj"));
+
+        controller.checkChannels(channels, bool -> System.out.println(bool));
     }
 
 }
