@@ -18,10 +18,17 @@ public class InstanceManagerTest {
     @Test
     public void registerInterfaceTest() {
         InstanceManagerService instanceManager = new InstanceManagerService();
-        User user = new User();
-        user.setTwitchAccount(new TwitchAccount());
+        User user1 = new User();
+        user1.setTwitchAccount(new TwitchAccount());
+        user1.getTwitchAccount().setDisplayName("TestUser1");
+        user1.getTwitchAccount().setTwitchId("TestID1");
 
-        TwasiInterface interfaceOne = new TwasiInterface(user) {
+        User user2 = new User();
+        user2.setTwitchAccount(new TwitchAccount());
+        user2.getTwitchAccount().setDisplayName("TestUser2");
+        user2.getTwitchAccount().setTwitchId("TestID2");
+
+        TwasiInterface interfaceOne = new TwasiInterface(user1) {
             @Override
             public void onEnable() {
 
@@ -54,7 +61,7 @@ public class InstanceManagerTest {
 
             @Override
             public Streamer getStreamer() {
-                return new Streamer(user);
+                return new Streamer(user1);
             }
 
             @Override
@@ -67,7 +74,7 @@ public class InstanceManagerTest {
                 return null;
             }
         };
-        TwasiInterface interfaceTwo = new TwasiInterface(user) {
+        TwasiInterface interfaceTwo = new TwasiInterface(user2) {
             @Override
             public void onEnable() {
 
@@ -100,7 +107,7 @@ public class InstanceManagerTest {
 
             @Override
             public Streamer getStreamer() {
-                return new Streamer(user);
+                return new Streamer(user2);
             }
 
             @Override

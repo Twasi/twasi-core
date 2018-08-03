@@ -41,13 +41,19 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
      */
     public boolean installPlugin(TwasiPlugin plugin) {
         if (userPlugins.stream().anyMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
-            TwasiLogger.log.info("Tried to install userplugin " + plugin.getUserPluginClass() + " twice for Streamer " + getStreamer().getUser().getTwitchAccount().getUserName());
+            TwasiLogger.log.info("Tried to install userplugin " + plugin.getUserPluginClass() + " twice for Streamer " + getStreamer().getUser().getTwitchAccount().getDisplayName());
             return false;
         }
 
         // Add to db
         UserRepository userRepo = ServiceRegistry.get(DataService.class).get(UserRepository.class);
         User u = userRepo.getById(user.getId());
+
+        if (u.getInstalledPlugins().contains(plugin.getName())) {
+            TwasiLogger.log.info("Tried to install userplugin " + plugin.getUserPluginClass() + " twice (database) for Streamer " + getStreamer().getUser().getTwitchAccount().getDisplayName());
+            return false;
+        }
+
         u.getInstalledPlugins().add(plugin.getName());
         userRepo.commit(u);
 
@@ -67,6 +73,11 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     public void enableUserPlugin(TwasiPlugin plugin) {
         try {
+            if (userPlugins.stream().anyMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
+                TwasiLogger.log.info("Tried to enable userplugin " + plugin.getUserPluginClass() + " twice for Streamer " + getStreamer().getUser().getTwitchAccount().getDisplayName());
+                return;
+            }
+
             TwasiUserPlugin userPlugin = plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
 
             LifecycleManagement.initiate(userPlugin, this, plugin);
