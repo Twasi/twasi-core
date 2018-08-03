@@ -29,6 +29,10 @@ public class InstanceManagerService implements IService {
             TwasiLogger.log.info("Tried to register Interface which is already registered (ignored): " + inf.toString());
             return false;
         }
+        if (interfaces.stream().anyMatch(twitchInf -> inf.getStreamer().getUser().getTwitchAccount().getTwitchId().equals(inf.getStreamer().getUser().getTwitchAccount().getTwitchId()))) {
+            TwasiLogger.log.info("Tried to register Interface for a streamer, that already has one: " + inf.getStreamer().getUser().getTwitchAccount().getDisplayName());
+            return false;
+        }
 
         interfaces.add(inf);
         TwasiLogger.log.debug("Registered interface for streamer " + inf.getStreamer().getUser().getTwitchAccount().getUserName());
