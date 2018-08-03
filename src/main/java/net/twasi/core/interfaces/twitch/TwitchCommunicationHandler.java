@@ -20,6 +20,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
     @Override
     public boolean sendRawMessage(String rawMessage) {
         try {
+            TwasiLogger.log.trace("IRC OUT: " + rawMessage);
             TwitchInterface twitchInterface = (TwitchInterface) getInterface();
             twitchInterface.getWriter().write(rawMessage + "\n");
             twitchInterface.getWriter().flush();
@@ -37,6 +38,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
 
         try {
             String line = twitchInterface.getReader().readLine();
+            TwasiLogger.log.trace("IRC IN: " + line);
             if (line == null) {
                 return null;
             }

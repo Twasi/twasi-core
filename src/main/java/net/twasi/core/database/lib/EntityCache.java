@@ -27,7 +27,12 @@ public class EntityCache<T extends BaseEntity> {
         if (cache.size() == 0) {
             return false;
         }
-        return cache.stream().anyMatch(item -> item.isSame(entity));
+        return cache.stream().anyMatch(item -> {
+            if (item == null) {
+                return false;
+            }
+            return item.isSame(entity);
+        });
     }
 
     public void remove(T entity) {
