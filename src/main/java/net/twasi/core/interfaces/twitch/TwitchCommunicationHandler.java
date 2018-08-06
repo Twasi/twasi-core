@@ -22,7 +22,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
         try {
             TwasiLogger.log.trace("IRC OUT: " + rawMessage);
             TwitchInterface twitchInterface = (TwitchInterface) getInterface();
-            twitchInterface.getWriter().write(rawMessage + "\n");
+            twitchInterface.getWriter().write(rawMessage + "\r\n");
             twitchInterface.getWriter().flush();
             return true;
         } catch (IOException e) {
