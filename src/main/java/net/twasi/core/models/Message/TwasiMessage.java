@@ -6,6 +6,7 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.variables.VariablePreprocessor;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,6 +118,35 @@ public class TwasiMessage {
 
         if (type == null) {
             return null;
+        }
+
+        return new TwasiMessage(message, type, sender, inf);
+    }
+
+    public static TwasiMessage from(MessageEvent event, TwasiInterface inf) {
+        String message = event.getMessage();
+        MessageType type = MessageType.PRIVMSG;
+        TwitchAccount sender = new TwitchAccount(event.getUser().getRealName(), null, null, event.getTags().get("user-id"), new ArrayList<>(Collections.singleton(PermissionGroups.VIEWER)));
+
+        if (event.getTags().get("mod").equals("1")) {
+            if (!sender.getGroups().contains(PermissionGroups.MODERATOR))
+                sender.getGroups().add(PermissionGroups.MODERATOR);
+            if (!sender.getGroups().contains(PermissionGroups.SUBSCRIBERS))
+                sender.getGroups().add(PermissionGroups.SUBSCRIBERS);
+        }
+
+        if (event.getTags().get("subscriber").equals("1")) {
+            if (!sender.getGroups().contains(PermissionGroups.MODERATOR))
+                sender.getGroups().add(PermissionGroups.SUBSCRIBERS);
+        }
+
+        if (event.getTags().get("badges").contains("broadcaster")) {
+            if (!sender.getGroups().contains(PermissionGroups.BROADCASTER))
+                sender.getGroups().add(PermissionGroups.BROADCASTER);
+            if (!sender.getGroups().contains(PermissionGroups.MODERATOR))
+                sender.getGroups().add(PermissionGroups.MODERATOR);
+            if (!sender.getGroups().contains(PermissionGroups.SUBSCRIBERS))
+                sender.getGroups().add(PermissionGroups.SUBSCRIBERS);
         }
 
         return new TwasiMessage(message, type, sender, inf);

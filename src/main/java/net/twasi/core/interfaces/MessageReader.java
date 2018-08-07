@@ -4,15 +4,16 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.MessageType;
 import net.twasi.core.models.Message.TwasiMessage;
+import org.pircbotx.hooks.events.MessageEvent;
 
-public class MessageReader implements Runnable {
+public class MessageReader {
     private TwasiInterface twasiInterface;
 
     public MessageReader(TwasiInterface inf) {
         twasiInterface = inf;
     }
 
-    @Override
+    /* @Override
     public void run() {
         while (!twasiInterface.getSocket().isClosed()) {
             try {
@@ -32,5 +33,17 @@ public class MessageReader implements Runnable {
                 e.printStackTrace();
             }
         }
+    }*/
+
+    public void onMessage(MessageEvent event) {
+        TwasiMessage message = TwasiMessage.from(event, twasiInterface);
+
+        TwasiLogger.log.trace("IRC: message=" + message.getMessage() + ", type=" + message.getType() + ", sender=" + message.getSender());
+        if (message.getType().equals(MessageType.PING)) {
+            //twasiInterface.getCommunicationHandler().send"PONG " + message.getMessage());
+            //TwasiLogger.log.debug("PING answered: " + message.getMessage());
+            return;
+        }
+        twasiInterface.getDispatcher().dispatch(message);
     }
 }

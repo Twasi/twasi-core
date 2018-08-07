@@ -238,5 +238,12 @@
             <version>1.2.1</version>
         </dependency>
 
+        <!-- PircBotX -->
+        <dependency>
+            <groupId>org.pircbotx</groupId>
+            <artifactId>pircbotx</artifactId>
+            <version>2.1</version>
+        </dependency>
+
     </dependencies>
 </project>

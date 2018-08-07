@@ -9,6 +9,14 @@ import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
+import org.pircbotx.Configuration;
+import org.pircbotx.PircBotX;
+import org.pircbotx.cap.EnableCapHandler;
+import org.pircbotx.hooks.Event;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ConnectEvent;
+import org.pircbotx.hooks.events.DisconnectEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,22 +29,18 @@ public class TwitchInterface extends TwasiInterface {
     private CommunicationHandler handler;
     private Streamer streamer;
 
-    private Socket socket;
-    private BufferedWriter writer;
-    private BufferedReader reader;
+    private PircBotX bot;
 
-    private Thread messageReader;
+    private MessageReader messageReader;
 
     // Dispatcher for incoming messages
     private MessageDispatcher dispatcher;
 
     public TwitchInterface(Streamer streamer) {
         super(streamer.getUser());
-
         this.streamer = streamer;
 
         this.handler = new TwitchCommunicationHandler(this);
-
         this.dispatcher = new MessageDispatcher(this);
     }
 
@@ -53,7 +57,66 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public boolean connect() {
         try {
-            socket = new Socket(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname, ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port);
+            this.messageReader = new MessageReader(this);
+
+            //Configure what we want our bot to do
+            Configuration configuration = new Configuration.Builder()
+                    //.setLogin(streamer.getUser().getTwitchBotAccountOrDefault().getUserName())
+                    .setName(streamer.getUser().getTwitchBotAccountOrDefault().getUserName())
+                    .setServerPassword(streamer.getUser().getTwitchBotAccountOrDefault().getToken().getAccessToken())
+                    //.setNickservPassword(streamer.getUser().getTwitchBotAccountOrDefault().getToken().getAccessToken())
+                    .addServer(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname)
+                    .addAutoJoinChannel(streamer.getUser().getTwitchAccount().getChannel())
+                    .addCapHandler(new EnableCapHandler("twitch.tv/commands"))
+                    .addCapHandler(new EnableCapHandler("twitch.tv/membership"))
+                    .addCapHandler(new EnableCapHandler("twitch.tv/tags"))
+                    .addListener(new ListenerAdapter() {
+                        @Override
+                        public void onConnect(ConnectEvent event) throws Exception {
+                            TwasiLogger.log.debug("Connected to IRC: " + streamer.getUser().getTwitchAccount().getDisplayName() + " - " + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname);
+                        }
+
+                        @Override
+                        public void onDisconnect(DisconnectEvent event) throws Exception {
+                            TwasiLogger.log.debug("Disconnected from IRC: " + streamer.getUser().getTwitchAccount().getDisplayName() + " - " + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname);
+                        }
+
+                        /* @Override
+                        public void onMessage(MessageEvent event) throws Exception {
+                            TwasiLogger.log.debug("Incoming message: " + event.getMessage());
+                            messageReader.onMessage(event);
+                        } */
+
+                        @Override
+                        public void onEvent(Event event) {
+                            if (event instanceof MessageEvent) {
+                                MessageEvent messageEvent = (MessageEvent) event;
+                                TwasiLogger.log.debug("Incoming message: " + messageEvent.getMessage());
+                                messageReader.onMessage(messageEvent);
+                            }
+                            //TwasiLogger.log.debug("New event: " + event.toString());
+                        }
+                    })
+                    .buildConfiguration();
+
+            //Create our bot with the configuration
+            bot = new PircBotX(configuration);
+            //Connect to the server
+
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        bot.startBot();
+                    } catch (Exception e) {
+                        TwasiLogger.log.error(e);
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+
+            /* socket = new Socket(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname, ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -76,7 +139,7 @@ public class TwitchInterface extends TwasiInterface {
             }
 
             this.messageReader = new Thread(new MessageReader(this));
-            this.messageReader.start();
+            this.messageReader.start();*/
 
             return true;
         } catch (Exception e) {
@@ -90,9 +153,8 @@ public class TwitchInterface extends TwasiInterface {
     public boolean disconnect() {
         TwasiLogger.log.info("Disconnecting from Twitch IRC");
         try {
-            writer.close();
-            reader.close();
-            socket.close();
+            bot.stopBotReconnect();
+            bot.sendIRC().quitServer("Bye, thanks for your service @Twitch #Twasi");
             return true;
         } catch (Exception e) {
             TwasiLogger.log.error("Failed to disconnect from Twitch IRC: " + e.getMessage());
@@ -122,16 +184,7 @@ public class TwitchInterface extends TwasiInterface {
         return dispatcher;
     }
 
-    @Override
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public BufferedReader getReader() {
-        return reader;
-    }
-
-    public BufferedWriter getWriter() {
-        return writer;
+    public PircBotX getBot() {
+        return bot;
     }
 }

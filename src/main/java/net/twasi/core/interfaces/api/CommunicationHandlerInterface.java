@@ -6,8 +6,6 @@ public interface CommunicationHandlerInterface {
 
     boolean sendMessage(String message);
 
-    boolean sendRawMessage(String rawMessage);
-
-    TwasiMessage readMessage();
+    // boolean sendRawMessage(String rawMessage);
 
 }
