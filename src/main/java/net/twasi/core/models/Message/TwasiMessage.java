@@ -126,7 +126,7 @@ public class TwasiMessage {
     public static TwasiMessage from(MessageEvent event, TwasiInterface inf) {
         String message = event.getMessage();
         MessageType type = MessageType.PRIVMSG;
-        TwitchAccount sender = new TwitchAccount(event.getUser().getRealName(), null, null, event.getTags().get("user-id"), new ArrayList<>(Collections.singleton(PermissionGroups.VIEWER)));
+        TwitchAccount sender = new TwitchAccount(event.getUser().getNick(), null, null, event.getTags().get("user-id"), new ArrayList<>(Collections.singleton(PermissionGroups.VIEWER)));
 
         if (event.getTags().get("mod").equals("1")) {
             if (!sender.getGroups().contains(PermissionGroups.MODERATOR))
