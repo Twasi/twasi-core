@@ -142,6 +142,10 @@ public class User extends BaseEntity {
     }
 
     public boolean hasPermission(TwitchAccount account, String permissionKey) {
+        if (ServiceRegistry.get(ConfigService.class).getCatalog().admin.users.contains(account.getUserName().toLowerCase())) {
+            return true;
+        }
+
         for (Permissions perm : getPermissions()) {
             if (perm.hasPermission(account, permissionKey)) {
                 return true;

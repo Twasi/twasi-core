@@ -8,4 +8,5 @@ public class ConfigCatalog {
     public AuthCatalog auth;
     public BotCatalog bot;
     public MailCatalog mail;
+    public AdminCatalog admin;
 }
