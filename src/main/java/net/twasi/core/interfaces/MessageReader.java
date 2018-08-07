@@ -23,7 +23,7 @@ public class MessageReader {
                 }
                 TwasiLogger.log.trace("IRC: message=" + message.getMessage() + ", type=" + message.getType() + ", sender=" + message.getSender());
                 if (message.getType().equals(MessageType.PING)) {
-                    twasiInterface.getCommunicationHandler().sendRawMessage("PONG " + message.getMessage());
+                    twasiInterface.getCommunicationHandler().sendRawMessage("PONG");
                     TwasiLogger.log.debug("PING answered: " + message.getMessage());
                     continue;
                 }
