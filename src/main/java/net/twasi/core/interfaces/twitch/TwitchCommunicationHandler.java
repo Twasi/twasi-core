@@ -14,6 +14,15 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
 
     @Override
     public boolean sendMessage(String message) {
+        if (message.startsWith("/") || message.startsWith(".")) {
+            message = "7" + message.substring(1);
+        }
+        getInterface().getBot().sendIRC().message(getInterface().getStreamer().getUser().getTwitchAccount().getChannel(), message);
+        return true;
+    }
+
+    @Override
+    public boolean sendInsecureMessage(String message) {
         getInterface().getBot().sendIRC().message(getInterface().getStreamer().getUser().getTwitchAccount().getChannel(), message);
         return true;
     }
