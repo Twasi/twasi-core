@@ -1,5 +1,6 @@
 package net.twasi.core.plugin;
 
+import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
@@ -163,7 +164,7 @@ public abstract class TwasiPlugin extends PluginBase {
 
     @Override
     public void registerRoute(String path, RequestHandler handler) {
-        // TODO WebInterfaceApp.getServer().createContext(path, handler);
+        WebInterfaceApp.getHandlers().addHandler(handler);
     }
 
     @Override

@@ -17,15 +17,16 @@ public class PluginConfig {
     public String helpText;
     public boolean messageHandler;
 
+    public List<String> commands;
+    public List<String> permissions;
+    public List<String> dependencies;
+
     public static PluginConfig fromInputStream(InputStream stream) throws Exception {
         // Parse
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
         return mapper.readValue(stream, PluginConfig.class);
     }
-
-    public List<String> commands;
-    public List<String> permissions;
 
     public String getName() {
         return name;
@@ -67,5 +68,12 @@ public class PluginConfig {
 
     public String getHelpText() {
         return helpText;
+    }
+
+    public List<String> getDependencies() {
+        if (dependencies == null) {
+            dependencies = new ArrayList<>();
+        }
+        return dependencies;
     }
 }

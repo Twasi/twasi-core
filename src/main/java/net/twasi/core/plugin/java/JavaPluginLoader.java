@@ -5,6 +5,8 @@ import net.twasi.core.plugin.Plugin;
 import net.twasi.core.plugin.PluginConfig;
 import net.twasi.core.plugin.PluginLoader;
 import net.twasi.core.plugin.TwasiPlugin;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.PluginManagerService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,14 +46,14 @@ public final class JavaPluginLoader implements PluginLoader {
         final File parentFile = file.getParentFile();
         final File dataFolder = new File(parentFile, description.getName());
 
-        // TODO: Dependencies
-        /* for (final String pluginName : description.getDepend()) {
-            Plugin current = server.getPluginManager().getPlugin(pluginName);
+        // TODO: We need to handle it when a plugin is loaded before another one. Maybe perform a sanity check shortly after loading all plugins? (PluginDiscovery)
+        for (String pluginName : description.getDependencies()) {
+            Plugin dependency = ServiceRegistry.get(PluginManagerService.class).getByName(pluginName);
 
-            if (current == null) {
-                throw new UnknownDependencyException(pluginName);
+            if (dependency == null) {
+                TwasiLogger.log.warn("Could not resolve dependency '" + pluginName + "' of plugin '" + description.getName() + "'");
             }
-        } */
+        }
 
         final PluginClassLoader loader;
         try {

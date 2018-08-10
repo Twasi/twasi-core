@@ -29,6 +29,11 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
             TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)
                     .getByName(name);
 
+            if (plugin == null) {
+                TwasiLogger.log.warn("Tried to enable plugin '" + name + "' but was not found in plugins folder.");
+                return;
+            }
+
             enableUserPlugin(plugin);
         });
     }
@@ -73,6 +78,11 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     public void enableUserPlugin(TwasiPlugin plugin) {
         try {
+            if (plugin == null) {
+                TwasiLogger.log.warn("Tried to enable userplugin but Plugin.jar was not found locally.");
+                return;
+            }
+
             if (userPlugins.stream().anyMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
                 TwasiLogger.log.info("Tried to enable userplugin " + plugin.getUserPluginClass() + " twice for Streamer " + getStreamer().getUser().getTwitchAccount().getDisplayName());
                 return;
