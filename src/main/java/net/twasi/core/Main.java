@@ -29,6 +29,7 @@ public class Main {
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());
         ServiceRegistry.register(new TwitchAPI());
+        ServiceRegistry.register(new ApiSchemaManagementService());
 
         Logger root = (Logger) LoggerFactory
                 .getLogger(Logger.ROOT_LOGGER_NAME);
@@ -39,12 +40,12 @@ public class Main {
         TwasiLogger.log.info("Connecting to database " + ServiceRegistry.get(ConfigService.class).getCatalog().database.hostname);
         ServiceRegistry.get(DatabaseService.class).connect();
 
-        TwasiLogger.log.info("Preparing webinterface");
-        WebInterfaceApp.prepare();
-
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();
         pd.discoverAll();
+
+        TwasiLogger.log.info("Preparing webinterface");
+        WebInterfaceApp.prepare();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
         ServiceRegistry.get(InstanceManagerService.class).startForAllUsers();

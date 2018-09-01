@@ -1,6 +1,7 @@
 package net.twasi.core.plugin;
 
 
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
@@ -92,4 +93,6 @@ public interface Plugin {
      * Registers a new route to the API
      */
     public void registerRoute(String path, RequestHandler handler);
+
+    public GraphQLQueryResolver getGraphQLResolver();
 }

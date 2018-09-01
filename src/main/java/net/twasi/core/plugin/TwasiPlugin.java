@@ -1,5 +1,6 @@
 package net.twasi.core.plugin;
 
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
@@ -165,6 +166,11 @@ public abstract class TwasiPlugin extends PluginBase {
     @Override
     public void registerRoute(String path, RequestHandler handler) {
         WebInterfaceApp.getHandlers().addHandler(handler);
+    }
+
+    @Override
+    public GraphQLQueryResolver getGraphQLResolver() {
+        return null;
     }
 
     @Override

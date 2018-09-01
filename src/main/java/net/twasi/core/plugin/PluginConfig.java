@@ -15,6 +15,7 @@ public class PluginConfig {
     public String version;
     public String main;
     public String helpText;
+    public String api;
     public boolean messageHandler;
 
     public List<String> commands;
@@ -68,6 +69,10 @@ public class PluginConfig {
 
     public String getHelpText() {
         return helpText;
+    }
+
+    public String getApi() {
+        return api;
     }
 
     public List<String> getDependencies() {

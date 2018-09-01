@@ -3,20 +3,12 @@ package net.twasi.core.graphql;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.model.*;
-import net.twasi.core.graphql.repository.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.JWTService;
 
 public class Query implements GraphQLQueryResolver {
-
-    private final UserRepository userRepository;
-
-    public Query(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     public ViewerDTO viewer(String token) {
         try {
             User user = ServiceRegistry.get(JWTService.class).getManager().getUserFromToken(token);

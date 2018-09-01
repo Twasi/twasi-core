@@ -85,7 +85,7 @@ type Viewer {
     status: BotStatus,
     userStatus: UserStatus,
     appInfo: AppInfo,
-    plugins: [PluginDetails]
+    plugins: [PluginDetails],
 }
 
 type BotStatus {
@@ -121,7 +121,7 @@ type PluginDetails {
 }
 
 type Query {
-    viewer(token: String): Viewer
+    viewer(token: String): Viewer%PLUGINS%
 }
 
 schema {

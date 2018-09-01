@@ -37,11 +37,7 @@ public final class JavaPluginLoader implements PluginLoader {
         }
 
         final PluginConfig description;
-        try {
-            description = getPluginConfig(file);
-        } catch (Exception ex) {
-            throw new Exception(ex);
-        }
+        description = getPluginConfig(file);
 
         final File parentFile = file.getParentFile();
         final File dataFolder = new File(parentFile, description.getName());
