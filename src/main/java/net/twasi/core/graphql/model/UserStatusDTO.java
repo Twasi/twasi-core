@@ -5,17 +5,16 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
-import org.bson.types.ObjectId;
 
 public class UserStatusDTO {
-    private ObjectId userId;
+    private User user;
 
-    public UserStatusDTO(ObjectId userId) {
-        this.userId = userId;
+    public UserStatusDTO(User user) {
+        this.user = user;
     }
 
     public UserStatusType getStatus() {
-        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getById(userId);
+        // User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getById(userId);
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
 
         if (user.getStatus() == AccountStatus.SETUP) {

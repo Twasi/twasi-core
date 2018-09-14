@@ -1,33 +1,30 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.User;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ViewerDTO {
-    private UserDTO user;
-    private BotStatusDTO status;
-    private UserStatusDTO userStatus;
+public class PanelDTO {
+    private User user;
     private AppInfoDTO appInfo = new AppInfoDTO();
 
-    public ViewerDTO(UserDTO user, BotStatusDTO status, UserStatusDTO userStatus) {
+    public PanelDTO(User user) {
         this.user = user;
-        this.status = status;
-        this.userStatus = userStatus;
     }
 
     public UserDTO getUser() {
-        return user;
+        return new UserDTO(user);
     }
 
     public BotStatusDTO getStatus() {
-        return status;
+        return new BotStatusDTO(user);
     }
 
     public UserStatusDTO getUserStatus() {
-        return userStatus;
+        return new UserStatusDTO(user);
     }
 
     public AppInfoDTO getAppInfo() {

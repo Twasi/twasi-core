@@ -80,7 +80,7 @@ type Config {
     isActivated: Boolean!
 }
 
-type Viewer {
+type Panel {
     user: User
     status: BotStatus,
     userStatus: UserStatus,
@@ -121,7 +121,7 @@ type PluginDetails {
 }
 
 type Query {
-    viewer(token: String): Viewer%PLUGINS%
+    panel(token: String): Panel%PLUGINS%
 }
 
 schema {
