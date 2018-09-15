@@ -143,7 +143,6 @@ public class TwitchAPI implements IService {
         if (!tokenValidation.getValid()) {
             TwasiLogger.log.info("Invalid token found.");
             token.refresh();
-            // ServiceRegistry.get(DatabaseService.class).getStore().save(token);
         }
 
         UserInfoDTO userInfo = getUserInfo(token);

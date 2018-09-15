@@ -25,7 +25,7 @@ public class UserRepository extends Repository<User> {
     }
 
     public User getByTwitchAccountOrCreate(TwitchAccount account) {
-        Query<User> query =  store.createQuery(User.class).field("twitchAccount.twitchId").equal(account.getTwitchId());
+        Query<User> query = store.createQuery(User.class).field("twitchAccount.twitchId").equal(account.getTwitchId());
 
         User user;
         if (query.count() == 0) {
@@ -33,6 +33,10 @@ public class UserRepository extends Repository<User> {
         } else {
             user = query.get();
         }
+
+        // Update access & refresh token
+        user.getTwitchAccount().setToken(account.getToken());
+        store.save(user);
 
         return user;
     }
