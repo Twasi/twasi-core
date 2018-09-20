@@ -20,7 +20,14 @@ public class AuthController extends RequestHandler {
     @Override
     public void handleGet(Request req, HttpServletResponse res) {
         try {
-            res.sendRedirect(ServiceRegistry.get(TwitchAPI.class).getAuthURL());
+            String state;
+
+            if (req.getParameter("environment") != null) {
+                state = req.getParameter("environment");
+            } else {
+                state = "https://panel.twasi.net";
+            }
+            res.sendRedirect(ServiceRegistry.get(TwitchAPI.class).getAuthURL() + "&state=" + state);
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect to twitch", e);
         }

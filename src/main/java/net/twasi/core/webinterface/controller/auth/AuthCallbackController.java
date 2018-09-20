@@ -35,8 +35,24 @@ public class AuthCallbackController extends RequestHandler {
         }
 
         try {
-            res.sendRedirect(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.frontend + "?jwt=" + token);
-            //Commons.writeString(res, Config.getCatalog().webinterface.frontend + "?jwt=" + token, 200);
+            String redirectTo;
+
+            // Decide where to redirect
+            String state = req.getParameter("state");
+
+            if (state == null || !(
+                    state.equalsIgnoreCase("https://twasi.net") ||
+                            state.equalsIgnoreCase("https://panel-beta.twasi.net") ||
+                            state.equalsIgnoreCase("http://localhost:3000") ||
+                            state.equalsIgnoreCase("https://dev.twasi.net/auth")
+            )) {
+                redirectTo = "https://panel.twasi.net";
+            } else {
+                redirectTo = state;
+            }
+
+            res.sendRedirect(redirectTo + "?jwt=" + token);
+
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect back to frontend", e);
         }
