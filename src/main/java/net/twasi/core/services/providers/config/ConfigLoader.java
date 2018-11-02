@@ -2,8 +2,8 @@ package net.twasi.core.services.providers.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import net.twasi.core.services.providers.config.catalog.ConfigCatalog;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.services.providers.config.catalog.ConfigCatalog;
 import org.apache.log4j.Level;
 
 import java.io.File;

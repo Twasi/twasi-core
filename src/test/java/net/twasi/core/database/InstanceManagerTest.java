@@ -6,14 +6,10 @@ import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
-import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.InstanceManagerService;
-import net.twasi.core.services.providers.config.ConfigService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.pircbotx.PircBotX;
-
-import java.net.Socket;
 
 public class InstanceManagerTest {
     @Test

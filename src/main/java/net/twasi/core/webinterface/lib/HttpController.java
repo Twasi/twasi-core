@@ -1,6 +1,5 @@
 package net.twasi.core.webinterface.lib;
 
-import com.sun.net.httpserver.HttpExchange;
 import org.eclipse.jetty.server.Request;
 
 import javax.servlet.http.HttpServletResponse;

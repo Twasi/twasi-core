@@ -12,7 +12,6 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.JWTService;
-import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.eclipse.jetty.server.Request;
 

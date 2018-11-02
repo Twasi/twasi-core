@@ -6,8 +6,6 @@ import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
-import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.config.ConfigService;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

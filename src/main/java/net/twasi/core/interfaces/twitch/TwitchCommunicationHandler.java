@@ -1,10 +1,6 @@
 package net.twasi.core.interfaces.twitch;
 
 import net.twasi.core.interfaces.api.CommunicationHandler;
-import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.models.Message.TwasiMessage;
-
-import java.io.IOException;
 
 public class TwitchCommunicationHandler extends CommunicationHandler {
 

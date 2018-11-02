@@ -18,6 +18,8 @@ public enum ApplicationState {
 
     STARTING,
     OPERATING,
-    CLOSING
+    CLOSING,
+
+    MAINTENANCE
 
 }

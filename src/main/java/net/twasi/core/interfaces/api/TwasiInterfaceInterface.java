@@ -4,8 +4,6 @@ import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 import org.pircbotx.PircBotX;
 
-import java.net.Socket;
-
 public interface TwasiInterfaceInterface {
 
     /**

@@ -1,20 +1,14 @@
 package net.twasi.core.graphql.model;
 
-import graphql.ErrorType;
-import graphql.GraphQLError;
-import graphql.GraphQLException;
-import graphql.language.SourceLocation;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.plugin.TwasiPlugin;
-import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UserDTO {
