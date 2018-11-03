@@ -6,6 +6,7 @@ Twasi Core is the Core Application of the Twasi Twitchbot. It hosts all the othe
 [![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=coverage)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Lines of code](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=ncloc)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTwasi%2Ftwasi-core.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FTwasi%2Ftwasi-core?ref=badge_shield)
 
 ## Contents
 Twasi-Core is the main application. It can be started and will then automatically create the initial folder structure and config files. After that, you have to adapt those files and install all the plugins you need. After that, you can start it again. It will connect to the configured MongoDB server, load all plugins in the 'plugins' directory and start the webinterface.
@@ -36,3 +37,7 @@ Twasi-Core is a java maven application. Just issue `mvn clean compile assembly:s
 
 ## Download precompiled version
 Later you will find the latest release in the release tab on Github. Sadly, there are no releases during our instable development version. But you can download a snapshot of the latest changes from our artifactory repository [here](https://artifactory.twasi.net/artifactory/list/libs-snapshot-local/net/twasi/TwasiCore/1.0-SNAPSHOT/)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTwasi%2Ftwasi-core.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FTwasi%2Ftwasi-core?ref=badge_large)
