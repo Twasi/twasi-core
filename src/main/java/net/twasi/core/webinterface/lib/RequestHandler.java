@@ -1,6 +1,5 @@
 package net.twasi.core.webinterface.lib;
 
-import io.prometheus.client.Counter;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
@@ -16,12 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public abstract class RequestHandler extends AbstractHandler implements HttpController {
-    private static final Counter requests = Counter.build()
-            .name("requests_total").help("Total requests.").register();
+    //private static final Counter requests = Counter.build()
+    //        .name("requests_total").help("Total requests.").register();
 
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        requests.inc();
+        //requests.inc();
 
         /* if (!httpExchange.getHttpContext().getPath().equalsIgnoreCase(httpExchange.getRequestURI().getPath())) {
             Commons.writeDTO(httpExchange, new NotFoundDTO(), 404);
@@ -48,7 +47,9 @@ public abstract class RequestHandler extends AbstractHandler implements HttpCont
                     response.getWriter().println("OPTIONS OK");
                     break;
                 default:
-                    Commons.handleUnallowedMethod(response);
+                    //Commons.handleUnallowedMethod(response);
+                    response.setStatus(405);
+                    baseRequest.setHandled(true);
                     break;
             }
         } catch (Throwable e) {
@@ -61,22 +62,19 @@ public abstract class RequestHandler extends AbstractHandler implements HttpCont
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
     }
 
-    @Override
-    public void handleGet(Request r, HttpServletResponse t) {
-        r.setHandled(true);
-        Commons.handleUnallowedMethod(t);
+    public void handleGet(Request t, HttpServletResponse r) throws IOException {
+        r.setStatus(405);
+        t.setHandled(true);
     }
 
-    @Override
-    public void handlePost(Request r, HttpServletResponse t) {
-        r.setHandled(true);
-        Commons.handleUnallowedMethod(t);
+    public void handlePost(Request t, HttpServletResponse r) throws IOException {
+        r.setStatus(405);
+        t.setHandled(true);
     }
 
-    @Override
-    public void handlePut(Request r, HttpServletResponse t) {
-        r.setHandled(true);
-        Commons.handleUnallowedMethod(t);
+    public void handlePut(Request t, HttpServletResponse r) throws IOException {
+        r.setStatus(405);
+        t.setHandled(true);
     }
 
     private String getToken(Request t) {
@@ -96,13 +94,6 @@ public abstract class RequestHandler extends AbstractHandler implements HttpCont
         }
 
         return splitted[1];
-    }
-
-    protected boolean isAuthenticated(Request t) {
-        String jwt = getToken(t);
-
-        return jwt != null && ServiceRegistry.get(JWTService.class).getManager().isValidToken(jwt);
-
     }
 
     public User getUser(Request t) {

@@ -54,6 +54,10 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
 
     @Override
     public boolean commit(T term) {
+        if (term == null) {
+            return false;
+        }
+
         if (!cache.exist(term)) {
             TwasiLogger.log.debug("Tried to commit entity that is not in cache.");
             return false;

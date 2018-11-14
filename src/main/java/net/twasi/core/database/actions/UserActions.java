@@ -1,5 +1,6 @@
 package net.twasi.core.database.actions;
 
+import io.prometheus.client.Counter;
 import net.twasi.core.database.models.AccountStatus;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
@@ -14,6 +15,9 @@ import java.util.UUID;
 
 public class UserActions {
 
+    private static final Counter registrations = Counter.build()
+            .name("registrations_total").help("Total new users registered.").register();
+
     public static User createNewUser(TwitchAccount account) {
         User user = new User();
         user.setTwitchAccount(account);
@@ -26,6 +30,8 @@ public class UserActions {
             // Send welcome mail
             ServiceRegistry.get(MailService.class).getMailer().sendMail(MailTemplates.getEmailConfirmationMail(user.getTwitchAccount().getEmail(), user.getTwitchAccount().getUserName(), confirmationCode));
         }
+
+        registrations.inc();
 
         ServiceRegistry.get(DataService.class).get(UserRepository.class).add(user);
         return user;
