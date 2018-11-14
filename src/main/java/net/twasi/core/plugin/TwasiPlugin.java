@@ -7,7 +7,9 @@ import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -164,8 +166,8 @@ public abstract class TwasiPlugin extends PluginBase {
     }
 
     @Override
-    public void registerRoute(String path, RequestHandler handler) {
-        WebInterfaceApp.getHandlers().addHandler(handler);
+    public void registerServlet(String path, HttpServlet handler) {
+        WebInterfaceApp.getServletHandler().addServlet(new ServletHolder(handler), path);
     }
 
     @Override

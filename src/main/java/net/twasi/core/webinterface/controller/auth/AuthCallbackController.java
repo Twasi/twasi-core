@@ -13,13 +13,14 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.JWTService;
-import net.twasi.core.webinterface.lib.RequestHandler;
-import org.eclipse.jetty.server.Request;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AuthCallbackController extends RequestHandler {
+public class AuthCallbackController extends HttpServlet {
     private static final Counter authCallbacks = Counter.build()
             .name("auth_callbacks_total").help("Total callbacks from Twitch OAuth.").register();
     private static final Counter logins = Counter.build()
@@ -28,7 +29,7 @@ public class AuthCallbackController extends RequestHandler {
             .name("logins_failed_total").help("Total users failed logging in (using Twitch OAuth).").register();
 
     @Override
-    public void handleGet(Request req, HttpServletResponse res) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         authCallbacks.inc();
 
         String code = req.getParameter("code");

@@ -4,8 +4,9 @@ import io.prometheus.client.exporter.MetricsServlet;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
+import net.twasi.core.webinterface.controller.auth.AuthCallbackController;
+import net.twasi.core.webinterface.controller.auth.AuthController;
 import net.twasi.core.webinterface.metrics.CustomMetrics;
-import net.twasi.core.webinterface.registry.AuthRegistry;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -26,9 +27,11 @@ public class WebInterfaceApp {
         context.addServlet(GraphQLEndpoint.class, "/graphql");
 
         handlers.addHandler(context);
-        handlers.addHandler(AuthRegistry.register());
 
         server.setHandler(handlers);
+
+        getServletHandler().addServlet(AuthController.class, "/auth");
+        getServletHandler().addServlet(AuthCallbackController.class, "/auth/callback");
 
         getServletHandler().addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
     }

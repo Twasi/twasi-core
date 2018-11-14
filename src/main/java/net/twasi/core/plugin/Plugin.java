@@ -6,6 +6,7 @@ import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.InputStream;
 
@@ -92,7 +93,7 @@ public interface Plugin {
     /**
      * Registers a new route to the API
      */
-    public void registerRoute(String path, RequestHandler handler);
+    public void registerServlet(String path, HttpServlet servlet);
 
     public GraphQLQueryResolver getGraphQLResolver();
 }

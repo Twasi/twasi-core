@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public abstract class RequestHandler extends AbstractHandler implements HttpController {
+public abstract class RequestHandler extends AbstractHandler {
     //private static final Counter requests = Counter.build()
     //        .name("requests_total").help("Total requests.").register();
 
