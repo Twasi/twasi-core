@@ -22,8 +22,8 @@ public class WebInterfaceApp {
         server = new Server(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
 
         context = new ServletContextHandler();
-        context.setContextPath("/apis");
-        context.addServlet(GraphQLEndpoint.class, "/");
+        context.setContextPath("/");
+        context.addServlet(GraphQLEndpoint.class, "/graphql");
 
         handlers.addHandler(context);
         handlers.addHandler(AuthRegistry.register());
