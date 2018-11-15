@@ -29,6 +29,8 @@ public class JWTManager {
             String secret;
             if (user.getJWTSecret() == null) {
                 secret = generateNewSecret();
+                user.setJWTSecret(secret);
+                ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
             } else {
                 secret = user.getJWTSecret();
             }
@@ -48,9 +50,6 @@ public class JWTManager {
                     .withClaim("rank", user.getRank())
                     .withClaim("displayName", user.getTwitchAccount().getDisplayName())
                     .sign(algorithm);
-
-            user.setJWTSecret(secret);
-            ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
         } catch (Exception e) {
             TwasiLogger.log.error(e);
         }
