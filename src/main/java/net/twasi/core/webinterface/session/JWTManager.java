@@ -26,12 +26,23 @@ public class JWTManager {
         user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(user.getTwitchAccount().getTwitchId());
 
         try {
-            String secret = generateNewSecret();
+            String secret;
+            if (user.getJWTSecret() == null) {
+                secret = generateNewSecret();
+            } else {
+                secret = user.getJWTSecret();
+            }
+
             Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            Date expiration = new Date();
+            expiration.setTime(expiration.getTime() + 1000 * 60 * 60 * 24);
 
             token = JWT.create()
                     .withIssuer(ServiceRegistry.get(ConfigService.class).getCatalog().auth.issuer)
                     .withIssuedAt(new Date())
+                    .withExpiresAt(new Date())
+                    .withExpiresAt(expiration)
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
                     .withClaim("rank", user.getRank())
