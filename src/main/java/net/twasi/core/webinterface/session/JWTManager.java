@@ -89,6 +89,12 @@ public class JWTManager {
         // because every user has another secret.
         try {
             DecodedJWT decodedJWT = JWT.decode(jwt);
+
+            if (decodedJWT.getExpiresAt().getTime() > new Date().getTime()) {
+                // Token expired
+                return false;
+            }
+
             twitchId = decodedJWT.getClaim("twitchid").asString();
         } catch (JWTDecodeException exception) {
             TwasiLogger.log.info(exception);
