@@ -10,6 +10,8 @@ import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.services.providers.mail.MailService;
 import net.twasi.core.services.providers.mail.MailTemplates;
+import net.twasi.twitchapi.TwitchAPI;
+import net.twasi.twitchapi.helix.users.response.UserDTO;
 
 import java.util.UUID;
 
@@ -20,6 +22,9 @@ public class UserActions {
 
     public static User createNewUser(TwitchAccount account) {
         User user = new User();
+
+        UserDTO userData = TwitchAPI.helix().users().withAuth(account.getToken().toAuthContext()).getCurrentUser();
+
         user.setTwitchAccount(account);
         user.setStatus(AccountStatus.SETUP);
 

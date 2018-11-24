@@ -1,17 +1,20 @@
 package net.twasi.core;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
 import net.twasi.core.graphql.WebInterfaceApp;
-import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
+import net.twasi.core.logger.JettyVoidLogger;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.*;
 import net.twasi.core.services.providers.config.ConfigService;
-import org.slf4j.LoggerFactory;
+import net.twasi.twitchapi.TwitchAPI;
+import net.twasi.twitchapi.auth.AuthorizationContext;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -28,12 +31,19 @@ public class Main {
         ServiceRegistry.register(new DataService());
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());
-        ServiceRegistry.register(new TwitchAPI());
         ServiceRegistry.register(new ApiSchemaManagementService());
 
-        Logger root = (Logger) LoggerFactory
-                .getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(Level.OFF);
+        TwitchAPI.initialize(new AuthorizationContext(
+                ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId,
+                ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientSecret,
+                ServiceRegistry.get(ConfigService.class).getCatalog().twitch.redirectUri
+        ));
+
+        // Disable logging
+        org.eclipse.jetty.util.log.Log.setLog(new JettyVoidLogger());
+        LogManager.getLogger("graphql").setLevel(Level.OFF);
+        LogManager.getLogger("org.pircbotx").setLevel(Level.WARN);
+        Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.SEVERE);
 
         TwasiLogger.log.info("Starting Twasi Core");
 

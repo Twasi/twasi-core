@@ -90,7 +90,7 @@ public class JWTManager {
         try {
             DecodedJWT decodedJWT = JWT.decode(jwt);
 
-            if (decodedJWT.getExpiresAt().getTime() > new Date().getTime()) {
+            if (decodedJWT.getExpiresAt().getTime() < new Date().getTime()) {
                 // Token expired
                 return false;
             }

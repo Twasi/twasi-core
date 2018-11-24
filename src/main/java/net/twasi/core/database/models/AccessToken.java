@@ -1,23 +1,21 @@
 package net.twasi.core.database.models;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import me.philippheuer.twitch4j.auth.model.OAuthCredential;
-import net.twasi.core.interfaces.twitch.webapi.TwitchAPI;
-import net.twasi.core.services.ServiceRegistry;
-
-import java.util.Calendar;
+import net.twasi.twitchapi.auth.AuthenticationType;
+import net.twasi.twitchapi.auth.PersonalAuthorizationContext;
+import net.twasi.twitchapi.id.oauth2.response.TokenDTO;
 
 public class AccessToken {
 
     private String accessToken;
     private String refreshToken;
-    private Long expiresIn;
+    private int expiresIn;
     private String[] scope;
 
     public AccessToken() {
     }
 
-    public AccessToken(String accessToken, String refreshToken, Long expiresIn, String[] scope) {
+    public AccessToken(String accessToken, String refreshToken, int expiresIn, String[] scope) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
@@ -26,6 +24,13 @@ public class AccessToken {
 
     public AccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public AccessToken(TokenDTO token) {
+        this.accessToken = token.getAccessToken();
+        this.refreshToken = token.getRefreshToken();
+        this.expiresIn = token.getExpiresIn();
+        this.scope = token.getScope();
     }
 
     public String getAccessToken() {
@@ -46,12 +51,12 @@ public class AccessToken {
         this.refreshToken = refreshToken;
     }
 
-    public Long getExpiresIn() {
+    public int getExpiresIn() {
         return expiresIn;
     }
 
     @JsonSetter("expires_in")
-    public void setExpiresIn(Long expiresIn) {
+    public void setExpiresIn(int expiresIn) {
         this.expiresIn = expiresIn;
     }
 
@@ -64,23 +69,22 @@ public class AccessToken {
         this.scope = scope;
     }
 
-    public OAuthCredential toCredential() {
-        OAuthCredential cred = new OAuthCredential();
-        cred.setToken(getAccessToken());
-        cred.setRefreshToken(getRefreshToken());
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(getExpiresIn());
-
-        cred.setTokenExpiresAt(cal);
-        return cred;
+    public PersonalAuthorizationContext toAuthContext() {
+        return new TwasiPersonalAuthorizationContext(this);
     }
 
-    public void refresh() {
-        AccessToken newToken = ServiceRegistry.get(TwitchAPI.class).refreshToken(this);
-        setAccessToken(newToken.getAccessToken());
-        setRefreshToken(newToken.getRefreshToken());
-        setScope(newToken.getScope());
-        setExpiresIn(newToken.getExpiresIn());
+    public class TwasiPersonalAuthorizationContext extends PersonalAuthorizationContext {
+
+        public TwasiPersonalAuthorizationContext(AccessToken token) {
+            super(token.getAccessToken(), token.getRefreshToken(), AuthenticationType.BEARER);
+        }
+
+        @Override
+        public void onRefresh() {
+            setAccessToken(getAccessToken());
+            setRefreshToken(getRefreshToken());
+
+            // TODO save to db
+        }
     }
 }

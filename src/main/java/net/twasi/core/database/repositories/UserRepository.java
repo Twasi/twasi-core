@@ -34,8 +34,11 @@ public class UserRepository extends Repository<User> {
             user = query.get();
         }
 
-        // Update access & refresh token
+        // Update access information
         user.getTwitchAccount().setToken(account.getToken());
+
+        // TODO also update other information (username, email, avatar etc.)
+
         store.save(user);
 
         return user;

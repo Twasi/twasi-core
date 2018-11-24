@@ -9,4 +9,5 @@ public class TwitchCatalog {
     public String clientId;
     public String clientSecret;
     public String redirectUri;
+    public String scopes;
 }
