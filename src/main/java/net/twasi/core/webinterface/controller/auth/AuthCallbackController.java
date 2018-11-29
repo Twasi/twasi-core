@@ -12,6 +12,7 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.JWTService;
+import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.twitchapi.TwitchAPI;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 import net.twasi.twitchapi.id.oauth2.response.TokenDTO;
@@ -77,12 +78,7 @@ public class AuthCallbackController extends HttpServlet {
             // Decide where to redirect
             String state = req.getParameter("state");
 
-            if (state == null || !(
-                    state.equalsIgnoreCase("https://twasi.net") ||
-                            state.equalsIgnoreCase("https://panel-beta.twasi.net") ||
-                            state.equalsIgnoreCase("http://localhost:3000") ||
-                            state.equalsIgnoreCase("https://dev.twasi.net/auth")
-            )) {
+            if (state == null || !(ServiceRegistry.get(ConfigService.class).getCatalog().auth.endpoints.contains(state))) {
                 redirectTo = "https://panel.twasi.net";
             } else {
                 redirectTo = state;
