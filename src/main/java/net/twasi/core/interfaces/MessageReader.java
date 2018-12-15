@@ -4,6 +4,8 @@ import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.MessageType;
 import net.twasi.core.models.Message.TwasiMessage;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.pircbotx.hooks.events.MessageEvent;
 
 public class MessageReader {
@@ -37,6 +39,11 @@ public class MessageReader {
 
     public void onMessage(MessageEvent event) {
         TwasiMessage message = TwasiMessage.from(event, twasiInterface);
+
+        if (message.getSender().getUserName().equalsIgnoreCase(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultName)) {
+            // Ignore our own messages
+            return;
+        }
 
         TwasiLogger.log.trace("IRC: message=" + message.getMessage() + ", type=" + message.getType() + ", sender=" + message.getSender());
         if (message.getType().equals(MessageType.PING)) {
