@@ -1,6 +1,7 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.models.permissions.PermissionGroups;
+import net.twasi.twitchapi.auth.PersonalAuthorizationContext;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -109,6 +110,11 @@ public class TwitchAccount {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public PersonalAuthorizationContext toAuthContext() {
+        AccessToken token = getToken();
+        return token.toAuthContext(this);
     }
 
     public void setAvatar(String avatar) {
