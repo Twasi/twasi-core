@@ -23,7 +23,7 @@ public class UserActions {
     public static User createNewUser(TwitchAccount account) {
         User user = new User();
 
-        UserDTO userData = TwitchAPI.helix().users().withAuth(account.getToken().toAuthContext()).getCurrentUser();
+        UserDTO userData = TwitchAPI.helix().users().withAuth(account.getToken().toAuthContext(account)).getCurrentUser();
 
         user.setTwitchAccount(account);
         user.setStatus(AccountStatus.SETUP);

@@ -53,7 +53,7 @@ public class AuthCallbackController extends HttpServlet {
 
         AccessToken accessToken = new AccessToken(token);
 
-        UserDTO userData = TwitchAPI.helix().users().withAuth(accessToken.toAuthContext()).getCurrentUser();
+        UserDTO userData = TwitchAPI.helix().users().withAuth(accessToken.toAuthContext(null)).getCurrentUser();
 
         if (userData == null) {
             res.setStatus(500);

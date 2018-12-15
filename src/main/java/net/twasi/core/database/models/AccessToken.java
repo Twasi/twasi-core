@@ -69,14 +69,25 @@ public class AccessToken {
         this.scope = scope;
     }
 
-    public PersonalAuthorizationContext toAuthContext() {
-        return new TwasiPersonalAuthorizationContext(this);
+    public PersonalAuthorizationContext toAuthContext(TwitchAccount account) {
+        return new TwasiPersonalAuthorizationContext(account);
+    }
+
+    private static String getTwitchIdOrNull(TwitchAccount account) {
+        if (account == null) {
+            return null;
+        }
+        return account.getTwitchId();
     }
 
     public class TwasiPersonalAuthorizationContext extends PersonalAuthorizationContext {
+        TwasiPersonalAuthorizationContext(TwitchAccount account) {
+            super(accessToken, refreshToken, AccessToken.getTwitchIdOrNull(account), AuthenticationType.BEARER);
+            String twitchId = "";
 
-        public TwasiPersonalAuthorizationContext(AccessToken token) {
-            super(token.getAccessToken(), token.getRefreshToken(), AuthenticationType.BEARER);
+            if (account != null) {
+                twitchId = account.getTwitchId();
+            }
         }
 
         @Override

@@ -36,7 +36,7 @@ public class TwitchAccountDTO {
     }
 
     public TwitchAccountDTO update() {
-        UserDTO userData = TwitchAPI.helix().users().withAuth(account.getToken().toAuthContext()).getCurrentUser();
+        UserDTO userData = TwitchAPI.helix().users().withAuth(account.getToken().toAuthContext(account)).getCurrentUser();
         this.account = TwitchAccount.fromUser(userData, account.getToken());
 
         User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(account.getTwitchId());
