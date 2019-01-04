@@ -38,7 +38,7 @@ public class PluginDiscovery {
 
                 loader.enablePlugin(plugin);
 
-                if (plugin.isDependency()) {
+                if (plugin.getDescription().isDependency()) {
                     ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiDependency) plugin);
                 } else {
                     ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
