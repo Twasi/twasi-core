@@ -65,6 +65,9 @@ public class Main {
         TwasiLogger.log.info("Twasi ready. Started in " + longTime + " seconds.");
         AppStateService.getService().setState(ApplicationState.OPERATING);
 
+        // Call plugins/dependencies ready
+        ServiceRegistry.get(PluginManagerService.class).callReady();
+
         WebInterfaceApp.start();
         cli.start();
     }

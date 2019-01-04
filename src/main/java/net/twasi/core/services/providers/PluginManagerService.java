@@ -98,4 +98,9 @@ public class PluginManagerService implements IService {
     public TwasiDependency getDependencyByName(String name) {
         return dependencies.stream().filter(dep -> dep.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
+
+    public void callReady() {
+        plugins.forEach(TwasiPlugin::onReady);
+        dependencies.forEach(TwasiPlugin::onReady);
+    }
 }

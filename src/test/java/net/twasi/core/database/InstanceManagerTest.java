@@ -2,6 +2,7 @@ package net.twasi.core.database;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.core.interfaces.MessageReader;
 import net.twasi.core.interfaces.api.CommunicationHandlerInterface;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.MessageDispatcher;
@@ -70,6 +71,11 @@ public class InstanceManagerTest {
             public PircBotX getBot() {
                 return null;
             }
+
+            @Override
+            public MessageReader getMessageReader() {
+                return null;
+            }
         };
         TwasiInterface interfaceTwo = new TwasiInterface(user2) {
             @Override
@@ -114,6 +120,11 @@ public class InstanceManagerTest {
 
             @Override
             public PircBotX getBot() {
+                return null;
+            }
+
+            @Override
+            public MessageReader getMessageReader() {
                 return null;
             }
         };
