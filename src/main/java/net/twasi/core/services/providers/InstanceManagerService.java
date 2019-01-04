@@ -4,6 +4,8 @@ import net.twasi.core.database.models.EventMessage;
 import net.twasi.core.database.models.EventMessageType;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
+import net.twasi.core.events.NewInstanceEvent;
+import net.twasi.core.events.TwasiEventHandler;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.interfaces.twitch.TwitchInterface;
 import net.twasi.core.logger.TwasiLogger;
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class InstanceManagerService implements IService {
     private List<TwasiInterface> interfaces = new ArrayList<>();
+
+    private List<TwasiEventHandler<NewInstanceEvent>> newInstanceEventHandlers = new ArrayList<>();
 
     /**
      * Registers a single interface (e.g. if someone starts the bot aferwards)
@@ -35,6 +39,9 @@ public class InstanceManagerService implements IService {
 
         interfaces.add(inf);
         TwasiLogger.log.debug("Registered interface for streamer " + inf.getStreamer().getUser().getTwitchAccount().getUserName());
+
+        newInstanceEventHandlers.forEach(handler -> handler.on(new NewInstanceEvent(inf)));
+
         return true;
     }
 
@@ -97,5 +104,9 @@ public class InstanceManagerService implements IService {
 
     public List<TwasiInterface> getInterfaces() {
         return interfaces;
+    }
+
+    public void registerNewInstanceHandler(TwasiEventHandler<NewInstanceEvent> handler) {
+        newInstanceEventHandlers.add(handler);
     }
 }
