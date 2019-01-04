@@ -37,16 +37,24 @@ public class PluginDiscovery {
                 }
 
                 loader.enablePlugin(plugin);
-                ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
+
+                if (plugin.isDependency()) {
+                    ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiDependency) plugin);
+                } else {
+                    ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
+                }
             } catch (Exception e) {
                 TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?");
                 e.printStackTrace();
             }
         }
 
-        TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s) loaded.");
+        TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s), " + ServiceRegistry.get(PluginManagerService.class).getDependencies().size() + " dependency(/ies) loaded.");
         TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(
                 ServiceRegistry.get(PluginManagerService.class).getPlugins().stream().map(plugin -> plugin.getDescription().getName()).toArray()
+        ));
+        TwasiLogger.log.info("List of loaded dependencies: " + Arrays.toString(
+                ServiceRegistry.get(PluginManagerService.class).getDependencies().stream().map(plugin -> plugin.getDescription().getName()).toArray()
         ));
 
         ServiceRegistry.get(ApiSchemaManagementService.class).executeBuild();

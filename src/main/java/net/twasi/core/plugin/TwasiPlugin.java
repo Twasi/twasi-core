@@ -127,6 +127,7 @@ public abstract class TwasiPlugin extends PluginBase {
 
     /**
      * Sets the enabled state of this plugin
+     * If a change is detected (plugin is enabled/disabled), the according method is called.
      *
      * @param enabled true if enabled, otherwise false
      */
@@ -161,6 +162,10 @@ public abstract class TwasiPlugin extends PluginBase {
     }
 
     @Override
+    public void onReady() {
+    }
+
+    @Override
     public final Logger getLogger() {
         return logger;
     }
@@ -178,6 +183,11 @@ public abstract class TwasiPlugin extends PluginBase {
     @Override
     public String toString() {
         return description.getName();
+    }
+
+    @Override
+    public boolean isDependency() {
+        return false;
     }
 
     /**

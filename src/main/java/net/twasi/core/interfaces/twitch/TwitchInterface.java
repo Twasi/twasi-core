@@ -178,6 +178,11 @@ public class TwitchInterface extends TwasiInterface {
         return dispatcher;
     }
 
+    @Override
+    public MessageReader getMessageReader() {
+        return messageReader;
+    }
+
     public PircBotX getBot() {
         return bot;
     }

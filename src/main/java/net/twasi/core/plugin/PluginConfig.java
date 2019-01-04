@@ -17,6 +17,7 @@ public class PluginConfig {
     public String helpText;
     public String api;
     public boolean messageHandler;
+    public boolean dependency;
 
     public List<String> commands;
     public List<String> permissions;
@@ -58,6 +59,10 @@ public class PluginConfig {
 
     public boolean handlesMessages() {
         return messageHandler;
+    }
+
+    public boolean isDependency() {
+        return dependency;
     }
 
     public List<String> getCommands() {

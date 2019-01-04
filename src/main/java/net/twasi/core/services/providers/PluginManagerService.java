@@ -1,6 +1,7 @@
 package net.twasi.core.services.providers;
 
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.services.IService;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class PluginManagerService implements IService {
 
     private List<TwasiPlugin> plugins = new ArrayList<>();
+    private List<TwasiDependency> dependencies = new ArrayList<>();
 
     /**
      * Registers a plugin
@@ -39,8 +41,21 @@ public class PluginManagerService implements IService {
         return true;
     }
 
+    public boolean registerDependency(TwasiDependency dependency) {
+        if (dependencies.contains(dependency)) {
+            TwasiLogger.log.info("Tried to register dependency " + dependency.getDescription().getName() + " twice. Skipped.");
+            return false;
+        }
+        dependencies.add(dependency);
+        return true;
+    }
+
     public List<TwasiPlugin> getPlugins() {
         return plugins;
+    }
+
+    public List<TwasiDependency> getDependencies() {
+         return dependencies;
     }
 
     /**
@@ -73,5 +88,14 @@ public class PluginManagerService implements IService {
      */
     public TwasiPlugin getByName(String name) {
         return plugins.stream().filter(plugin -> plugin.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns a dependency by a name
+     * @param name the name to search
+     * @return the corresponding plugin, or null if not found
+     */
+    public TwasiDependency getDependencyByName(String name) {
+        return dependencies.stream().filter(dep -> dep.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 }

@@ -65,6 +65,11 @@ public interface Plugin {
     public void onActivate();
 
     /**
+     * Called when Twasi-Core is ready (all plugins & instances loaded)
+     */
+    public void onReady();
+
+    /**
      * Returns the plugin logger associated with this server's logger. The
      * returned logger automatically tags all log messages with the plugin's
      * name.
@@ -94,6 +99,11 @@ public interface Plugin {
      * Registers a new route to the API
      */
     public void registerServlet(String path, HttpServlet servlet);
+
+    /**
+     * Returns if this is a dependency
+     */
+    public boolean isDependency();
 
     public GraphQLQueryResolver getGraphQLResolver();
 }

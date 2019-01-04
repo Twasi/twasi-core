@@ -1,5 +1,6 @@
 package net.twasi.core.interfaces.api;
 
+import net.twasi.core.interfaces.MessageReader;
 import net.twasi.core.messages.MessageDispatcher;
 import net.twasi.core.models.Streamer;
 import org.pircbotx.PircBotX;
@@ -58,6 +59,13 @@ public interface TwasiInterfaceInterface {
      * @return dispatcher
      */
     MessageDispatcher getDispatcher();
+
+    /**
+     * Get the message reader
+     *
+     * @return message reader
+     */
+    MessageReader getMessageReader();
 
     PircBotX getBot();
 

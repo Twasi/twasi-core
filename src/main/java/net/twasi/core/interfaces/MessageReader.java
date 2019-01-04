@@ -1,6 +1,8 @@
 package net.twasi.core.interfaces;
 
+import net.twasi.core.events.TwasiEventHandler;
 import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.interfaces.events.IncomingMessageEvent;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.MessageType;
 import net.twasi.core.models.Message.TwasiMessage;
@@ -8,8 +10,14 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageReader {
     private TwasiInterface twasiInterface;
+
+    // Event handlers
+    private List<TwasiEventHandler<IncomingMessageEvent>> incomingMessageEventHandlers = new ArrayList<>();
 
     public MessageReader(TwasiInterface inf) {
         twasiInterface = inf;
@@ -37,20 +45,29 @@ public class MessageReader {
         }
     }*/
 
+    public void registerIncomingMessageHandler(TwasiEventHandler<IncomingMessageEvent> e) {
+        incomingMessageEventHandlers.add(e);
+    }
+
     public void onMessage(MessageEvent event) {
         TwasiMessage message = TwasiMessage.from(event, twasiInterface);
 
-        if (message.getSender().getUserName().equalsIgnoreCase(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultName)) {
+        if (message.getSender().getUserName().equalsIgnoreCase(twasiInterface.getStreamer().getUser().getTwitchBotAccountOrDefault().getUserName())) {
             // Ignore our own messages
             return;
         }
 
         TwasiLogger.log.trace("IRC: message=" + message.getMessage() + ", type=" + message.getType() + ", sender=" + message.getSender());
-        if (message.getType().equals(MessageType.PING)) {
-            //twasiInterface.getCommunicationHandler().send"PONG " + message.getMessage());
+        // Ping requests are handled by PircX
+        //if (message.getType().equals(MessageType.PING)) {
+            //twasiInterface.getCommunicationHandler().send("PONG " + message.getMessage());
             //TwasiLogger.log.debug("PING answered: " + message.getMessage());
-            return;
-        }
+            //return;
+        //}
+
+        // Call all event handlers (middleware)
+        incomingMessageEventHandlers.forEach(handler -> handler.on(new IncomingMessageEvent(message)));
+
         twasiInterface.getDispatcher().dispatch(message);
     }
 }
