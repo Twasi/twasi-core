@@ -2,6 +2,8 @@ package net.twasi.core.models.Message;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.permissions.PermissionGroups;
+import net.twasi.core.events.OutgoingMessageEvent;
+import net.twasi.core.events.TwasiEventHandler;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.messages.variables.VariablePreprocessor;
 import net.twasi.core.services.ServiceRegistry;
@@ -10,6 +12,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class TwasiMessage {
 
@@ -17,6 +20,8 @@ public class TwasiMessage {
     protected String message;
     protected TwitchAccount sender;
     private TwasiInterface twasiInterface;
+
+    private List<TwasiEventHandler<OutgoingMessageEvent>> replyMessageHandlers = new ArrayList<>();
 
     public TwasiMessage(String message, MessageType type, TwitchAccount sender, TwasiInterface inf) {
         this.message = message;
@@ -54,7 +59,15 @@ public class TwasiMessage {
 
     public void reply(String text) {
         text = VariablePreprocessor.process(getTwasiInterface(), text, this);
-        twasiInterface.getCommunicationHandler().sendMessage(text);
+
+        String finalText = text;
+        replyMessageHandlers.forEach(handler -> handler.on(new OutgoingMessageEvent(finalText, this)));
+
+        twasiInterface.getCommunicationHandler().sendMessageInternal(text);
+    }
+
+    public void registerReplyHandler(TwasiEventHandler<OutgoingMessageEvent> e) {
+        replyMessageHandlers.add(e);
     }
 
     public static TwasiMessage parse(String ircLine, TwasiInterface inf) {

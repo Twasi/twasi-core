@@ -1,6 +1,5 @@
-package net.twasi.core.interfaces.events;
+package net.twasi.core.events;
 
-import net.twasi.core.events.TwasiEvent;
 import net.twasi.core.models.Message.TwasiMessage;
 
 public class IncomingMessageEvent extends TwasiEvent {
