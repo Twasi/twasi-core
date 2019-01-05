@@ -72,7 +72,7 @@ public class TwitchInterface extends TwasiInterface {
 
                         @Override
                         public void onDisconnect(DisconnectEvent event) throws Exception {
-                            TwasiLogger.log.debug("Disconnected from IRC: " + streamer.getUser().getTwitchAccount().getDisplayName() + " - " + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname);
+                            TwasiLogger.log.debug("Disconnected from IRC: " + streamer.getUser().getTwitchAccount().getDisplayName() + " - " + ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname + ", Reason: " + event.getDisconnectException().getMessage());
                         }
 
                         /* @Override
