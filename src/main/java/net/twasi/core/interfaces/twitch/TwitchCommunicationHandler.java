@@ -20,7 +20,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
         outgoingMessageHandlers.forEach(handler -> handler.on(new OutgoingMessageEvent(message, null)));
 
         return sendMessageInternal(message);
-}
+    }
 
     @Override
     public boolean sendInsecureMessage(String message) {
