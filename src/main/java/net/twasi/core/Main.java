@@ -13,6 +13,7 @@ import net.twasi.twitchapi.TwitchAPI;
 import net.twasi.twitchapi.auth.AuthorizationContext;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.telegram.telegrambots.ApiContextInitializer;
 
 import java.util.logging.Logger;
 
@@ -32,6 +33,8 @@ public class Main {
         ServiceRegistry.register(new JWTService());
         ServiceRegistry.register(new InstanceManagerService());
         ServiceRegistry.register(new ApiSchemaManagementService());
+        ApiContextInitializer.init(); // Init Telegram API context from a static block
+        ServiceRegistry.register(new TelegramService());
 
         TwitchAPI.initialize(new AuthorizationContext(
                 ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId,

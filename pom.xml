@@ -246,5 +246,12 @@
             <version>v3-rev192-1.23.0</version>
         </dependency>
 
+        <!-- Telegram API -->
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
     </dependencies>
 </project>
