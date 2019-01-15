@@ -37,12 +37,12 @@ public class TelegramService implements IService {
                 }
             };
             try {
-                ApiContextInitializer.init();
                 new TelegramBotsApi().registerBot(telegramBot);
                 TwasiLogger.log.info("Telegram bot is connected.");
             } catch (TelegramApiException e) {
                 TwasiLogger.log.info("Telegram bot could not connect to the API.");
                 TwasiLogger.log.debug(e);
+                telegramBot = null;
                 return;
             }
         } else {
