@@ -45,6 +45,17 @@ public class TelegramService implements IService {
                     if (!update.hasMessage() || !update.getMessage().hasText()) return;
                     // If message has no text just ignore it
 
+                    if (!update.getMessage().getChatId().equals(config.chatId)) {
+                        SendMessage msg = new SendMessage(update.getMessage().getChatId(), "You are not permitted to use this bot.");
+                        try {
+                            telegramBot.execute(msg);
+                        } catch (TelegramApiException e) {
+                            TwasiLogger.log.debug(e);
+                        }
+                        return;
+                    }
+                    // Ignore message if it's not sent from the chat-id in config
+
                     String text = update.getMessage().getText();
                     if (!text.startsWith("/")) return;
                     // If message is no command also ignore it
