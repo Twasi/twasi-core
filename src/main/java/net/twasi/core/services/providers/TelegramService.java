@@ -50,7 +50,7 @@ public class TelegramService implements IService {
                         try {
                             telegramBot.execute(msg);
                         } catch (TelegramApiException e) {
-                            TwasiLogger.log.debug(e);
+                            TwasiLogger.log.error(e);
                         }
                         return;
                     }
@@ -78,7 +78,7 @@ public class TelegramService implements IService {
 
                             } catch (TelegramApiException e) {
                                 TwasiLogger.log.debug("A telegram message could not be sent.");
-                                TwasiLogger.log.debug(e);
+                                TwasiLogger.log.error(e);
                             }
                             return;
                         }
@@ -100,7 +100,7 @@ public class TelegramService implements IService {
 
             } catch (TelegramApiException e) {
                 TwasiLogger.log.info("Telegram bot could not connect to the API.");
-                TwasiLogger.log.debug(e);
+                TwasiLogger.log.error(e);
                 telegramBot = null;
                 return;
                 // Set null to prevent usage of the bot while not connected
@@ -116,7 +116,7 @@ public class TelegramService implements IService {
 
         } catch (TelegramApiException e) {
             TwasiLogger.log.info("Unable to send message to the Telegram chat that is set in config (\"" + config.chatId + "\").");
-            TwasiLogger.log.debug(e);
+            TwasiLogger.log.error(e);
             telegramBot = null;
             return;
         }
@@ -162,7 +162,7 @@ public class TelegramService implements IService {
                     answerInterface.answer(stringBuilder.toString());
                 } catch (TelegramApiException e) {
                     TwasiLogger.log.info("A telegram message could not be sent.");
-                    TwasiLogger.log.debug(e);
+                    TwasiLogger.log.error(e);
                 }
             }
         });
