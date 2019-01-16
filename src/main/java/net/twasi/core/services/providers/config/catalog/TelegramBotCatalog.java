@@ -4,6 +4,8 @@ public class TelegramBotCatalog {
 
     public String username;
     public String botToken;
-    public String groupId;
+    public long chatId;
+
+    public boolean enabled;
 
 }

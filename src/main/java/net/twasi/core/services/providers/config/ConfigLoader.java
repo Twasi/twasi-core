@@ -56,6 +56,11 @@ class ConfigLoader {
                 writer.println("#  port: 587");
                 writer.println("#  user: noreply@yourserver.com");
                 writer.println("#  password: MAIL_PASSWORD");
+                writer.println("telegram:");
+                writer.println("  enabled: false");
+                writer.println("#  botToken: null # Get yours from the telegram botfather");
+                writer.println("#  userName: null # The telegram-bot's username");
+                writer.println("#  chatId: null # The chat-ID the bot should send messages to");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {
