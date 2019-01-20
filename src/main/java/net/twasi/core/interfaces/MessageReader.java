@@ -63,7 +63,7 @@ public class MessageReader {
         //}
 
         // Call all event handlers (middleware)
-        incomingMessageEventHandlers.forEach(handler -> handler.on(new IncomingMessageEvent(message)));
+        incomingMessageEventHandlers.forEach(handler -> new Thread(() -> handler.on(new IncomingMessageEvent(message))).start());
 
         twasiInterface.getDispatcher().dispatch(message);
     }

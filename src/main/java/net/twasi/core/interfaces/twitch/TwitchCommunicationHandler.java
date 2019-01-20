@@ -17,7 +17,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
 
     @Override
     public boolean sendMessage(String message) {
-        outgoingMessageHandlers.forEach(handler -> handler.on(new OutgoingMessageEvent(message, null)));
+        outgoingMessageHandlers.forEach(handler -> new Thread(() -> handler.on(new OutgoingMessageEvent(message, null))).start());
 
         return sendMessageInternal(message);
     }
