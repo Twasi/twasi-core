@@ -18,7 +18,11 @@ import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.DisconnectEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 
+import java.util.HashMap;
+
 public class TwitchInterface extends TwasiInterface {
+
+    private HashMap<TwitchInterface, TwitchInterfaceMaintainer> maintainers;
 
     private CommunicationHandler handler;
     private Streamer streamer;
@@ -36,6 +40,8 @@ public class TwitchInterface extends TwasiInterface {
 
         this.handler = new TwitchCommunicationHandler(this);
         this.dispatcher = new MessageDispatcher(this);
+
+        this.maintainers = new HashMap<>();
     }
 
     @Override
@@ -97,15 +103,20 @@ public class TwitchInterface extends TwasiInterface {
             bot = new PircBotX(configuration);
             //Connect to the server
 
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        bot.startBot();
-                    } catch (Exception e) {
-                        TwasiLogger.log.error(e);
-                        e.printStackTrace();
+            Thread t = new Thread(() -> {
+                try {
+                    bot.startBot();
+                    TwitchInterfaceMaintainer maintainer;
+                    if (!maintainers.containsKey(TwitchInterface.this)) {
+                        maintainer = new TwitchInterfaceMaintainer(TwitchInterface.this);
+                        maintainers.put(TwitchInterface.this, maintainer);
+                    } else {
+                        maintainer = maintainers.get(TwitchInterface.this);
                     }
+                    maintainer.start();
+                } catch (Exception e) {
+                    TwasiLogger.log.error(e);
+                    e.printStackTrace();
                 }
             });
             t.start();
@@ -146,6 +157,9 @@ public class TwitchInterface extends TwasiInterface {
     @Override
     public boolean disconnect() {
         TwasiLogger.log.info("Disconnecting from Twitch IRC");
+        TwitchInterfaceMaintainer maintainer = maintainers.get(this);
+        maintainer.stopMaintainer();
+        maintainers.remove(this);
         try {
             bot.stopBotReconnect();
             bot.sendIRC().quitServer("Bye, thanks for your service @Twitch #Twasi");
