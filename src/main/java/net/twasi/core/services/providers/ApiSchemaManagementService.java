@@ -49,7 +49,7 @@ public class ApiSchemaManagementService implements IService {
 
             definitiveSchema = schemaBuilder.build().makeExecutableSchema();
         } catch (IOException e) {
-            e.printStackTrace();
+            TwasiLogger.log.trace(e);
         }
     }
 

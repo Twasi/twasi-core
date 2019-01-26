@@ -28,12 +28,13 @@ public class TwitchInterfaceMaintainer extends Thread {
                         bot.stopBotReconnect();
                         bot.close();
                     } catch (Exception e) {
-                        TwasiLogger.log.error(e);
+                        TwasiLogger.log.trace(e);
                     } finally {
                         try {
                             bot.startBot();
                         } catch (Exception e) {
-                            TwasiLogger.log.error(e);
+                            TwasiLogger.log.error("Unable to start bot for user " + twitchInterface.getStreamer().getUser().getId() + ": " + e.getMessage());
+                            TwasiLogger.log.trace(e);
                         }
                     }
                 }).start();

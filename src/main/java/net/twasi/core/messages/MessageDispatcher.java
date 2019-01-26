@@ -35,7 +35,6 @@ public class MessageDispatcher {
                         plugin.onCommand(new TwasiCommandEvent(twasiCommand));
                     } catch (Throwable e) {
                         TwasiLogger.log.error("Exception while executing onCommand of plugin " + plugin.getClass() + ": " + e.getMessage());
-                        e.printStackTrace();
                     }
                 }
             }
@@ -47,7 +46,7 @@ public class MessageDispatcher {
                 plugin.onMessage(new TwasiMessageEvent(msg));
             } catch (Throwable e) {
                 TwasiLogger.log.error("Exception while  executing onMessage of plugin " + plugin.getClass() + ": " + e.getMessage());
-                e.printStackTrace();
+                TwasiLogger.log.trace(e);
             }
         }
         return true;

@@ -45,7 +45,7 @@ public class PluginDiscovery {
                 }
             } catch (Exception e) {
                 TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?");
-                e.printStackTrace();
+                TwasiLogger.log.trace(e);
             }
         }
 

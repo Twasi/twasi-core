@@ -97,7 +97,6 @@ public class JWTManager {
 
             twitchId = decodedJWT.getClaim("twitchid").asString();
         } catch (JWTDecodeException exception) {
-            TwasiLogger.log.info(exception);
             return false;
         }
 
@@ -114,10 +113,7 @@ public class JWTManager {
                     .build(); //Reusable verifier instance
             DecodedJWT decodedJWT = verifier.verify(jwt);
             return true;
-        } catch (UnsupportedEncodingException exception) {
-            TwasiLogger.log.error(exception);
-            return false;
-        } catch (JWTVerificationException exception) {
+        } catch (UnsupportedEncodingException | JWTVerificationException exception) {
             TwasiLogger.log.debug(exception);
             return false;
         }

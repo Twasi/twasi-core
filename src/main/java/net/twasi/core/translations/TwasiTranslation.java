@@ -63,7 +63,6 @@ public class TwasiTranslation {
             }
         } catch (Exception e) {
             TwasiLogger.log.error(e);
-            e.printStackTrace();
         }
         return null;
     }
@@ -83,7 +82,6 @@ public class TwasiTranslation {
             }
         } catch (Exception e) {
             TwasiLogger.log.error(e);
-            e.printStackTrace();
         }
         return null;
     }

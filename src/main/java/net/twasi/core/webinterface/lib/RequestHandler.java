@@ -53,8 +53,7 @@ public abstract class RequestHandler extends AbstractHandler {
                     break;
             }
         } catch (Throwable e) {
-            TwasiLogger.log.error(e);
-            e.printStackTrace();
+            TwasiLogger.log.debug(e);
         }
 
         // Commit the user

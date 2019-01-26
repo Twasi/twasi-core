@@ -1,6 +1,7 @@
 package net.twasi.core.services.providers;
 
 import net.twasi.core.database.lib.Repository;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.IService;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class DataService implements IService {
             try {
                 repos.put(clazz, clazz.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+                TwasiLogger.log.trace(e);
             }
         }
         return (T) repos.get(clazz);

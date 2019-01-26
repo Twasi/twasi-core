@@ -37,7 +37,7 @@ public class MessageReader {
                 twasiInterface.getDispatcher().dispatch(message);
             } catch (Throwable e) {
                 TwasiLogger.log.error("Exception in MessageReader of " + twasiInterface.getStreamer().getUser().getTwitchAccount().getUserName() + ": " + e.getMessage());
-                e.printStackTrace();
+                TwasiLogger.log.trace(e);
             }
         }
     }*/
