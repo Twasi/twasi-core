@@ -103,23 +103,14 @@ public class TwitchInterface extends TwasiInterface {
             bot = new PircBotX(configuration);
             //Connect to the server
 
-            Thread t = new Thread(() -> {
-                try {
-                    bot.startBot();
-                    TwitchInterfaceMaintainer maintainer;
-                    if (!maintainers.containsKey(TwitchInterface.this)) {
-                        maintainer = new TwitchInterfaceMaintainer(TwitchInterface.this);
-                        maintainers.put(TwitchInterface.this, maintainer);
-                    } else {
-                        maintainer = maintainers.get(TwitchInterface.this);
-                    }
-                    maintainer.start();
-                } catch (Exception e) {
-                    TwasiLogger.log.error(e);
-                    e.printStackTrace();
-                }
-            });
-            t.start();
+            TwitchInterfaceMaintainer maintainer;
+            if (!maintainers.containsKey(TwitchInterface.this)) {
+                maintainer = new TwitchInterfaceMaintainer(TwitchInterface.this);
+                maintainers.put(TwitchInterface.this, maintainer);
+            } else {
+                maintainer = maintainers.get(TwitchInterface.this);
+            }
+            maintainer.start(); // Maintainer automatically starts the bot
 
             /* socket = new Socket(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname, ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

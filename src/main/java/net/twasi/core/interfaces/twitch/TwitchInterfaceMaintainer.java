@@ -1,6 +1,7 @@
 package net.twasi.core.interfaces.twitch;
 
 import net.twasi.core.logger.TwasiLogger;
+import org.pircbotx.PircBotX;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,12 +22,26 @@ public class TwitchInterfaceMaintainer extends Thread {
             if (!run) return;
             if (!twitchInterface.getBot().isConnected()) {
                 TwasiLogger.log.debug("TwitchInterfaceMaintainer for user " + twitchInterface.getStreamer().getUser().getId() + " detected an unconnected TwitchInterface");
-                try {
-                    twitchInterface.getBot().startBot();
-                    TimeUnit.SECONDS.sleep(10);
-                } catch (Exception e) {
-                    TwasiLogger.log.error(e);
-                }
+                new Thread(() -> {
+                    PircBotX bot = twitchInterface.getBot();
+                    try {
+                        bot.stopBotReconnect();
+                        bot.close();
+                    } catch (Exception e) {
+                        TwasiLogger.log.error(e);
+                    } finally {
+                        try {
+                            bot.startBot();
+                        } catch (Exception e) {
+                            TwasiLogger.log.error(e);
+                        }
+                    }
+                }).start();
+            }
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (Exception e) {
+                TwasiLogger.log.error(e);
             }
         }
     }
