@@ -26,9 +26,8 @@ public class TwitchInterfaceMaintainer extends Thread {
                     PircBotX bot = twitchInterface.getBot();
                     try {
                         bot.stopBotReconnect();
-                        bot.close();
+                        if (bot.isConnected()) bot.close();
                     } catch (Exception e) {
-                        TwasiLogger.log.trace(e);
                     } finally {
                         try {
                             bot.startBot();
