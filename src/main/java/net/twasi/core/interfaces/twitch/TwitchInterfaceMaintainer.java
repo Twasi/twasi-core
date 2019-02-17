@@ -27,7 +27,7 @@ public class TwitchInterfaceMaintainer extends Thread {
                     try {
                         bot.stopBotReconnect();
                         if (bot.isConnected()) bot.close();
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     } finally {
                         try {
                             bot.startBot();

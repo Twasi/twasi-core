@@ -5,7 +5,6 @@ import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
-import net.twasi.core.webinterface.lib.RequestHandler;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -215,9 +214,8 @@ public abstract class TwasiPlugin extends PluginBase {
      */
     public static <T extends TwasiPlugin> T getPlugin(Class<T> clazz) {
         if (clazz == null) {
-            TwasiLogger.log.error("Null class cannot have a plugin");
+            throw new IllegalArgumentException("Null class cannot have a plugin");
         }
-        ;
         if (!TwasiPlugin.class.isAssignableFrom(clazz)) {
             throw new IllegalArgumentException(clazz + " does not extend " + TwasiPlugin.class);
         }
@@ -246,7 +244,7 @@ public abstract class TwasiPlugin extends PluginBase {
      */
     public static TwasiPlugin getProvidingPlugin(Class<?> clazz) {
         if (clazz == null) {
-            TwasiLogger.log.error("Null class cannot have a plugin");
+            throw new IllegalArgumentException("Null class cannot have a plugin");
         }
         final ClassLoader cl = clazz.getClassLoader();
         if (!(cl instanceof PluginClassLoader)) {
