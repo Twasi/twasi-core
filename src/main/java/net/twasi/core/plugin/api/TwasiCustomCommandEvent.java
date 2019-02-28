@@ -5,8 +5,10 @@ import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.api.events.TwasiCommandEvent;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class TwasiCustomCommandEvent extends TwasiCommandEvent {
 
@@ -20,7 +22,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         this.sender = command.getSender();
         this.streamer = command.getTwasiInterface().getStreamer();
         this.usedCommandName = command.getCommandName();
-        this.args = Arrays.asList(command.getMessage().split(" "));
+        this.args = new ArrayList<>(asList(command.getMessage().split(" "))); // As ArrayList to prevent UnsupportedOperationException in next line
         this.args.remove(0); // Remove command name from args
     }
 
