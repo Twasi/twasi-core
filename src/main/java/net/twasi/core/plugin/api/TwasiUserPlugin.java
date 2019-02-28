@@ -29,7 +29,15 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
     public void onCommand(TwasiCommandEvent e) {
-        TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
+        TwasiCustomCommand command = null;
+        for (TwasiCustomCommand cmd : getCommands())
+            if (cmd.getCommandName().equalsIgnoreCase(e.getCommand().getCommandName())) {
+                command = cmd;
+                break;
+            }
+        if (command == null)
+            TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
+        else command.process(new TwasiCustomCommandEvent(e.getCommand()));
     }
 
     public void onMessage(TwasiMessageEvent e) {
@@ -65,6 +73,10 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
     public List<TwasiVariable> getVariables() {
+        return new ArrayList<>();
+    }
+
+    public List<TwasiCustomCommand> getCommands() {
         return new ArrayList<>();
     }
 
