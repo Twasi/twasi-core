@@ -12,7 +12,7 @@ public abstract class TwasiCustomCommand {
 
     public abstract String getCommandName();
 
-    private String getTranslation(String key, Object... objects) {
+    protected String getTranslation(String key, Object... objects) {
         return this.twasiUserPlugin.getTranslation(key, objects);
     }
 
