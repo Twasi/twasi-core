@@ -53,4 +53,8 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         if (string.equals("")) return null;
         else return string.substring(1); // Substring to remove leading whitespace
     }
+
+    public boolean hasArgs() {
+        return getArgs().size() > 0;
+    }
 }
