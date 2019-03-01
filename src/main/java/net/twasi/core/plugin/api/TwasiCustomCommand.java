@@ -12,6 +12,10 @@ public abstract class TwasiCustomCommand {
 
     public abstract String getCommandName();
 
+    public boolean allowsTimer() {
+        return false;
+    }
+
     protected String getTranslation(String key, Object... objects) {
         return this.twasiUserPlugin.getTranslation(key, objects);
     }
