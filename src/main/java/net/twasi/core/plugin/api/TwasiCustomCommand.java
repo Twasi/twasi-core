@@ -15,12 +15,16 @@ public abstract class TwasiCustomCommand {
 
     public abstract String getCommandName();
 
-    public String getFormattedCommandName(){
-        return ServiceRegistry.get(ConfigService.class).getCatalog().bot.prefix  + getCommandName();
+    public String getFormattedCommandName() {
+        return ServiceRegistry.get(ConfigService.class).getCatalog().bot.prefix + getCommandName();
     }
 
     public boolean allowsTimer() {
         return false;
+    }
+
+    public boolean allowsListing() {
+        return true;
     }
 
     protected String getTranslation(String key, Object... objects) {
