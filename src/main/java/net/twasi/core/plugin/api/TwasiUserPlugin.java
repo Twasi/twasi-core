@@ -83,4 +83,8 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     public String getTranslation(String key, Object... objects) {
         return getTranslations().getTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
+
+    public String getRandomTranslation(String key, Object... objects) {
+        return getTranslations().getRandomTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
+    }
 }
