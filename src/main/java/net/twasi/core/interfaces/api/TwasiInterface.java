@@ -5,6 +5,7 @@ import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
+import net.twasi.core.plugin.api.TwasiCustomCommand;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
@@ -122,6 +123,12 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     public List<TwasiUserPlugin> getPlugins() {
         return userPlugins;
+    }
+
+    public List<TwasiCustomCommand> getCustomCommands() {
+        List<TwasiCustomCommand> commands = new ArrayList<>();
+        for (TwasiUserPlugin p : getPlugins()) commands.addAll(p.getCommands());
+        return commands;
     }
 
     public List<TwasiUserPlugin> getByCommand(String command) {

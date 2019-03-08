@@ -60,57 +60,43 @@ public class Permissions {
 
     /**
      * Checks if a permission key is contained in this permission. If it is, it checks if the twitch account has access.
-     *
+     * <p>
      * Allows the use of wildcards:
      * commands.mod.add -> commands.mod.*
      *
-     * @param account The twitchaccount to check permission for
+     * @param account       The twitchaccount to check permission for
      * @param permissionKey The key to check
      * @return if the user has permission for the given key
      */
     public boolean hasPermission(TwitchAccount account, String permissionKey) {
-        Boolean accountIsContained = false;
         for (PermissionEntity entity : getEntities()) {
-            if (entity.getType() == PermissionEntityType.SINGLE) {
-                if (entity.getAccount().getTwitchId().equals(account.getTwitchId())) {
-                    accountIsContained = true;
-                }
-            }
-            if (entity.getType() == PermissionEntityType.GROUP) {
-                if (account.getGroups().contains(entity.getGroup())) {
-                    accountIsContained = true;
-                }
-            }
+            if (entity.getType() == PermissionEntityType.SINGLE && !entity.getAccount().getTwitchId().equals(account.getTwitchId()))
+                return false;
+            else if (!account.getGroups().contains(entity.getGroup())) return false;
         }
 
-        if (!accountIsContained) {
-            // The account isn't even known in this permission, how can he have it granted?
-            return false;
-        }
-
-        for(String key : getKeys()) {
-            if (key.equalsIgnoreCase(permissionKey)) {
-                // Perfect match
-                return true;
-            }
+        for (String key : getKeys()) {
+            /* Return true if the user has exactly the permission
+               that is requested. */
+            if (key.equalsIgnoreCase(permissionKey)) return true;
 
             String[] keyGroups = key.split("\\.");
             String[] inputGroups = permissionKey.split("\\.");
 
-            if (keyGroups.length < inputGroups.length) {
-                continue;
+            /* Go to the next permission if the requested permission
+               is shorter than the current key (current key is too specific) */
+            if (inputGroups.length < keyGroups.length) continue;
+
+            for (int i = 0; i < keyGroups.length; i++) {
+                if (i != (keyGroups.length - 1)) { // If current part is not the last one
+                    if (!keyGroups[i].equalsIgnoreCase(inputGroups[i]))
+                        break; // If current part does not fit the required permission
+                } else { // If current part is the last one
+                    if (keyGroups[i].equalsIgnoreCase(inputGroups[i]) || keyGroups[i].equals("*"))
+                        return true; // If last part fits or is wildcard (*) return true
+                }
             }
 
-            for(int i = 0; i < keyGroups.length; i++) {
-                if (keyGroups[i].equals("*")) {
-                    // The group matches (Wildcard)
-                    return true;
-                }
-                if (!keyGroups[i].equalsIgnoreCase(inputGroups[i])) {
-                    // Something doesn't match
-                    break;
-                }
-            }
         }
         return false;
     }

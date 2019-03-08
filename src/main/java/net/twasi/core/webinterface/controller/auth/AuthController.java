@@ -24,6 +24,7 @@ public class AuthController extends HttpServlet {
             resp.sendRedirect(TwitchAPI.authentication().getAuthURL(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.scopes, state));
         } catch (Exception e) {
             TwasiLogger.log.error("Could not redirect to twitch", e);
+            throw e;
         }
     }
 }
