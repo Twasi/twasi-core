@@ -34,24 +34,8 @@ public class UserDTO {
         return EventMessageDTO.fromEvents(user.getEvents());
     }
 
-    public StreamDTO getLatestStream() {
-        return null; // TODO
-    }
-
-    public List<StreamDTO> getStreams() {
-        return new ArrayList<>(); // TODO
-    }
-
-    public CurrentUserStatsDTO getCurrentStats() {
-        return null; // TODO
-    }
-
-    public AllTimeStatsDTO getAlltimeStats() {
-        return null; // TODO
-    }
-
     public UserRank getRank() {
-        return UserRank.valueOf(user.getRank());
+        return user.getRank();
     }
 
     public PluginDetailsDTO installPlugin(String name) {

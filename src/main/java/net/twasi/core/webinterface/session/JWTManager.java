@@ -47,7 +47,7 @@ public class JWTManager {
                     .withExpiresAt(expiration)
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
-                    .withClaim("rank", user.getRank())
+                    .withClaim("rank", user.getRank().toString())
                     .withClaim("displayName", user.getTwitchAccount().getDisplayName())
                     .sign(algorithm);
         } catch (Exception e) {

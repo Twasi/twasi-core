@@ -4,7 +4,9 @@ import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.mongodb.morphia.annotations.Entity;
 
@@ -33,7 +35,7 @@ public class User extends BaseEntity {
 
     private AccountStatus status;
 
-    private String rank;
+    private UserRank rank;
 
     public User() {
         if (ServiceRegistry.has(ConfigService.class)) {
@@ -141,8 +143,17 @@ public class User extends BaseEntity {
         this.permissions = permissions;
     }
 
+    /**
+     * Checks if the given TwitchAccount has the permission to do a certain thing on the User's channel
+     * @param account The TwitchAccount to check
+     * @param permissionKey The Permission to check
+     * @return if the user is allowed to take the action
+     */
     public boolean hasPermission(TwitchAccount account, String permissionKey) {
-        if (ServiceRegistry.get(ConfigService.class).getCatalog().admin.users.contains(account.getUserName().toLowerCase())) {
+
+        // Team has global access
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(account.getTwitchId());
+        if (user != null && user.getRank().equals(UserRank.TEAM)) {
             return true;
         }
 
@@ -151,6 +162,7 @@ public class User extends BaseEntity {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -197,9 +209,9 @@ public class User extends BaseEntity {
                 .orElse(null);
     }
 
-    public String getRank() {
+    public UserRank getRank() {
         if (rank == null) {
-            rank = "Streamer";
+            rank = UserRank.STREAMER;
         }
         return rank;
     }

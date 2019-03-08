@@ -5,53 +5,13 @@ type User {
     installPlugin(name: String): PluginDetails
     uninstallPlugin(name: String): PluginDetails
     events: [EventMessage]!
-    latestStream: Stream
-    streams: [Stream]!
     rank: UserRank
-
-    currentStats: CurrentUserStats!
-    alltimeStats: AllTimeStats!
 }
 
 type EventMessage {
     message: String!
     messageType: EventMessageType!
     createdAt: String!
-}
-
-type CurrentUserStats {
-    follower: Int!
-    viewerTracked: Int!
-    chatMessages: Int!
-    streams: Int!
-}
-
-type AllTimeStats {
-    viewersMax: Int!
-    totalStreamDuration: Int!
-    hoursViewed: Int!
-
-    # Those are optional, if the corresponding plugin is installed
-    totalTokens: Int!
-    totalSongrequestsPlayed: Int!
-    totalQuotes: Int!
-}
-
-type Stream {
-    id: String!
-    streamId: String!
-    duration: Duration!
-    isLive: Boolean!
-    followerPlus: Int!
-    clicksPlus: Int!
-    viewersMax: Int!
-    viewersAverage: Int!
-}
-
-type Duration {
-    from: Int!
-    to: Int!
-    duration: Int!
 }
 
 enum EventMessageType {
