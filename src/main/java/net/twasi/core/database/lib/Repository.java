@@ -44,7 +44,7 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
 
     @Override
     public List<T> getAll() {
-        return null;
+        return store.createQuery(entityType).asList();
     }
 
     @Override

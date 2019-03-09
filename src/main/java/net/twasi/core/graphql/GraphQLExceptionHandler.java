@@ -5,6 +5,7 @@ import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.ExecutionPath;
 import graphql.language.SourceLocation;
+import net.twasi.core.logger.TwasiLogger;
 
 public class GraphQLExceptionHandler implements DataFetcherExceptionHandler {
     @Override
@@ -15,6 +16,6 @@ public class GraphQLExceptionHandler implements DataFetcherExceptionHandler {
 
         ExceptionWhileDataFetching error = new ExceptionWhileDataFetching(path, exception, sourceLocation);
         handlerParameters.getExecutionContext().addError(error, path);
-        //log.warn(error.getMessage(), exception);
+        TwasiLogger.log.debug(error.getMessage(), exception);
     }
 }

@@ -1,6 +1,7 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.graphql.model.support.SupportDTO;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
 
@@ -37,5 +38,9 @@ public class PanelDTO {
                 .stream()
                 .map(p -> new PluginDetailsDTO(p.getDescription(), user.getInstalledPlugins().contains(p.getName())))
                 .collect(Collectors.toList());
+    }
+
+    public SupportDTO getSupport() {
+        return new SupportDTO(user);
     }
 }

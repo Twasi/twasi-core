@@ -3,6 +3,7 @@ package net.twasi.core.database.repositories;
 import net.twasi.core.database.actions.UserActions;
 import net.twasi.core.database.lib.Repository;
 import net.twasi.core.database.models.AccountStatus;
+import net.twasi.core.database.models.BaseEntity;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import org.bson.types.ObjectId;
@@ -50,8 +51,7 @@ public class UserRepository extends Repository<User> {
                 query.criteria("status").equal(AccountStatus.OK),
                 query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
         );
-        List<ObjectId> ids = query.asList().stream().map(e -> e.getId()).collect(Collectors.toList());
-        return ids;
+        return query.asList().stream().map(BaseEntity::getId).collect(Collectors.toList());
     }
 
     public List<User> getAllRunning() {
@@ -60,7 +60,6 @@ public class UserRepository extends Repository<User> {
                 query.criteria("status").equal(AccountStatus.OK),
                 query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
         );
-        List<User> users = query.asList();
-        return users;
+        return query.asList();
     }
 }
