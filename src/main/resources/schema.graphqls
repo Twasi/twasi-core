@@ -46,6 +46,7 @@ type Panel {
     userStatus: UserStatus,
     appInfo: AppInfo,
     plugins: [PluginDetails],
+    support: Support
 }
 
 type BotStatus {
@@ -78,6 +79,33 @@ type PluginDetails {
     version: String!
     commands: [String]!
     permissions: [String]!
+}
+
+type Support {
+    myTickets: [SupportTicket],
+    adminTickets: [SupportTicket],
+    create(topic: String, message: String): SupportTicket
+}
+
+type SupportTicket {
+    id: String,
+    owner: SupportTicketUser,
+    topic: String,
+    messages: [SupportTicketMessage],
+    state: String,
+    reply(message: String, close: Boolean): SupportTicketMessage
+}
+
+type SupportTicketMessage {
+    sender: SupportTicketUser,
+    message: String,
+    createdAt: String,
+    staff: Boolean
+}
+
+type SupportTicketUser {
+    name: String,
+    avatar: String
 }
 
 type Query {
