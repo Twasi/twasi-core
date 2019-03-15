@@ -1,4 +1,4 @@
-package net.twasi.core.plugin.api;
+package net.twasi.core.plugin.api.customcommands;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.models.Message.TwasiCommand;

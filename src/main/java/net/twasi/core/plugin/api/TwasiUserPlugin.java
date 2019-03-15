@@ -3,11 +3,15 @@ package net.twasi.core.plugin.api;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
+import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
+import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 import net.twasi.core.plugin.api.events.*;
 import net.twasi.core.translations.TwasiTranslation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
 
@@ -29,9 +33,10 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
     public void onCommand(TwasiCommandEvent e) {
-        TwasiCustomCommand command = null;
-        for (TwasiCustomCommand cmd : getCommands())
-            if (cmd.getCommandName().equalsIgnoreCase(e.getCommand().getCommandName())) {
+        TwasiPluginCommand command = null;
+        String name = e.getCommand().getCommandName().toLowerCase();
+        for (TwasiPluginCommand cmd : getCommands())
+            if (cmd.getCommandName().equalsIgnoreCase(name) || cmd.getAliases().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(name)) {
                 command = cmd;
                 break;
             }
@@ -76,15 +81,16 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         return new ArrayList<>();
     }
 
-    public List<TwasiCustomCommand> getCommands() {
+    @NotNull
+    public List<TwasiPluginCommand> getCommands() {
         return new ArrayList<>();
     }
 
-    public String getTranslation(String key, Object... objects) {
+    public final String getTranslation(String key, Object... objects) {
         return getTranslations().getTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
 
-    public String getRandomTranslation(String key, Object... objects) {
+    public final String getRandomTranslation(String key, Object... objects) {
         return getTranslations().getRandomTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
 }
