@@ -103,6 +103,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
     }
 
     public boolean uninstallPlugin(TwasiPlugin plugin) {
+
         if (userPlugins.stream().noneMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
             TwasiLogger.log.info("Uninstall plugin " + plugin.getUserPluginClass() + " for Streamer " + getStreamer().getUser().getTwitchAccount().getUserName() + " failed (not installed).");
             return false;
@@ -118,7 +119,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         u.getInstalledPlugins().remove(plugin.getName());
         userRepo.commit(u);
 
-        userPlugins = userPlugins.stream().filter(uPlugin -> !userPlugin.getClass().equals(plugin.getUserPluginClass())).collect(Collectors.toList());
+        userPlugins = userPlugins.stream().filter(uPlugin -> !uPlugin.getClass().equals(plugin.getUserPluginClass())).collect(Collectors.toList());
         return true;
     }
 
