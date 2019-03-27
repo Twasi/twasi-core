@@ -5,9 +5,6 @@ import net.twasi.core.models.Message.TwasiMessage;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class VariablePreprocessor {
     public static String process(TwasiInterface inf, String text, TwasiMessage message) {
         // Check if at least 1 $ is contained
@@ -70,6 +67,6 @@ public class VariablePreprocessor {
             }
         }
 
-        return Arrays.stream(words).collect(Collectors.joining(" "));
+        return String.join(" ", words);
     }
 }
