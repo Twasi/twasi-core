@@ -7,7 +7,6 @@ import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
 import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 import net.twasi.core.plugin.api.events.*;
 import net.twasi.core.translations.TwasiTranslation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +80,6 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         return new ArrayList<>();
     }
 
-    @NotNull
     public List<TwasiPluginCommand> getCommands() {
         return new ArrayList<>();
     }

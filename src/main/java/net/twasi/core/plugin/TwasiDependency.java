@@ -6,7 +6,6 @@ import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
 import net.twasi.core.plugin.api.customcommands.TwasiDependencyCommand;
 import net.twasi.core.translations.TwasiTranslation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public abstract class TwasiDependency extends TwasiPlugin {
         return twasiTranslation.getRandomTranslation(user, key, objects);
     }
 
-    @NotNull
     public List<TwasiDependencyCommand> getCommands() {
         return new ArrayList<>();
     }
