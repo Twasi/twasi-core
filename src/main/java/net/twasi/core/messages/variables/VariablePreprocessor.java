@@ -2,8 +2,11 @@ package net.twasi.core.messages.variables;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.TwasiMessage;
+import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.PluginManagerService;
 
 public class VariablePreprocessor {
     public static String process(TwasiInterface inf, String text, TwasiMessage message) {
@@ -34,7 +37,22 @@ public class VariablePreprocessor {
                     }
                 }
                 String finalName = variable;
-                TwasiUserPlugin handlingPlugin = inf
+
+                PluginManagerService pms = ServiceRegistry.get(PluginManagerService.class);
+                TwasiDependency handlingDependency = pms
+                        .getDependencies()
+                        .stream()
+                        .filter(dep -> dep.getVariables()
+                                .stream()
+                                .anyMatch(var -> var
+                                        .getNames()
+                                        .stream()
+                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
+                                )
+                        ).findFirst().orElse(null);
+
+                TwasiUserPlugin handlingPlugin = null;
+                if (handlingDependency == null) handlingPlugin = inf
                         .getPlugins()
                         .stream()
                         .filter(plugin -> plugin
@@ -46,18 +64,29 @@ public class VariablePreprocessor {
                                         .anyMatch(name -> name.equalsIgnoreCase(finalName))
                                 )
                         ).findFirst().orElse(null);
-                if (handlingPlugin == null) {
+                if (handlingPlugin == null && handlingDependency == null) {
                     words[i] = "ERROR_NOT_FOUND";
                 } else {
-                    TwasiVariable handlingVariable = handlingPlugin
-                            .getVariables()
-                            .stream()
-                            .filter(var -> var
-                                    .getNames()
-                                    .stream()
-                                    .anyMatch(name -> name.equalsIgnoreCase(finalName))
-                            ).findFirst().orElse(null);
-
+                    TwasiVariable handlingVariable;
+                    if (handlingDependency != null) {
+                        handlingVariable = handlingDependency
+                                .getVariables()
+                                .stream()
+                                .filter(var -> var
+                                        .getNames()
+                                        .stream()
+                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
+                                ).findFirst().orElse(null);
+                    } else {
+                        handlingVariable = handlingPlugin
+                                .getVariables()
+                                .stream()
+                                .filter(var -> var
+                                        .getNames()
+                                        .stream()
+                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
+                                ).findFirst().orElse(null);
+                    }
                     if (handlingVariable == null) {
                         throw new RuntimeException("Error while trying to process variable " + variable + " for user plugin " + handlingPlugin.getCorePlugin().getName());
                     }

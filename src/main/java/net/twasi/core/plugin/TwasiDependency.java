@@ -3,6 +3,7 @@ package net.twasi.core.plugin;
 import net.twasi.core.database.models.User;
 import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.plugin.api.TwasiVariable;
 import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
 import net.twasi.core.plugin.api.customcommands.TwasiDependencyCommand;
 import net.twasi.core.translations.TwasiTranslation;
@@ -32,6 +33,10 @@ public abstract class TwasiDependency extends TwasiPlugin {
     }
 
     public List<TwasiDependencyCommand> getCommands() {
+        return new ArrayList<>();
+    }
+
+    public List<TwasiVariable> getVariables() {
         return new ArrayList<>();
     }
 
