@@ -1,5 +1,6 @@
 package net.twasi.core.messages;
 
+import com.google.gson.Gson;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.internal.InternalCommandHandler;
@@ -13,6 +14,7 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MessageDispatcher {
 
@@ -29,9 +31,13 @@ public class MessageDispatcher {
         if (msg.isCommand()) {
             TwasiCommand twasiCommand = msg.toCommand();
 
+            TwasiLogger.log.debug("Executing message as command (sent by " + msg.getSender().getDisplayName() + ")");
+
             if (!internalCommandHandler.handle(twasiCommand)) {
 
                 List<TwasiUserPlugin> availablePlugins = twasiInterface.getByCommand(twasiCommand.getCommandName());
+
+                TwasiLogger.log.debug("Handling plugins: " + new Gson().toJson(availablePlugins.stream().map(plugin -> plugin.getCorePlugin().getClass().toString()).collect(Collectors.toList())));
 
                 for (TwasiUserPlugin plugin : availablePlugins) {
                     Thread commandExecutionThread = new Thread(() -> {
