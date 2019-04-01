@@ -52,13 +52,13 @@ public class MessageDispatcher {
                     commandExecutionThread.setDaemon(true);
                     commandExecutionThread.start();
                 }
-            }
 
-            List<TwasiDependency> dependencies = ServiceRegistry.get(PluginManagerService.class).getDependencies();
-            for (TwasiDependency dependency : dependencies) {
-                Thread commandExecutionThread = new Thread(() -> dependency.handleCommand(twasiCommand));
-                commandExecutionThread.setDaemon(true);
-                commandExecutionThread.start();
+                List<TwasiDependency> dependencies = ServiceRegistry.get(PluginManagerService.class).getDependencies();
+                for (TwasiDependency dependency : dependencies) {
+                    Thread commandExecutionThread = new Thread(() -> dependency.handleCommand(twasiCommand));
+                    commandExecutionThread.setDaemon(true);
+                    commandExecutionThread.start();
+                }
             }
         }
         List<TwasiUserPlugin> onMessagePlugins = twasiInterface.getMessagePlugins();
