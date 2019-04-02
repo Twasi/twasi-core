@@ -26,6 +26,8 @@ public class TwasiTranslation {
 
     private String getTranslation(Language language, String translationKey, boolean random) {
 
+        boolean isPluginProperty = translationKey.toLowerCase().startsWith("plugin.");
+
         if (language == null) {
             language = Language.EN_GB;
         }
@@ -33,6 +35,7 @@ public class TwasiTranslation {
         InputStream inputStream = classLoader.getResourceAsStream("translations/" + language.toString() + ".lang");
 
         if (inputStream == null && language == Language.EN_GB) {
+            if (isPluginProperty) return null;
             TwasiLogger.log.error("Default English language not found in classLoader resources folder. Please create a folder 'translations' with the file 'EN_GB.lang' in it.");
             return translationKey;
         }
@@ -45,6 +48,7 @@ public class TwasiTranslation {
         if (result != null) return result;
 
         if (language == Language.EN_GB) {
+            if(isPluginProperty) return null;
             TwasiLogger.log.warn("Unknown translation key '" + translationKey + "' searched, but not found. This may lead to unexpected results.");
             return translationKey;
         }
