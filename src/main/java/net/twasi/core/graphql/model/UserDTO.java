@@ -51,6 +51,7 @@ public class UserDTO {
 
         return new PluginDetailsDTO(
                 plugin.getDescription(),
+                user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
                         .getPlugins()
@@ -64,6 +65,7 @@ public class UserDTO {
 
         return new PluginDetailsDTO(
                 plugin.getDescription(),
+                user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
                         .getPlugins()

@@ -1,5 +1,6 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.User;
 import net.twasi.core.plugin.PluginConfig;
 
 import java.util.List;
@@ -15,8 +16,18 @@ public class PluginDetailsDTO {
     private final boolean isInstalled;
 
     public PluginDetailsDTO(PluginConfig config, boolean isInstalled) {
-        name = config.getName();
-        description = config.getDescription();
+        this(config, null, isInstalled);
+    }
+
+    public PluginDetailsDTO(PluginConfig config, User user, boolean isInstalled) {
+        if (user != null) {
+            name = config.getLocalizedName(user);
+            description = config.getLocalizedDescription(user);
+        } else {
+            name = config.getName();
+            description = config.getDescription();
+        }
+
         author = config.getAuthor();
         version = config.getVersion();
 

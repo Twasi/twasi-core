@@ -38,6 +38,7 @@ public abstract class TwasiPlugin extends PluginBase {
         ((PluginClassLoader) classLoader).initialize(this);
 
         translation = new TwasiTranslation(getClassLoader());
+        description.setLocalizationPluginClass(this);
     }
 
     protected TwasiPlugin(final JavaPluginLoader loader, final PluginConfig description, final File file) {
@@ -48,6 +49,7 @@ public abstract class TwasiPlugin extends PluginBase {
         init(loader, description, dataFolder, file, classLoader);
 
         translation = new TwasiTranslation(getClassLoader());
+        description.setLocalizationPluginClass(this);
     }
 
     /**

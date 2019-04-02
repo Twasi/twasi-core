@@ -2,6 +2,7 @@ package net.twasi.core.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import net.twasi.core.database.models.User;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PluginConfig {
     public List<String> commands;
     public List<String> permissions;
     public List<String> dependencies;
+    private TwasiPlugin twasiPlugin;
 
     public static PluginConfig fromInputStream(InputStream stream) throws Exception {
         // Parse
@@ -34,8 +36,16 @@ public class PluginConfig {
         return name;
     }
 
+    public String getLocalizedName(User user) {
+        return this.twasiPlugin.getLocalizedName(user);
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public String getLocalizedDescription(User user) {
+        return this.twasiPlugin.getLocalizedDescription(user);
     }
 
     public String getAuthor() {
@@ -85,5 +95,9 @@ public class PluginConfig {
             dependencies = new ArrayList<>();
         }
         return dependencies;
+    }
+
+    void setLocalizationPluginClass(TwasiPlugin twasiPlugin) {
+        this.twasiPlugin = twasiPlugin;
     }
 }
