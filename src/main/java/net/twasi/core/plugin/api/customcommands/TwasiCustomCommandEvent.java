@@ -57,4 +57,8 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
     public boolean hasArgs() {
         return getArgs().size() > 0;
     }
+
+    public boolean hasPermission(String key) {
+        return this.streamer.getUser().hasPermission(this.sender, key);
+    }
 }
