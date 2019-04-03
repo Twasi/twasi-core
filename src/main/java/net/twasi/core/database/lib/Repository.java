@@ -1,7 +1,6 @@
 package net.twasi.core.database.lib;
 
 import net.twasi.core.database.models.BaseEntity;
-import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DatabaseService;
 import org.bson.types.ObjectId;
@@ -15,7 +14,7 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     protected Datastore store;
     private Class entityType;
 
-    protected EntityCache<T> cache = new EntityCache<>();
+    // protected EntityCache<T> cache = new EntityCache<>();
 
     public Repository() {
         store = ServiceRegistry.get(DatabaseService.class).getStore();
@@ -27,14 +26,15 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     public T getById(ObjectId id) {
         T entity = (T) store.get(entityType, id);
 
-        if (cache.exist(entity)) {
+        /* if (cache.exist(entity)) {
             // Return from cache
             return cache.get(entity);
         } else {
             // Add to cache
             cache.add(entity);
             return entity;
-        }
+        } */
+        return entity;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
 
     @Override
     public boolean commit(T term) {
-        if (term == null) {
+        /* if (term == null) {
             return false;
         }
 
@@ -65,17 +65,19 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
         T cachedEntity = cache.get(term);
         store.save(cachedEntity);
         cache.remove(cachedEntity);
+        return true;*/
+        store.save(term);
         return true;
     }
 
     @Override
     public void commitAll() {
         //TODO: do all at once for performance boost?
-        cache.getAll().forEach(this::commit);
+        // cache.getAll().forEach(this::commit);
     }
 
     public List<ObjectId> getAllIds() {
         List<ObjectId> ids = (List<ObjectId>) store.find(entityType).asList().stream().map(e -> ((BaseEntity)e).getId()).collect(Collectors.toList());
-        return null;
+        return ids;
     }
 }

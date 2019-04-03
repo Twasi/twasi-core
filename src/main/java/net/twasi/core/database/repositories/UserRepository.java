@@ -17,12 +17,13 @@ public class UserRepository extends Repository<User> {
     public User getByTwitchId(String twitchId) {
         User user = store.createQuery(User.class).field("twitchAccount.twitchId").equal(twitchId).get();
 
-        if (cache.exist(user)) {
+        /* if (cache.exist(user)) {
             return cache.get(user);
         } else {
             cache.add(user);
             return user;
-        }
+        } */
+        return user;
     }
 
     public User getByTwitchAccountOrCreate(TwitchAccount account) {
