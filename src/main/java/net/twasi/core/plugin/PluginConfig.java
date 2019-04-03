@@ -19,6 +19,8 @@ public class PluginConfig {
     public String api;
     public boolean messageHandler;
     public boolean dependency;
+    public boolean hidden;
+    public boolean autoinstall;
 
     public List<String> commands;
     public List<String> permissions;
@@ -73,6 +75,14 @@ public class PluginConfig {
 
     public boolean isDependency() {
         return dependency;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public boolean isAutoinstall() {
+        return autoinstall;
     }
 
     public List<String> getCommands() {

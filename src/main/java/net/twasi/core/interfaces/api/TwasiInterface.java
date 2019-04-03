@@ -26,10 +26,16 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
     }
 
     public void enableInstalledPlugins() {
-        // Enable all currently installed plugins
-        user.getInstalledPlugins().forEach(name -> {
-            TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)
-                    .getByName(name);
+        PluginManagerService pluginManagerService = ServiceRegistry.get(PluginManagerService.class);
+        List<String> installedPlugins = new ArrayList<>(user.getInstalledPlugins());
+
+        pluginManagerService.getPlugins().stream().filter(p ->
+                p.getDescription().isAutoinstall()).map(p ->
+                p.getDescription().getName()).forEach(installedPlugins::add);
+
+        // Enable all currently installed and auto installing plugins
+        installedPlugins.forEach(name -> {
+            TwasiPlugin plugin = pluginManagerService.getByName(name);
 
             if (plugin == null) {
                 TwasiLogger.log.warn("Tried to enable plugin '" + name + "' but was not found in plugins folder.");

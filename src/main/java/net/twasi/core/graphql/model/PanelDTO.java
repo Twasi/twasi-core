@@ -36,6 +36,7 @@ public class PanelDTO {
         return ServiceRegistry.get(PluginManagerService.class)
                 .getPlugins()
                 .stream()
+                .filter(p -> !p.getDescription().isHidden())
                 .map(p -> new PluginDetailsDTO(p.getDescription(), user, user.getInstalledPlugins().contains(p.getName())))
                 .collect(Collectors.toList());
     }
