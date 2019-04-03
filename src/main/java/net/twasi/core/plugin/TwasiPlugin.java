@@ -1,10 +1,12 @@
 package net.twasi.core.plugin;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
+import net.twasi.core.translations.TwasiTranslation;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -25,6 +27,7 @@ public abstract class TwasiPlugin extends PluginBase {
     private PluginConfig description = null;
     private File dataFolder = null;
     private ClassLoader classLoader = null;
+    private TwasiTranslation translation;
     private Logger logger = null;
 
     public TwasiPlugin() {
@@ -33,6 +36,9 @@ public abstract class TwasiPlugin extends PluginBase {
             throw new IllegalStateException("TwasiPlugin requires " + PluginClassLoader.class.getName());
         }
         ((PluginClassLoader) classLoader).initialize(this);
+
+        translation = new TwasiTranslation(getClassLoader());
+        description.setLocalizationPluginClass(this);
     }
 
     protected TwasiPlugin(final JavaPluginLoader loader, final PluginConfig description, final File file) {
@@ -41,6 +47,9 @@ public abstract class TwasiPlugin extends PluginBase {
             throw new IllegalStateException("Cannot use initialization constructor at runtime");
         }
         init(loader, description, dataFolder, file, classLoader);
+
+        translation = new TwasiTranslation(getClassLoader());
+        description.setLocalizationPluginClass(this);
     }
 
     /**
@@ -92,6 +101,20 @@ public abstract class TwasiPlugin extends PluginBase {
     @Override
     public final PluginConfig getDescription() {
         return description;
+    }
+
+    public String getLocalizedName(User user) {
+        String res = this.translation.getTranslation(user, "plugin.title");
+        if (res != null && !res.equalsIgnoreCase("plugin.title")) return res;
+        TwasiLogger.log.debug("The Plugin '" + getDescription().name + "' does not provide a localized name.");
+        return getDescription().name;
+    }
+
+    public String getLocalizedDescription(User user) {
+        String res = this.translation.getTranslation(user, "plugin.description");
+        if (res != null && !res.equalsIgnoreCase("plugin.description")) return res;
+        TwasiLogger.log.debug("The Plugin '" + getDescription().name + "' does not provide a localized description.");
+        return getDescription().description;
     }
 
     @Override

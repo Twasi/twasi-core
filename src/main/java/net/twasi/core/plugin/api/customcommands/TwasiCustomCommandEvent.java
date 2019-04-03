@@ -1,4 +1,4 @@
-package net.twasi.core.plugin.api;
+package net.twasi.core.plugin.api.customcommands;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.models.Message.TwasiCommand;
@@ -56,5 +56,9 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
 
     public boolean hasArgs() {
         return getArgs().size() > 0;
+    }
+
+    public boolean hasPermission(String key) {
+        return this.streamer.getUser().hasPermission(this.sender, key);
     }
 }

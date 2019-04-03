@@ -157,7 +157,7 @@ public final class PluginClassLoader extends URLClassLoader {
         if (twasiPlugin == null) {
             throw new IllegalStateException("Initializing plugin cannot be null");
         }
-        ;
+
         if (twasiPlugin.getClass().getClassLoader() != this)
             throw new IllegalStateException("Cannot initialize plugin outside of this class loader");
         if (this.plugin != null || this.pluginInit != null) {

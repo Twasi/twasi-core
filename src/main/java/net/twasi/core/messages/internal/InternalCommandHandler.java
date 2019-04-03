@@ -1,5 +1,6 @@
 package net.twasi.core.messages.internal;
 
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.TwasiCommand;
 
 import java.text.NumberFormat;
@@ -9,8 +10,10 @@ public class InternalCommandHandler {
 
     public boolean handle(TwasiCommand command) {
         if (!command.getTwasiInterface().getStreamer().getUser().hasPermission(command.getSender(), "twasi.admin")) {
+            TwasiLogger.log.debug("User is not a global Twasi Admin. Checking for plugins to handle...");
             return false;
         }
+        TwasiLogger.log.debug("User is a global Twasi Admin. Checking for internal commands...");
         if (command.getCommandName().equalsIgnoreCase("twasi")) {
             String[] split = command.getMessage().split(" ");
             if (split.length == 1) {
@@ -39,8 +42,10 @@ public class InternalCommandHandler {
                     command.reply("RAM: " + format.format(usedMemory) + "MB / " + format.format(totalMemory) + "MB (Max: " + format.format(maxMemory) + "MB)");
                 }
             }
+            TwasiLogger.log.debug("Command was handled by internal command handler.");
             return true;
         }
+        TwasiLogger.log.debug("Command was not handled by internal command handler. Checking for plugins to handle...");
         return false;
     }
 

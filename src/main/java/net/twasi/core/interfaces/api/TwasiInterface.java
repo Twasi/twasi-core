@@ -3,10 +3,11 @@ package net.twasi.core.interfaces.api;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
-import net.twasi.core.plugin.api.TwasiCustomCommand;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.plugin.api.customcommands.TwasiCustomCommand;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.PluginManagerService;
@@ -25,10 +26,16 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
     }
 
     public void enableInstalledPlugins() {
-        // Enable all currently installed plugins
-        user.getInstalledPlugins().forEach(name -> {
-            TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class)
-                    .getByName(name);
+        PluginManagerService pluginManagerService = ServiceRegistry.get(PluginManagerService.class);
+        List<String> installedPlugins = new ArrayList<>(user.getInstalledPlugins());
+
+        pluginManagerService.getPlugins().stream().filter(p ->
+                p.getDescription().isAutoinstall()).map(p ->
+                p.getDescription().getName()).forEach(installedPlugins::add);
+
+        // Enable all currently installed and auto installing plugins
+        installedPlugins.forEach(name -> {
+            TwasiPlugin plugin = pluginManagerService.getByName(name);
 
             if (plugin == null) {
                 TwasiLogger.log.warn("Tried to enable plugin '" + name + "' but was not found in plugins folder.");
@@ -102,6 +109,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
     }
 
     public boolean uninstallPlugin(TwasiPlugin plugin) {
+
         if (userPlugins.stream().noneMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
             TwasiLogger.log.info("Uninstall plugin " + plugin.getUserPluginClass() + " for Streamer " + getStreamer().getUser().getTwitchAccount().getUserName() + " failed (not installed).");
             return false;
@@ -117,7 +125,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         u.getInstalledPlugins().remove(plugin.getName());
         userRepo.commit(u);
 
-        userPlugins = userPlugins.stream().filter(uPlugin -> !userPlugin.getClass().equals(plugin.getUserPluginClass())).collect(Collectors.toList());
+        userPlugins = userPlugins.stream().filter(uPlugin -> !uPlugin.getClass().equals(plugin.getUserPluginClass())).collect(Collectors.toList());
         return true;
     }
 
@@ -127,8 +135,11 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
 
     public List<TwasiCustomCommand> getCustomCommands() {
         List<TwasiCustomCommand> commands = new ArrayList<>();
-        for (TwasiUserPlugin p : getPlugins()) commands.addAll(p.getCommands());
-        return commands;
+        for (TwasiUserPlugin p : getPlugins())
+            commands.addAll(p.getCommands());
+        for (TwasiDependency d : ServiceRegistry.get(PluginManagerService.class).getDependencies())
+            commands.addAll(d.getCommands());
+        return commands.stream().filter(TwasiCustomCommand::allowsListing).collect(Collectors.toList());
     }
 
     public List<TwasiUserPlugin> getByCommand(String command) {

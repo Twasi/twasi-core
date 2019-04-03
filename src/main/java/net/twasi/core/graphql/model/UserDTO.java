@@ -8,7 +8,6 @@ import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.PluginManagerService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
@@ -43,7 +42,7 @@ public class UserDTO {
 
         TwasiInterface instance = ServiceRegistry.get(InstanceManagerService.class).getByUser(user);
 
-        if (instance == null) {
+        if (instance == null || plugin.getDescription().isHidden()) {
             return null;
         }
 
@@ -51,6 +50,7 @@ public class UserDTO {
 
         return new PluginDetailsDTO(
                 plugin.getDescription(),
+                user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
                         .getPlugins()
@@ -62,8 +62,11 @@ public class UserDTO {
         TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
         ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
 
+        if (plugin.getDescription().isHidden()) return null;
+
         return new PluginDetailsDTO(
                 plugin.getDescription(),
+                user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
                         .getPlugins()
