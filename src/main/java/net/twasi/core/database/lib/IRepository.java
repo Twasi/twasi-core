@@ -13,4 +13,6 @@ public interface IRepository<T> {
 
     boolean commit(T entity);
     void commitAll();
+
+    void remove(T entity);
 }

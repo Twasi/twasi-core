@@ -71,13 +71,18 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     }
 
     @Override
+    public void remove(T entity) {
+        store.delete(entity);
+    }
+
+    @Override
     public void commitAll() {
         //TODO: do all at once for performance boost?
         // cache.getAll().forEach(this::commit);
     }
 
     public List<ObjectId> getAllIds() {
-        List<ObjectId> ids = (List<ObjectId>) store.find(entityType).asList().stream().map(e -> ((BaseEntity)e).getId()).collect(Collectors.toList());
+        List<ObjectId> ids = (List<ObjectId>) store.find(entityType).asList().stream().map(e -> ((BaseEntity) e).getId()).collect(Collectors.toList());
         return ids;
     }
 }
