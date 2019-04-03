@@ -7,6 +7,7 @@ import java.util.List;
 
 public class PluginDetailsDTO {
     private final String name;
+    private final String id;
     private final String description;
     private final String author;
     private final String version;
@@ -35,6 +36,7 @@ public class PluginDetailsDTO {
         permissions = config.getPermissions();
 
         this.isInstalled = isInstalled;
+        this.id = config.getName();
     }
 
     public String getName() {
@@ -59,6 +61,10 @@ public class PluginDetailsDTO {
 
     public List<String> getPermissions() {
         return permissions;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public boolean isInstalled() {
