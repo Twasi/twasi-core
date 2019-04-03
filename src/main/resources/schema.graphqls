@@ -79,7 +79,7 @@ type PluginDetails {
     version: String!
     commands: [String]!
     permissions: [String]!
-    id
+    id: String!
 }
 
 type Support {
