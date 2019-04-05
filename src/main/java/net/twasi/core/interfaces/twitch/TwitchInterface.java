@@ -139,8 +139,7 @@ public class TwitchInterface extends TwasiInterface {
 
             return true;
         } catch (Exception e) {
-            TwasiLogger.log.error("Failed to connect to Twitch IRC: " + e.getMessage());
-            TwasiLogger.log.trace(e);
+            TwasiLogger.log.error("Failed to connect to Twitch IRC: " + e.getMessage(), e);
             return false;
         }
     }
@@ -156,8 +155,7 @@ public class TwitchInterface extends TwasiInterface {
             bot.sendIRC().quitServer("Bye, thanks for your service @Twitch #Twasi");
             return true;
         } catch (Exception e) {
-            TwasiLogger.log.error("Failed to disconnect from Twitch IRC: " + e.getMessage());
-            TwasiLogger.log.trace(e);
+            TwasiLogger.log.error("Failed to disconnect from Twitch IRC: " + e.getMessage(), e);
             return false;
         }
     }

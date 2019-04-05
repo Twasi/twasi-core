@@ -15,7 +15,7 @@ public class DataService implements IService {
             try {
                 repos.put(clazz, clazz.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
-                TwasiLogger.log.trace(e);
+                TwasiLogger.log.error("Exception when initializing repository of type " + clazz.getName(), e);
             }
         }
         return (T) repos.get(clazz);
