@@ -46,7 +46,12 @@ type Panel {
     userStatus: UserStatus,
     appInfo: AppInfo,
     plugins: [PluginDetails],
-    support: Support
+    support: Support,
+    admin: Admin
+}
+
+type Admin {
+    impersonate(twitchname: String): String
 }
 
 type BotStatus {

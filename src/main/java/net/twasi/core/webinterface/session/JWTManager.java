@@ -43,7 +43,6 @@ public class JWTManager {
             token = JWT.create()
                     .withIssuer(ServiceRegistry.get(ConfigService.class).getCatalog().auth.issuer)
                     .withIssuedAt(new Date())
-                    .withExpiresAt(new Date())
                     .withExpiresAt(expiration)
                     .withClaim("name", user.getTwitchAccount().getUserName())
                     .withClaim("twitchid", user.getTwitchAccount().getTwitchId())
@@ -90,11 +89,6 @@ public class JWTManager {
         try {
             DecodedJWT decodedJWT = JWT.decode(jwt);
 
-            if (decodedJWT.getExpiresAt().getTime() < new Date().getTime()) {
-                // Token expired
-                return false;
-            }
-
             twitchId = decodedJWT.getClaim("twitchid").asString();
         } catch (JWTDecodeException exception) {
             return false;
@@ -112,6 +106,13 @@ public class JWTManager {
                     .withIssuer(ServiceRegistry.get(ConfigService.class).getCatalog().auth.issuer)
                     .build(); //Reusable verifier instance
             DecodedJWT decodedJWT = verifier.verify(jwt);
+
+            // The token is okay, check expiration
+            if (decodedJWT.getExpiresAt().getTime() < new Date().getTime()) {
+                // Token expired
+                return false;
+            }
+
             return true;
         } catch (UnsupportedEncodingException | JWTVerificationException exception) {
             TwasiLogger.log.debug(exception);

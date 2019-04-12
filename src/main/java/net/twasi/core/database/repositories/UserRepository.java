@@ -26,6 +26,12 @@ public class UserRepository extends Repository<User> {
         return user;
     }
 
+    public User getByTwitchName(String twitchname) {
+        User user = store.createQuery(User.class).field("twitchAccount.userName").equal(twitchname).get();
+
+        return user;
+    }
+
     public User getByTwitchAccountOrCreate(TwitchAccount account) {
         Query<User> query = store.createQuery(User.class).field("twitchAccount.twitchId").equal(account.getTwitchId());
 
