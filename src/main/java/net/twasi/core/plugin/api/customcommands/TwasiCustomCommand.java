@@ -19,7 +19,12 @@ public abstract class TwasiCustomCommand {
 
     private final CooldownRepository cooldownRepo = ServiceRegistry.get(DataService.class).get(CooldownRepository.class);
 
-    protected abstract boolean process(TwasiCustomCommandEvent event);
+    protected boolean execute(TwasiCustomCommandEvent event) {
+        process(event);
+        return false;
+    }
+
+    protected abstract void process(TwasiCustomCommandEvent event);
 
     public final void processInternal(TwasiCommand command) {
         User user = command.getTwasiInterface().getStreamer().getUser();
@@ -33,11 +38,11 @@ public abstract class TwasiCustomCommand {
 
         // COOLDOWN CHECK
         if (sender.getGroups().contains(BROADCASTER) || user.hasPermission(sender, "twasi.skipcooldown")) // If user has permission to skip cooldown
-            process(new TwasiCustomCommandEvent(command)); // Execute the command
+            execute(new TwasiCustomCommandEvent(command)); // Execute the command
         else { // If user cannot skip cooldown
             CooldownEntity cd = cooldownRepo.getCooldown(user, sender, getCommandName()); // Get current or new Cooldown Entity
             if (cd.hasCooldown()) return; // If there is a cooldown skip command execution
-            if (process(new TwasiCustomCommandEvent(command))) { // If command was executed successfully
+            if (execute(new TwasiCustomCommandEvent(command))) { // If command was executed successfully
                 cooldownRepo.commit(cd.setCooldown(getCooldown())); // Reset the cooldown and commit
             }
         }
