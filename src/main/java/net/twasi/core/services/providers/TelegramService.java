@@ -100,7 +100,6 @@ public class TelegramService implements IService {
 
             } catch (TelegramApiException e) {
                 TwasiLogger.log.info("Telegram bot could not connect to the API.");
-                TwasiLogger.log.error(e);
                 telegramBot = null;
                 return;
                 // Set null to prevent usage of the bot while not connected
