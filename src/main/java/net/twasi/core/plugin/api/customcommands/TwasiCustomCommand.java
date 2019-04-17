@@ -2,6 +2,7 @@ package net.twasi.core.plugin.api.customcommands;
 
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.plugin.api.customcommands.cooldown.CooldownEntity;
 import net.twasi.core.plugin.api.customcommands.cooldown.CooldownRepository;
@@ -24,7 +25,9 @@ public abstract class TwasiCustomCommand {
         return false;
     }
 
-    protected abstract void process(TwasiCustomCommandEvent event);
+    protected void process(TwasiCustomCommandEvent event){
+        TwasiLogger.log.warn("Command " + getCommandName() + " has no handler.");
+    }
 
     public final void processInternal(TwasiCommand command) {
         User user = command.getTwasiInterface().getStreamer().getUser();
