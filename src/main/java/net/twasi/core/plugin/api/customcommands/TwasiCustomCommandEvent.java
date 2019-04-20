@@ -29,6 +29,10 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         this.args.remove(0); // Remove command name from args
     }
 
+    public TwasiCustomCommandEvent(TwasiCommand command){
+        this(command, TwasiCustomCommandEvent.class.getClassLoader());
+    }
+
     public void reply(String text) {
         getCommand().reply(text);
     }
