@@ -53,7 +53,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         StringBuilder connected = new StringBuilder();
         for (String s : getArgs()) connected.append(" ").append(s);
         String string = connected.toString();
-        if (string.equals("")) return null;
+        if (string.equals("")) return "";
         else return string.substring(1); // Substring to remove leading whitespace
     }
 
