@@ -73,8 +73,17 @@ public class InstanceManagerService implements IService {
 
         TwasiInterface inf = getByUser(user);
 
-        inf.disconnect();
-        inf.onDisable();
+        try {
+            inf.disconnect();
+        } catch (Exception e) {
+            TwasiLogger.log.info("Failed to disconnect interface " + user.getTwitchAccount().getUserName(), e);
+        }
+
+        try {
+            inf.onDisable();
+        } catch (Exception e) {
+            TwasiLogger.log.info("Failed to disable interface " + user.getTwitchAccount().getUserName(), e);
+        }
 
         interfaces.remove(inf);
 
