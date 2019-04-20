@@ -19,7 +19,10 @@ public class TwitchInterfaceMaintainer extends Thread {
     @Override
     public void run() {
         while (true) {
-            if (!run) return;
+            if (!run) {
+                TwasiLogger.log.debug("TwitchInterfaceMaintainer stopped for user " + twitchInterface.getStreamer().getUser().getTwitchAccount().getUserName());
+                return;
+            }
             if (!twitchInterface.getBot().isConnected()) {
                 TwasiLogger.log.debug("TwitchInterfaceMaintainer for user " + twitchInterface.getStreamer().getUser().getId() + " detected an unconnected TwitchInterface");
                 new Thread(() -> {
@@ -46,7 +49,7 @@ public class TwitchInterfaceMaintainer extends Thread {
     }
 
     public void stopMaintainer() {
-        TwasiLogger.log.debug("TwitchInterfaceMaintainer stopped for user " + twitchInterface.getStreamer().getUser().getId());
+        TwasiLogger.log.debug("TwitchInterfaceMaintainer stopped for user " + twitchInterface.getStreamer().getUser().getTwitchAccount().getUserName());
         run = false;
     }
 }

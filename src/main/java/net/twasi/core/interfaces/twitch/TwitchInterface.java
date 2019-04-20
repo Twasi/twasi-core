@@ -148,11 +148,12 @@ public class TwitchInterface extends TwasiInterface {
     public boolean disconnect() {
         TwasiLogger.log.info("Disconnecting from Twitch IRC");
         TwitchInterfaceMaintainer maintainer = maintainers.get(this);
-        maintainer.stopMaintainer();
-        maintainers.remove(this);
         try {
             bot.stopBotReconnect();
             bot.sendIRC().quitServer("Bye, thanks for your service @Twitch #Twasi");
+            bot.close();
+            maintainer.stopMaintainer();
+            maintainers.remove(this);
             return true;
         } catch (Exception e) {
             TwasiLogger.log.error("Failed to disconnect from Twitch IRC: " + e.getMessage(), e);
