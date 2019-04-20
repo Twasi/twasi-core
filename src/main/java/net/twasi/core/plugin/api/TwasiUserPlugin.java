@@ -3,7 +3,6 @@ package net.twasi.core.plugin.api;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
-import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
 import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 import net.twasi.core.plugin.api.events.*;
 import net.twasi.core.translations.TwasiTranslation;
@@ -41,7 +40,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
             }
         if (command == null)
             TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
-        else command.process(new TwasiCustomCommandEvent(e.getCommand()));
+        else command.processInternal(e.getCommand());
     }
 
     public void onMessage(TwasiMessageEvent e) {

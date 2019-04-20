@@ -1,6 +1,7 @@
 package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.models.UserRank;
 import net.twasi.core.graphql.model.support.SupportDTO;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
@@ -43,5 +44,13 @@ public class PanelDTO {
 
     public SupportDTO getSupport() {
         return new SupportDTO(user);
+    }
+
+    public AdminDTO getAdmin() {
+        // Is the user a team member
+        if (user.getRank() == UserRank.TEAM) {
+            return new AdminDTO(user);
+        }
+        return null;
     }
 }

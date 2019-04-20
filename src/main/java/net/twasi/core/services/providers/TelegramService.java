@@ -100,7 +100,6 @@ public class TelegramService implements IService {
 
             } catch (TelegramApiException e) {
                 TwasiLogger.log.info("Telegram bot could not connect to the API.");
-                TwasiLogger.log.error(e);
                 telegramBot = null;
                 return;
                 // Set null to prevent usage of the bot while not connected
@@ -110,16 +109,17 @@ public class TelegramService implements IService {
             TwasiLogger.log.info("Telegram options in config are uncompleted. Skipping Telegram login...");
             return;
         }
+        /*
         try {
             sendMessageToTelegramChat("Twasi-Core connected.");
             // Give feedback to the user that everything is set up correctly
 
         } catch (TelegramApiException e) {
             TwasiLogger.log.info("Unable to send message to the Telegram chat that is set in config (\"" + config.chatId + "\").");
-            TwasiLogger.log.error(e);
             telegramBot = null;
             return;
         }
+        */
 
         registerHelpCommandHandler();
     }

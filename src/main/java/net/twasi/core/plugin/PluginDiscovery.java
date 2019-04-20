@@ -44,8 +44,7 @@ public class PluginDiscovery {
                     ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
                 }
             } catch (Exception e) {
-                TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?");
-                TwasiLogger.log.trace(e);
+                TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?", e);
             }
         }
 
