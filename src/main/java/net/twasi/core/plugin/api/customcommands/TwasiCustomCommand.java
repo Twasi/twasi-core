@@ -29,7 +29,7 @@ public abstract class TwasiCustomCommand {
         TwasiLogger.log.warn("Command " + getCommandName() + " has no handler.");
     }
 
-    public final void processInternal(TwasiCommand command) {
+    public final void processInternal(TwasiCommand command, ClassLoader loader) {
         User user = command.getTwasiInterface().getStreamer().getUser();
         TwitchAccount sender = command.getSender();
 
@@ -41,11 +41,11 @@ public abstract class TwasiCustomCommand {
 
         // COOLDOWN CHECK
         if (sender.getGroups().contains(BROADCASTER) || user.hasPermission(sender, "twasi.skipcooldown")) // If user has permission to skip cooldown
-            execute(new TwasiCustomCommandEvent(command)); // Execute the command
+            execute(new TwasiCustomCommandEvent(command, loader)); // Execute the command
         else { // If user cannot skip cooldown
             CooldownEntity cd = cooldownRepo.getCooldown(user, sender, getCommandName()); // Get current or new Cooldown Entity
             if (cd.hasCooldown()) return; // If there is a cooldown skip command execution
-            if (execute(new TwasiCustomCommandEvent(command))) { // If command was executed successfully
+            if (execute(new TwasiCustomCommandEvent(command, loader))) { // If command was executed successfully
                 cooldownRepo.commit(cd.setCooldown(getCooldown())); // Reset the cooldown and commit
             }
         }

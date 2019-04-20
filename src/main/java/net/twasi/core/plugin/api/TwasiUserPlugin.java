@@ -40,7 +40,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
             }
         if (command == null)
             TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
-        else command.processInternal(e.getCommand());
+        else command.processInternal(e.getCommand(), getCorePlugin().getClassLoader());
     }
 
     public void onMessage(TwasiMessageEvent e) {
@@ -83,10 +83,12 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         return new ArrayList<>();
     }
 
+    @Deprecated
     public final String getTranslation(String key, Object... objects) {
         return getTranslations().getTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
 
+    @Deprecated
     public final String getRandomTranslation(String key, Object... objects) {
         return getTranslations().getRandomTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }

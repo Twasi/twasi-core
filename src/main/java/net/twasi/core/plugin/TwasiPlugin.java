@@ -106,14 +106,12 @@ public abstract class TwasiPlugin extends PluginBase {
     public String getLocalizedName(User user) {
         String res = this.translation.getTranslation(user, "plugin.title");
         if (res != null && !res.equalsIgnoreCase("plugin.title")) return res;
-        TwasiLogger.log.debug("The Plugin '" + getDescription().name + "' does not provide a localized name.");
         return getDescription().name;
     }
 
     public String getLocalizedDescription(User user) {
         String res = this.translation.getTranslation(user, "plugin.description");
         if (res != null && !res.equalsIgnoreCase("plugin.description")) return res;
-        TwasiLogger.log.debug("The Plugin '" + getDescription().name + "' does not provide a localized description.");
         return getDescription().description;
     }
 

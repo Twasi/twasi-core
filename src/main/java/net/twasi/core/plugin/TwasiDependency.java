@@ -6,6 +6,7 @@ import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
 import net.twasi.core.plugin.api.customcommands.TwasiDependencyCommand;
 import net.twasi.core.translations.TwasiTranslation;
+import net.twasi.core.translations.renderer.TranslationRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,18 @@ public abstract class TwasiDependency extends TwasiPlugin {
         return true;
     }
 
+    @Deprecated
     public final String getTranslation(User user, String key, Object... objects) {
         return twasiTranslation.getTranslation(user, key, objects);
     }
 
+    @Deprecated
     public final String getRandomTranslation(User user, String key, Object... objects) {
         return twasiTranslation.getRandomTranslation(user, key, objects);
+    }
+
+    public final TranslationRenderer getTranslationRenderer(){
+        return TranslationRenderer.getInstance(this);
     }
 
     public List<TwasiDependencyCommand> getCommands() {
@@ -45,6 +52,6 @@ public abstract class TwasiDependency extends TwasiPlugin {
                 return true;
             else
                 return cmd.getAliases().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(twasiCommand.getCommandName().toLowerCase());
-        }).collect(Collectors.toList()).forEach(handler -> handler.processInternal(twasiCommand));
+        }).collect(Collectors.toList()).forEach(handler -> handler.processInternal(twasiCommand, getClassLoader()));
     }
 }
