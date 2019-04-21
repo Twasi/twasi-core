@@ -8,6 +8,7 @@ import net.twasi.core.translations.renderer.TranslationRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Arrays.asList;
 
@@ -70,7 +71,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
     }
 
     public TranslationRenderer getRenderer(TranslationRenderer copyBindings) {
-        return TranslationRenderer
+        TranslationRenderer renderer = TranslationRenderer
                 .getInstance(loader, streamer.getUser().getConfig().getLanguage())
                 .bindAll(copyBindings.getBindings())
                 .bindAllObjects(copyBindings.getObjectBindings())
@@ -79,6 +80,9 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
                 .bindObject("sender", sender)
                 .bind("command", getUsedCommandName())
                 .bind("args", getArgsAsOne());
+        AtomicInteger i = new AtomicInteger(1);
+        args.forEach(arg -> renderer.bind("args."+ i.getAndIncrement(), arg));
+        return renderer;
     }
 
     public TranslationRenderer getRenderer(){
