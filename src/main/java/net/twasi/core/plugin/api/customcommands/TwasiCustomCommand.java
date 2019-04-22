@@ -25,7 +25,7 @@ public abstract class TwasiCustomCommand {
         return false;
     }
 
-    protected void process(TwasiCustomCommandEvent event){
+    protected void process(TwasiCustomCommandEvent event) {
         TwasiLogger.log.warn("Command " + getCommandName() + " has no handler.");
     }
 
@@ -43,7 +43,7 @@ public abstract class TwasiCustomCommand {
         if (sender.getGroups().contains(BROADCASTER) || user.hasPermission(sender, "twasi.skipcooldown")) // If user has permission to skip cooldown
             execute(new TwasiCustomCommandEvent(command, loader)); // Execute the command
         else { // If user cannot skip cooldown
-            CooldownEntity cd = cooldownRepo.getCooldown(user, sender, getCommandName()); // Get current or new Cooldown Entity
+            CooldownEntity cd = cooldownRepo.getCooldownOrCreate(user, sender, getCommandName()); // Get current or new Cooldown Entity
             if (cd.hasCooldown()) return; // If there is a cooldown skip command execution
             if (execute(new TwasiCustomCommandEvent(command, loader))) { // If command was executed successfully
                 cooldownRepo.commit(cd.setCooldown(getCooldown())); // Reset the cooldown and commit
@@ -57,9 +57,13 @@ public abstract class TwasiCustomCommand {
         return ServiceRegistry.get(ConfigService.class).getCatalog().bot.prefix + getCommandName();
     }
 
-    public abstract boolean allowsTimer();
+    public boolean allowsTimer() {
+        return false;
+    }
 
-    public abstract boolean allowsListing();
+    public boolean allowsListing() {
+        return true;
+    }
 
     public List<String> getAliases() {
         return new ArrayList<>();
