@@ -1,21 +1,24 @@
 package net.twasi.core.translations.renderer;
 
 import net.twasi.core.database.models.Language;
+import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class TranslationRenderer {
 
-    private static String bindingNotFound = "unknown_binding".toUpperCase();
-    private static String keyNotFound = "unknown_translation_key".toUpperCase();
-    private static String noTranslations = "no_translations_provided".toUpperCase();
+    private static String bindingNotFound = "undefined";
+    private static String keyNotFound = "no_translation_key";
+    private static String noTranslations = "no_translations";
 
     private ClassLoader loader;
     private Language language;
@@ -111,7 +114,7 @@ public class TranslationRenderer {
     }
 
     private String resolveBindings(String ofString) {
-        while (ofString.matches(".*[{][a-zA-Z0-9.\\s-_äöüÄÖÜß]+[}].*")) {
+        while (ofString.matches(".*[{][a-zA-Z0-9.\\s-_äöüÄÖÜß:]+[}].*")) {
             int s_index = 0, e_index = 0;
             int counter = 0;
             for (char c : ofString.toCharArray()) {
@@ -135,41 +138,107 @@ public class TranslationRenderer {
     }
 
     private String resolveBinding(String key) {
-        if (this.bindings.containsKey(key.toLowerCase()))
-            return this.bindings.get(key.toLowerCase());
-        if (!key.contains(".")) return bindingNotFound;
-        String[] arrayParts = key.split("\\.");
-        List<String> parts = new ArrayList<>(Arrays.asList(arrayParts));
-        parts.remove(0);
-        Object ob = objectBindings.get(arrayParts[0].toLowerCase());
+        if (this.bindings.containsKey(key.toLowerCase())) // Prioritize string-bindings
+            return this.bindings.get(key.toLowerCase()); // Return string-binding if existing
+
+        if (!key.contains(".")) { // If there is no string-binding and there are no sub-objects requested (no dots)
+            if (!objectBindings.containsKey(key.toLowerCase()))
+                return bindingNotFound; // If there is no object for this binding too return undefined
+            return objectToString(objectBindings.get(key.toLowerCase()), "");
+        }
+
+        String[] arrayParts = key.split("\\."); // Get object and sub-objects as string[]
+        List<String> parts = new ArrayList<>(Arrays.asList(arrayParts)); // Make string[] to List<String> (for sub-objects)
+        parts.remove(0); // Remove base-object from sub-objects-list
+        Object ob = objectBindings.get(arrayParts[0].toLowerCase()); // Get base-object
+
+        String options = null;
+
         try {
             outerloop:
-            for (String part : parts) {
-                Class resolvingClass = ob.getClass();
+            for (String part : parts) { // Loop through sub-objects
+                Class resolvingClass = ob.getClass(); // Get class of parent object
+
+                if (part.contains(":")) {
+                    options = part.split(":")[1];
+                    part = part.split(":")[0];
+                } else options = null;
+
                 // Try resolve as field
-                Field foundField = Arrays.stream(resolvingClass.getFields()).filter(f -> f.getName().equals(part)).findFirst().orElse(null);
-                if (foundField == null)
-                    foundField = Arrays.stream(resolvingClass.getFields()).filter(f -> f.getName().equalsIgnoreCase(part)).findFirst().orElse(null);
-                if (foundField != null) {
-                    ob = foundField.get(ob);
-                    continue;
+                String finalPart = part;
+                Field foundField = Arrays.stream(resolvingClass.getFields()).filter(f -> f.getName().equals(finalPart)).findFirst().orElse(null); // Search for matching fields
+                if (foundField == null) // If there is no perfect name match
+                    foundField = Arrays.stream(resolvingClass.getFields()).filter(f -> f.getName().equalsIgnoreCase(finalPart)).findFirst().orElse(null); // Search case insensitive
+                if (foundField != null) { // If there is a case-insensitive match
+                    ob = foundField.get(ob); // Set new parent object to the field's value
+                    continue; // And search for it's sub-objects
                 }
+
                 // Try resolve as method
-                for (String method : new String[]{part, "get" + part}) {
-                    Method found = Arrays.stream(resolvingClass.getMethods()).filter(m -> m.getName().equals(method)).findFirst().orElse(null);
-                    if (found == null)
-                        found = Arrays.stream(resolvingClass.getMethods()).filter(m -> m.getName().equalsIgnoreCase(method)).findFirst().orElse(null);
-                    if (found != null) {
-                        ob = found.invoke(ob);
-                        continue outerloop;
+                for (String prefix : new String[]{"", "get", "is", "has"}) { // Find method by different method-prefixes
+                    String method = prefix + part; // Add prefix to method name
+                    Method found = Arrays.stream(resolvingClass.getMethods()).filter(m -> m.getName().equals(method)).findFirst().orElse(null); // Search for matching methods
+                    if (found == null) // If there is no perfect name match
+                        found = Arrays.stream(resolvingClass.getMethods()).filter(m -> m.getName().equalsIgnoreCase(method)).findFirst().orElse(null); // Search case insensitive
+                    if (found != null) { // If there is a case-insensitive match
+                        ob = found.invoke(ob); // Set new parent object to the methods's return value
+                        continue outerloop; // And search for it's sub-objects
                     }
                 }
                 return bindingNotFound;
             }
-            return ob.toString();
+
+            return objectToString(ob, options);
         } catch (Exception e) {
             return bindingNotFound;
         }
+    }
+
+    private String objectToString(Object ob, String options) {
+        String value = ob.toString();
+
+        if (ob instanceof Float || ob instanceof Double) {
+            float f = (float) ob;
+            f = Math.round(f * 100) / 100; // 1.2345... -> 1.23
+            value = String.valueOf(f);
+        }
+
+        if (ob instanceof Calendar)
+            ob = ((Calendar) ob).getTime(); // Switch Calendar with assigned Date
+
+        if (ob instanceof Date) {
+            Date date = (Date) ob;
+            if (options == null) options = "datetime";
+            if (options.equalsIgnoreCase("date")) {
+                value = language.getDateFormat().format(date);
+            } else if (options.equalsIgnoreCase("time")) {
+                value = new SimpleDateFormat("hh:mm").format(date);
+            } else {
+                value = new SimpleDateFormat(language.getDateFormat().toPattern() + " hh:mm").format(date);
+            }
+        }
+
+        if (ob instanceof Integer) {
+            value = String.valueOf((int) ob);
+        }
+
+        if (ob instanceof Long) {
+            value = String.valueOf((long) ob);
+        }
+
+        if (ob instanceof Streamer) {
+            value = ((Streamer) ob).getUser().getTwitchAccount().getDisplayName();
+        }
+
+        if (ob instanceof User) {
+            value = ((User) ob).getTwitchAccount().getDisplayName();
+        }
+
+        if (ob instanceof TwitchAccount) {
+            value = ((TwitchAccount) ob).getDisplayName();
+        }
+
+        return value;
     }
 
     public ClassLoader getLoader() {
