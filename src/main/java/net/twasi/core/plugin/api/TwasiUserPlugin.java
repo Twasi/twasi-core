@@ -18,6 +18,9 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     private transient TwasiInterface twasiInterface;
     private transient TwasiTranslation translations;
 
+    private List<TwasiPluginCommand> commands = new ArrayList<>();
+    private List<TwasiVariable> variables = new ArrayList<>();
+
     public void onEnable(TwasiEnableEvent e) {
     }
 
@@ -76,11 +79,23 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
     public List<TwasiVariable> getVariables() {
-        return new ArrayList<>();
+        return variables;
+    }
+
+    protected void registerCommand(Class<? extends TwasiPluginCommand> clazz) {
+        try {
+            commands.add(clazz.getDeclaredConstructor(TwasiUserPlugin.class).newInstance(this));
+        } catch (Exception e) {
+            TwasiLogger.log.warn("Command class " + clazz.getName() + " of plugin " + getCorePlugin().getDescription().getName() + " could not be instantiated.");
+        }
+    }
+
+    protected void registerCommand(TwasiPluginCommand command) {
+        commands.add(command);
     }
 
     public List<TwasiPluginCommand> getCommands() {
-        return new ArrayList<>();
+        return commands;
     }
 
     @Deprecated

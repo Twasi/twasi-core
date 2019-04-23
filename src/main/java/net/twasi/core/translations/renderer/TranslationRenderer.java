@@ -6,6 +6,9 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.config.ConfigService;
+import net.twasi.core.services.providers.config.catalog.ConfigCatalog;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -19,16 +22,19 @@ public class TranslationRenderer {
     private static String bindingNotFound = "undefined";
     private static String keyNotFound = "no_translation_key";
     private static String noTranslations = "no_translations";
+    private static String null_value = "null";
 
     private ClassLoader loader;
     private Language language;
 
     private Map<String, String> bindings = new HashMap<>();
     private Map<String, Object> objectBindings = new HashMap<>();
+    private Map<String, DynamicBindingInterface> dynamicBindings = new HashMap<>();
 
     private TranslationRenderer(ClassLoader loader, Language language) {
         this.loader = loader;
         this.language = language;
+        defaultBindings();
     }
 
     public static TranslationRenderer getInstance(TwasiUserPlugin plugin) {
@@ -56,6 +62,11 @@ public class TranslationRenderer {
         return this;
     }
 
+    public TranslationRenderer multiBind(String value, String... keys) {
+        Arrays.stream(keys).forEach(key -> bind(key, value));
+        return this;
+    }
+
     public TranslationRenderer bindObject(String key, Object object) {
         if (key.contains(".")) throw new RuntimeException("Object binding key cannot contain dots.");
         objectBindings.put(key.toLowerCase(), object);
@@ -64,6 +75,21 @@ public class TranslationRenderer {
 
     public TranslationRenderer bindAllObjects(Map<String, Object> objectBindings) {
         objectBindings.forEach(this::bindObject);
+        return this;
+    }
+
+    public TranslationRenderer multiBindObject(Object object, String... keys) {
+        Arrays.stream(keys).forEach(key -> bindObject(key, object));
+        return this;
+    }
+
+    public TranslationRenderer bindDynamic(String key, DynamicBindingInterface resolver) {
+        dynamicBindings.put(key.toLowerCase(), resolver);
+        return this;
+    }
+
+    public TranslationRenderer multiBindDynamic(DynamicBindingInterface resolver, String... keys) {
+        Arrays.stream(keys).forEach(key -> bindDynamic(key, resolver));
         return this;
     }
 
@@ -141,6 +167,9 @@ public class TranslationRenderer {
         if (this.bindings.containsKey(key.toLowerCase())) // Prioritize string-bindings
             return this.bindings.get(key.toLowerCase()); // Return string-binding if existing
 
+        if (this.dynamicBindings.containsKey(key.toLowerCase()))  // Prioritize dynamic-bindings too
+            return this.dynamicBindings.get(key.toLowerCase()).resolve(); // return resolved value
+
         if (!key.contains(".")) { // If there is no string-binding and there are no sub-objects requested (no dots)
             if (!objectBindings.containsKey(key.toLowerCase()))
                 return bindingNotFound; // If there is no object for this binding too return undefined
@@ -195,11 +224,37 @@ public class TranslationRenderer {
     }
 
     private String objectToString(Object ob, String options) {
+        if (ob == null) return null_value;
         String value = ob.toString();
+
+        if (ob instanceof List) {
+            List list = (List) ob;
+            if (list.size() > 0) {
+                int index = -1;
+                if (options != null && !options.equals("")) {
+                    try {
+                        index = Integer.parseInt(options);
+                    } catch (Exception ignored) {
+                    }
+                }
+                try {
+                    if (index >= 0) ob = list.get(index);
+                    else {
+                        list = new ArrayList(list);
+                        Collections.shuffle(list);
+                        ob = list.get(0);
+                    }
+                } catch (Exception e) {
+                    value = null_value;
+                }
+            } else {
+                value = null_value;
+            }
+        }
 
         if (ob instanceof Float || ob instanceof Double) {
             float f = (float) ob;
-            f = Math.round(f * 100) / 100; // 1.2345... -> 1.23
+            f = Math.round(f * 100) / 100f; // 1.2345... -> 1.23
             value = String.valueOf(f);
         }
 
@@ -212,9 +267,9 @@ public class TranslationRenderer {
             if (options.equalsIgnoreCase("date")) {
                 value = language.getDateFormat().format(date);
             } else if (options.equalsIgnoreCase("time")) {
-                value = new SimpleDateFormat("hh:mm").format(date);
+                value = new SimpleDateFormat("HH:mm").format(date);
             } else {
-                value = new SimpleDateFormat(language.getDateFormat().toPattern() + " hh:mm").format(date);
+                value = new SimpleDateFormat(language.getDateFormat().toPattern() + " HH:mm").format(date);
             }
         }
 
@@ -241,6 +296,16 @@ public class TranslationRenderer {
         return value;
     }
 
+    public void defaultBindings() {
+        ConfigCatalog catalog = ServiceRegistry.get(ConfigService.class).getCatalog();
+        this
+                .bind("prefix", catalog.bot.prefix)
+                .multiBind(language.getLanguageName(), "lang", "language")
+                .multiBind(getClass().getPackage().getImplementationVersion(), "version", "ver")
+                .multiBindDynamic(() -> new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()), "time", "clocktime")
+                .bindDynamic("date", () -> language.getDateFormat().format(Calendar.getInstance().getTime()));
+    }
+
     public ClassLoader getLoader() {
         return loader;
     }
@@ -255,5 +320,9 @@ public class TranslationRenderer {
 
     public Map<String, Object> getObjectBindings() {
         return objectBindings;
+    }
+
+    public interface DynamicBindingInterface {
+        String resolve();
     }
 }
