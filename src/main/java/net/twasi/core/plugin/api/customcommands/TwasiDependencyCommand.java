@@ -33,7 +33,7 @@ public abstract class TwasiDependencyCommand extends TwasiCustomCommand {
     }
 
     @Override
-    protected TranslationRenderer getTranslationRenderer() {
+    protected final TranslationRenderer getTranslationRenderer() {
         return TranslationRenderer.getInstance(twasiDependency);
     }
 }

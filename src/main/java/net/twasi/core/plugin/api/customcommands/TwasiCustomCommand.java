@@ -84,7 +84,5 @@ public abstract class TwasiCustomCommand {
         return Duration.ofMinutes(1);
     }
 
-    public abstract TranslationRenderer additionalBindings();
-
     protected abstract TranslationRenderer getTranslationRenderer();
 }
