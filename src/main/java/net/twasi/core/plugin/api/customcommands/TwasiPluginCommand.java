@@ -31,6 +31,7 @@ public abstract class TwasiPluginCommand extends TwasiCustomCommand {
         return this.twasiUserPlugin.getRandomTranslation(key, objects);
     }
 
+    @Override
     protected final TranslationRenderer getTranslationRenderer(){
         return TranslationRenderer.getInstance(twasiUserPlugin);
     }

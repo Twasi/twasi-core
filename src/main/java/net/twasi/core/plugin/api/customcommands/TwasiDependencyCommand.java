@@ -32,8 +32,8 @@ public abstract class TwasiDependencyCommand extends TwasiCustomCommand {
         return this.twasiDependency.getRandomTranslation(user, key, objects);
     }
 
+    @Override
     protected TranslationRenderer getTranslationRenderer() {
         return TranslationRenderer.getInstance(twasiDependency);
     }
-
 }

@@ -9,6 +9,7 @@ import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.services.providers.config.catalog.ConfigCatalog;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -31,21 +32,23 @@ public class TranslationRenderer {
     private Map<String, Object> objectBindings = new HashMap<>();
     private Map<String, DynamicBindingInterface> dynamicBindings = new HashMap<>();
 
-    private TranslationRenderer(ClassLoader loader, Language language) {
+    private TranslationRenderer(@NotNull ClassLoader loader, Language language) {
         this.loader = loader;
         this.language = language;
-        defaultBindings();
+        if (language != null) defaultBindings();
     }
 
     public static TranslationRenderer getInstance(TwasiUserPlugin plugin) {
         User user = plugin.getTwasiInterface().getStreamer().getUser();
         TranslationRenderer renderer = new TranslationRenderer(plugin.getCorePlugin().getClassLoader(), user.getConfig().getLanguage());
         return renderer
-                .bindObject("user", user.getTwitchAccount());
+                .multiBindObject(user.getTwitchAccount(), "user", "streamer")
+                .multiBindObject(plugin.getCorePlugin().getDescription(), "plugin", "p");
     }
 
     public static TranslationRenderer getInstance(TwasiDependency twasiDependency) {
-        return new TranslationRenderer(twasiDependency.getClassLoader(), Language.EN_GB);
+        return new TranslationRenderer(twasiDependency.getClassLoader(), Language.EN_GB)
+                .multiBindObject(twasiDependency.getDescription(), "dependency", "dep", "plugin", "p");
     }
 
     public static TranslationRenderer getInstance(ClassLoader loader, Language language) {
@@ -296,10 +299,9 @@ public class TranslationRenderer {
         return value;
     }
 
-    public void defaultBindings() {
+    private void defaultBindings() {
         ConfigCatalog catalog = ServiceRegistry.get(ConfigService.class).getCatalog();
-        this
-                .bind("prefix", catalog.bot.prefix)
+        bind("prefix", catalog.bot.prefix)
                 .multiBind(language.getLanguageName(), "lang", "language")
                 .multiBind(getClass().getPackage().getImplementationVersion(), "version", "ver")
                 .multiBindDynamic(() -> new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()), "time", "clocktime")

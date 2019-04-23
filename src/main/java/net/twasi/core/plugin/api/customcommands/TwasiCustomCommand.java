@@ -9,6 +9,7 @@ import net.twasi.core.plugin.api.customcommands.cooldown.CooldownRepository;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.config.ConfigService;
+import net.twasi.core.translations.renderer.TranslationRenderer;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -41,11 +42,11 @@ public abstract class TwasiCustomCommand {
 
         // COOLDOWN CHECK
         if (sender.getGroups().contains(BROADCASTER) || user.hasPermission(sender, "twasi.skipcooldown")) // If user has permission to skip cooldown
-            execute(new TwasiCustomCommandEvent(command, loader)); // Execute the command
+            execute(new TwasiCustomCommandEvent(command, loader).addBindings(getTranslationRenderer())); // Execute the command
         else { // If user cannot skip cooldown
             CooldownEntity cd = cooldownRepo.getCooldownOrCreate(user, sender, getCommandName()); // Get current or new Cooldown Entity
             if (cd.hasCooldown()) return; // If there is a cooldown skip command execution
-            if (execute(new TwasiCustomCommandEvent(command, loader))) { // If command was executed successfully
+            if (execute(new TwasiCustomCommandEvent(command, loader).addBindings(getTranslationRenderer()))) { // If command was executed successfully
                 cooldownRepo.commit(cd.setCooldown(getCooldown())); // Reset the cooldown and commit
             }
         }
@@ -83,4 +84,7 @@ public abstract class TwasiCustomCommand {
         return Duration.ofMinutes(1);
     }
 
+    public abstract TranslationRenderer additionalBindings();
+
+    protected abstract TranslationRenderer getTranslationRenderer();
 }

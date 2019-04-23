@@ -19,6 +19,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
     private String usedCommandName;
     private List<String> args;
     private ClassLoader loader;
+    private TranslationRenderer addBindings = null;
 
     public TwasiCustomCommandEvent(TwasiCommand command, ClassLoader loader) {
         super(command);
@@ -30,7 +31,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         this.args.remove(0); // Remove command name from args
     }
 
-    public TwasiCustomCommandEvent(TwasiCommand command){
+    public TwasiCustomCommandEvent(TwasiCommand command) {
         this(command, TwasiCustomCommandEvent.class.getClassLoader());
     }
 
@@ -75,19 +76,23 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
                 .getInstance(loader, streamer.getUser().getConfig().getLanguage())
                 .bindAll(copyBindings.getBindings())
                 .bindAllObjects(copyBindings.getObjectBindings())
-                .bindObject("user", streamer.getUser().getTwitchAccount())
-                .bindObject("streamer", streamer.getUser().getTwitchAccount())
+                .multiBindObject(streamer.getUser().getTwitchAccount(), "user", "streamer")
                 .bindObject("sender", sender)
                 .bind("command", getUsedCommandName())
                 .bind("args", getArgsAsOne());
         AtomicInteger i = new AtomicInteger(1);
-        args.forEach(arg -> renderer.bind("args."+ i.getAndIncrement(), arg));
+        args.forEach(arg -> renderer.bind("args." + i.getAndIncrement(), arg));
         return renderer;
     }
 
-    public TranslationRenderer getRenderer(){
+    public TwasiCustomCommandEvent addBindings(TranslationRenderer renderer) {
+        this.addBindings = renderer;
+        return this;
+    }
+
+    public TranslationRenderer getRenderer() {
         return getRenderer(
-                TranslationRenderer.getInstance(null, null) // Can be null, will be replaced by the other method any way
+                (addBindings != null) ? addBindings : TranslationRenderer.getInstance(null, null) // Can be null, will be replaced by the other method any way
         );
     }
 }
