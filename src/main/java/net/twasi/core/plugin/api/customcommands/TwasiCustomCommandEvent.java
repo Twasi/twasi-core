@@ -17,7 +17,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
     private TwitchAccount sender;
     private Streamer streamer;
     private String usedCommandName;
-    private List<String> args;
+    protected List<String> args;
     private ClassLoader loader;
     private TranslationRenderer addBindings = null;
 
@@ -94,5 +94,9 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         return getRenderer(
                 (addBindings != null) ? addBindings : TranslationRenderer.getInstance(null, null) // Can be null, will be replaced by the other method any way
         );
+    }
+
+    public ClassLoader getLoader() {
+        return loader;
     }
 }
