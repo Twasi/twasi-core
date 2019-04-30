@@ -7,6 +7,7 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
+import net.twasi.core.services.providers.PluginManagerService;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.services.providers.mail.MailService;
 import net.twasi.core.services.providers.mail.MailTemplates;
@@ -14,6 +15,7 @@ import net.twasi.twitchapi.TwitchAPI;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserActions {
 
@@ -27,6 +29,11 @@ public class UserActions {
 
         user.setTwitchAccount(account);
         user.setStatus(AccountStatus.SETUP);
+
+        PluginManagerService service = ServiceRegistry.get(PluginManagerService.class);
+        user.setInstalledPlugins(service.getPlugins().stream().filter(p ->
+                p.getDescription().isAutoInstall() && !p.getDescription().isHidden()).map(t ->
+                t.getDescription().getName()).collect(Collectors.toList()));
 
         if (ServiceRegistry.get(ConfigService.class).getCatalog().mail.enabled) {
             String confirmationCode = user.getTwitchAccount().getUserName() + "_" + UUID.randomUUID().toString();

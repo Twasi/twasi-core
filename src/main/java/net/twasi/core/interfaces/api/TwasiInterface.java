@@ -3,7 +3,6 @@ package net.twasi.core.interfaces.api;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
@@ -29,9 +28,11 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         PluginManagerService pluginManagerService = ServiceRegistry.get(PluginManagerService.class);
         List<String> installedPlugins = new ArrayList<>(user.getInstalledPlugins());
 
-        pluginManagerService.getPlugins().stream().filter(p ->
-                p.getDescription().isAutoinstall()).map(p ->
-                p.getDescription().getName()).forEach(installedPlugins::add);
+        pluginManagerService.getPlugins().stream().filter(
+                p -> p.getDescription().isAutoInstall() && p.getDescription().isHidden()
+        ).map(
+                p -> p.getDescription().getName()
+        ).forEach(installedPlugins::add);
 
         // Enable all currently installed and auto installing plugins
         installedPlugins.forEach(name -> {
@@ -137,8 +138,6 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         List<TwasiCustomCommand> commands = new ArrayList<>();
         for (TwasiUserPlugin p : getPlugins())
             commands.addAll(p.getCommands());
-        for (TwasiDependency d : ServiceRegistry.get(PluginManagerService.class).getDependencies())
-            commands.addAll(d.getCommands());
         return commands.stream().filter(TwasiCustomCommand::allowsListing).collect(Collectors.toList());
     }
 

@@ -180,6 +180,10 @@ public class User extends BaseEntity {
         return installedPlugins;
     }
 
+    public void setInstalledPlugins(List<String> installedPlugins) {
+        this.installedPlugins = installedPlugins;
+    }
+
     public void setEvents(List<EventMessage> events) {
         this.events = events;
     }
