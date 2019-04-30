@@ -1,6 +1,7 @@
 package net.twasi.core.plugin.api.customcommands;
 
 import net.twasi.core.database.models.TwitchAccount;
+import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.api.events.TwasiCommandEvent;
@@ -16,6 +17,7 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
 
     private TwitchAccount sender;
     private Streamer streamer;
+    private TwasiInterface twasiInterface;
     private String usedCommandName;
     protected List<String> args;
     private ClassLoader loader;
@@ -24,7 +26,8 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
     public TwasiCustomCommandEvent(TwasiCommand command, ClassLoader loader) {
         super(command);
         this.sender = command.getSender();
-        this.streamer = command.getTwasiInterface().getStreamer();
+        this.twasiInterface = command.getTwasiInterface();
+        this.streamer = twasiInterface.getStreamer();
         this.usedCommandName = command.getCommandName();
         this.args = new ArrayList<>(asList(command.getMessage().split(" "))); // As ArrayList to prevent UnsupportedOperationException in next line
         this.loader = loader;
@@ -98,5 +101,9 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
 
     public ClassLoader getLoader() {
         return loader;
+    }
+
+    public TwasiInterface getTwasiInterface() {
+        return twasiInterface;
     }
 }
