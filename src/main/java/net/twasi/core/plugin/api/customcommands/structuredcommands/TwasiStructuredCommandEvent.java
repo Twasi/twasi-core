@@ -7,12 +7,13 @@ import java.util.List;
 
 public class TwasiStructuredCommandEvent extends TwasiCustomCommandEvent {
 
-    protected List<String> args = super.args;
+    private List<String> args;
     private String baseCommand;
 
     public TwasiStructuredCommandEvent(TwasiCustomCommandEvent event) {
         super(event.getCommand(), event.getLoader());
-        this.baseCommand = event.getArgs().get(0).toLowerCase();
+        this.args = event.getArgs();
+        this.baseCommand = args.get(0).toLowerCase();
         args.remove(0);
     }
 
