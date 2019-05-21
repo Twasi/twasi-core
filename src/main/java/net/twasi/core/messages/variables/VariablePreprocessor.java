@@ -2,100 +2,96 @@ package net.twasi.core.messages.variables;
 
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.TwasiMessage;
-import net.twasi.core.plugin.TwasiDependency;
-import net.twasi.core.plugin.api.TwasiUserPlugin;
-import net.twasi.core.plugin.api.TwasiVariable;
-import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.PluginManagerService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class VariablePreprocessor {
+
+    private static String charsRegex = "[a-zA-Z0-9]";
+    private static String indicatorRegex = "\\$";
+    private static char indicator = '$';
+
     public static String process(TwasiInterface inf, String text, TwasiMessage message) {
-        // Check if at least 1 $ is contained
-        if (!text.contains("$")) {
-            // There could be no variables in this text
-            return text;
+
+        return text;
+    }
+
+    private static List<ParsedVariable> parseVars(String text) {
+        List<ParsedVariable> variables = new ArrayList<>();
+        while (text.matches(".*" + indicatorRegex + charsRegex + "+.*")) {
+            int start = -1, end = -1;
+            StringBuilder varName = new StringBuilder();
+            StringBuilder varArgs = new StringBuilder();
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                if (c == indicator && String.valueOf(text.charAt(i + 1)).matches(charsRegex)) {
+                    start = i;
+                    continue;
+                }
+                if (!String.valueOf(c).matches(charsRegex)) {
+                    end = i;
+                    if (c == '(') {
+                        int depth = 0;
+                        for (int j = i + 1; j < text.length(); j++) {
+                            if(text.charAt(j) == '(') {
+                                depth ++;
+                            }
+                            if (text.charAt(j) == ')') {
+                                if(depth == 0) {
+                                    end = j;
+                                    break;
+                                }
+                                depth --;
+                            } else {
+                                varArgs.append(text.charAt(j));
+                            }
+                        }
+                    }
+                    if(end == i) {
+                        varArgs.setLength(0);
+                    }
+                    break;
+                } else if (start != -1) {
+                    varName.append(c);
+                }
+            }
+            variables.add(new ParsedVariable(text.substring(start, end), varName.toString(), varArgs.toString()));
+        }
+        return variables;
+    }
+
+    private static class ParsedVariable {
+        private String raw;
+        private String name;
+        private String args;
+
+        public ParsedVariable(String raw, String name, String args) {
+            this.raw = raw;
+            this.name = name;
+            this.args = args;
         }
 
-        // Split text to words
-        String[] words = text.split(" ");
+        public String resolve(){
+            List<String> args = new ArrayList<>();
+            if(!this.args.equals("")) {
+                int depth = 0;
+                int start = 0;
+                for(int i=0;i<this.args.length(); i++){
+                    char current = this.args.charAt(i);
+                    if(current == '(') depth++;
+                    if(current == ')' && depth > 0) depth--;
+                    if(current == ',' && depth == 0) {
 
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].startsWith("$")) {
-                String variable = words[i].substring(1);
-                String[] parameters = new String[0];
-
-                if (variable.contains("(")) {
-                    // Special case: $variable()
-                    if (variable.endsWith("()")) {
-                        variable = variable.substring(0, variable.length() - 2);
-                    } else {
-                        // There are parameters available
-                        variable = variable.substring(0, variable.length() - 1);
-                        String parameterString = variable.split("\\(", 2)[1];
-                        variable = variable.split("\\(", 2)[0];
-                        parameters = parameterString.split(",");
                     }
-                }
-                String finalName = variable;
-
-                PluginManagerService pms = ServiceRegistry.get(PluginManagerService.class);
-                TwasiDependency handlingDependency = pms
-                        .getDependencies()
-                        .stream()
-                        .filter(dep -> dep.getVariables()
-                                .stream()
-                                .anyMatch(var -> var
-                                        .getNames()
-                                        .stream()
-                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
-                                )
-                        ).findFirst().orElse(null);
-
-                TwasiUserPlugin handlingPlugin = null;
-                if (handlingDependency == null) handlingPlugin = inf
-                        .getPlugins()
-                        .stream()
-                        .filter(plugin -> plugin
-                                .getVariables()
-                                .stream()
-                                .anyMatch(var -> var
-                                        .getNames()
-                                        .stream()
-                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
-                                )
-                        ).findFirst().orElse(null);
-                if (handlingPlugin == null && handlingDependency == null) {
-                    words[i] = "ERROR_NOT_FOUND";
-                } else {
-                    TwasiVariable handlingVariable;
-                    if (handlingDependency != null) {
-                        handlingVariable = handlingDependency
-                                .getVariables()
-                                .stream()
-                                .filter(var -> var
-                                        .getNames()
-                                        .stream()
-                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
-                                ).findFirst().orElse(null);
-                    } else {
-                        handlingVariable = handlingPlugin
-                                .getVariables()
-                                .stream()
-                                .filter(var -> var
-                                        .getNames()
-                                        .stream()
-                                        .anyMatch(name -> name.equalsIgnoreCase(finalName))
-                                ).findFirst().orElse(null);
-                    }
-                    if (handlingVariable == null) {
-                        throw new RuntimeException("Error while trying to process variable " + variable + " for user plugin " + handlingPlugin.getCorePlugin().getName());
-                    }
-
-                    words[i] = handlingVariable.process(variable, inf, parameters, message);
                 }
             }
         }
+    }
 
-        return String.join(" ", words);
+    private static String resolveVar(String name, String[] args, String raw, TwasiInterface twasiInterface) {
+        return raw;
     }
 }
