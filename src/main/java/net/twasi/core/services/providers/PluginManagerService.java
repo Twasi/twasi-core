@@ -55,7 +55,7 @@ public class PluginManagerService implements IService {
     }
 
     public List<TwasiDependency> getDependencies() {
-         return dependencies;
+        return dependencies;
     }
 
     /**
@@ -83,6 +83,7 @@ public class PluginManagerService implements IService {
 
     /**
      * Returns a plugin by a name
+     *
      * @param name the name to search
      * @return the corresponding plugin, or null if not found
      */
@@ -92,6 +93,7 @@ public class PluginManagerService implements IService {
 
     /**
      * Returns a dependency by a name
+     *
      * @param name the name to search
      * @return the corresponding plugin, or null if not found
      */

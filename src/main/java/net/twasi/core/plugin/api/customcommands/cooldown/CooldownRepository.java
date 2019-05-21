@@ -6,7 +6,7 @@ import net.twasi.core.database.models.User;
 
 public class CooldownRepository extends Repository<CooldownEntity> {
 
-    public CooldownEntity getCooldown(User user, String twitchId, String command) {
+    public CooldownEntity getCooldownOrCreate(User user, String twitchId, String command) {
         CooldownEntity entity = store.createQuery(CooldownEntity.class)
                 .field("user").equal(user)
                 .field("senderTwitchId").equal(twitchId)
@@ -19,8 +19,8 @@ public class CooldownRepository extends Repository<CooldownEntity> {
         return entity;
     }
 
-    public CooldownEntity getCooldown(User user, TwitchAccount account, String command) {
-        return getCooldown(user, account.getTwitchId(), command);
+    public CooldownEntity getCooldownOrCreate(User user, TwitchAccount account, String command) {
+        return getCooldownOrCreate(user, account.getTwitchId(), command);
     }
 
 }

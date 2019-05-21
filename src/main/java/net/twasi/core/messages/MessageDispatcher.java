@@ -6,12 +6,9 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.messages.internal.InternalCommandHandler;
 import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.models.Message.TwasiMessage;
-import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.events.TwasiCommandEvent;
 import net.twasi.core.plugin.api.events.TwasiMessageEvent;
-import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,13 +44,6 @@ public class MessageDispatcher {
                             TwasiLogger.log.error("Exception while executing onCommand of plugin " + plugin.getClass() + ": " + e.getMessage(), e);
                         }
                     });
-                    commandExecutionThread.setDaemon(true);
-                    commandExecutionThread.start();
-                }
-
-                List<TwasiDependency> dependencies = ServiceRegistry.get(PluginManagerService.class).getDependencies();
-                for (TwasiDependency dependency : dependencies) {
-                    Thread commandExecutionThread = new Thread(() -> dependency.handleCommand(twasiCommand));
                     commandExecutionThread.setDaemon(true);
                     commandExecutionThread.start();
                 }

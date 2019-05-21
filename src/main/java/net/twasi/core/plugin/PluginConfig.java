@@ -20,7 +20,7 @@ public class PluginConfig {
     public boolean messageHandler;
     public boolean dependency;
     public boolean hidden;
-    public boolean autoinstall;
+    public boolean autoInstall;
 
     public List<String> commands;
     public List<String> permissions;
@@ -81,8 +81,8 @@ public class PluginConfig {
         return hidden;
     }
 
-    public boolean isAutoinstall() {
-        return autoinstall;
+    public boolean isAutoInstall() {
+        return autoInstall;
     }
 
     public List<String> getCommands() {

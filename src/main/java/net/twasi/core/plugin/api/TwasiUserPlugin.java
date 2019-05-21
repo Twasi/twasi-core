@@ -18,6 +18,9 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     private transient TwasiInterface twasiInterface;
     private transient TwasiTranslation translations;
 
+    private List<TwasiPluginCommand> commands = new ArrayList<>();
+    private List<TwasiVariable> variables = new ArrayList<>();
+
     public void onEnable(TwasiEnableEvent e) {
     }
 
@@ -40,7 +43,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
             }
         if (command == null)
             TwasiLogger.log.debug("Plugin '" + corePlugin.getDescription().getName() + "' has registered command '" + e.getCommand().getCommandName() + "' but has no handler.");
-        else command.processInternal(e.getCommand());
+        else command.processInternal(e.getCommand(), getCorePlugin().getClassLoader());
     }
 
     public void onMessage(TwasiMessageEvent e) {
@@ -76,17 +79,31 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
     public List<TwasiVariable> getVariables() {
-        return new ArrayList<>();
+        return variables;
+    }
+
+    protected void registerCommand(Class<? extends TwasiPluginCommand> clazz) {
+        try {
+            commands.add(clazz.getDeclaredConstructor(TwasiUserPlugin.class).newInstance(this));
+        } catch (Exception e) {
+            TwasiLogger.log.warn("Command class " + clazz.getName() + " of plugin " + getCorePlugin().getDescription().getName() + " could not be instantiated.");
+        }
+    }
+
+    protected void registerCommand(TwasiPluginCommand command) {
+        commands.add(command);
     }
 
     public List<TwasiPluginCommand> getCommands() {
-        return new ArrayList<>();
+        return commands;
     }
 
+    @Deprecated
     public final String getTranslation(String key, Object... objects) {
         return getTranslations().getTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
 
+    @Deprecated
     public final String getRandomTranslation(String key, Object... objects) {
         return getTranslations().getRandomTranslation(getTwasiInterface().getStreamer().getUser(), key, objects);
     }
