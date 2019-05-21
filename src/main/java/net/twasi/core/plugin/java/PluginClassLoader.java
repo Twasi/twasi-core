@@ -61,7 +61,7 @@ public final class PluginClassLoader extends URLClassLoader {
             try {
                 pluginClass = jarClass.asSubclass(TwasiPlugin.class);
             } catch (ClassCastException ex) {
-                throw new Exception("main class `" + description.getMain() + "' does not extend TwasiPlugin", ex);
+                throw new Exception("Main class `" + description.getMain() + "' does not extend TwasiPlugin", ex);
             }
 
             plugin = pluginClass.newInstance();
