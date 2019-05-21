@@ -1,11 +1,6 @@
 package net.twasi.core.graphql.model.support;
 
-import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.support.SupportTicket;
-import net.twasi.core.database.models.support.SupportTicketMessage;
-import net.twasi.core.database.repositories.SupportTicketRepository;
-import net.twasi.core.services.ServiceRegistry;
-import net.twasi.core.services.providers.DataService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,17 +9,8 @@ public class SupportTicketDTO {
 
     private SupportTicket ticket;
 
-    private boolean isAdminContext;
-    private User user;
-
-    public SupportTicketDTO(User user, SupportTicket supportTicket) {
+    public SupportTicketDTO(SupportTicket supportTicket) {
         this.ticket = supportTicket;
-        this.isAdminContext = false;
-    }
-
-    public SupportTicketDTO(User user, SupportTicket supportTicket, boolean isAdminContext) {
-        this(user, supportTicket);
-        this.isAdminContext = isAdminContext;
     }
 
     public SupportTicketUserDTO getOwner() {
@@ -54,11 +40,4 @@ public class SupportTicketDTO {
     public String getId() {
         return ticket.getId().toString();
     }
-
-    public SupportMessageDTO reply(String message, boolean close) {
-        SupportTicketMessage stm = ServiceRegistry.get(DataService.class).get(SupportTicketRepository.class).addReply(ticket, user, isAdminContext, message, close);
-
-        return new SupportMessageDTO(stm);
-    }
-
 }
