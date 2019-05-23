@@ -17,11 +17,15 @@ public class VariablePreprocessor {
     private static String charsRegex = "[a-zA-Z0-9]";
     private static String indicatorRegex = "\\$";
     private static char indicator = '$';
+    private static int resolveMaxDepth = 3;
 
     public static String process(TwasiInterface inf, String text, TwasiMessage message) {
         AtomicReference<String> parsed = new AtomicReference<>(text);
-        List<ParsedVariable> variables = parseVars(text);
-        variables.forEach(var -> parsed.set(parsed.get().replace(var.raw, var.resolve(inf, message))));
+        int i = resolveMaxDepth;
+        while (parsed.get().contains(String.valueOf(indicator)) && i-- > 0) {
+            List<ParsedVariable> variables = parseVars(parsed.get());
+            variables.forEach(var -> parsed.set(parsed.get().replace(var.raw, var.resolve(inf, message))));
+        }
         return parsed.get();
     }
 
@@ -37,8 +41,8 @@ public class VariablePreprocessor {
                     start = i;
                     continue;
                 }
-                if (!String.valueOf(c).matches(charsRegex)) {
-                    end = i;
+                if (!String.valueOf(c).matches(charsRegex) && start != -1) {
+                    end = i - 1;
                     if (c == '(') {
                         int depth = 0;
                         for (int j = i + 1; j < text.length(); j++) {
@@ -69,7 +73,7 @@ public class VariablePreprocessor {
             if (start == -1 || end == -1) break;
             end += 1; // Chars of strings start at 1 not at 0
             variables.add(new ParsedVariable(text.substring(start, end), varName.toString(), varArgs.toString()));
-            text = text.substring(0,start) + text.substring(end);
+            text = text.substring(0, start) + text.substring(end);
         }
         TwasiLogger.log.debug("Number of parsed variables: " + variables.size());
         return variables;
@@ -97,24 +101,22 @@ public class VariablePreprocessor {
                     if (current == ')' && depth > 0) depth--;
                     if (current == ',' && depth == 0) {
                         args.add(this.args.substring(start, i));
-                        start = i+1;
+                        start = i + 1;
                     }
                 }
                 args.add(this.args.substring(start)); // Add last arg
             }
-            for(int i=0; i<3;i++) {
-                List<String> resolvedArgs = new ArrayList<>();
-                args.forEach(arg -> {
-                    AtomicReference<String> parsed = new AtomicReference<>(arg);
+            List<String> resolvedArgs = new ArrayList<>();
+            for (String arg : args) {
+                AtomicReference<String> parsed = new AtomicReference<>(arg);
+                int i = resolveMaxDepth;
+                while (parsed.get().contains(String.valueOf(indicator)) && i-- > 0) {
                     List<ParsedVariable> variables = parseVars(arg);
-                    variables.forEach(var -> {
-                        parsed.set(parsed.get().replace(var.raw, var.resolve(twasiInterface, message)));
-                        resolvedArgs.add(parsed.get());
-                    });
-                });
-                args = resolvedArgs;
+                    variables.forEach(var -> parsed.set(parsed.get().replace(var.raw, var.resolve(twasiInterface, message))));
+                }
+                resolvedArgs.add(parsed.get());
             }
-            return resolveVar(this.name, args.toArray(new String[0]), raw, twasiInterface, message);
+            return resolveVar(this.name, resolvedArgs.toArray(new String[0]), raw, twasiInterface, message);
         }
     }
 
@@ -128,7 +130,7 @@ public class VariablePreprocessor {
                             var.getNames().stream().anyMatch(name::equalsIgnoreCase))).findAny().orElse(null);
 
             if (plugin != null) {
-                return plugin.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message);
+                return reformat(plugin.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message));
             }
 
             PluginManagerService pm = ServiceRegistry.get(PluginManagerService.class);
@@ -137,11 +139,16 @@ public class VariablePreprocessor {
                             var.getNames().stream().anyMatch(name::equalsIgnoreCase))).findAny().orElse(null);
 
             if (dependency != null) {
-                return dependency.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message);
+                return reformat(dependency.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message));
             }
         } catch (Exception ignored) {
         }
 
-        return raw;
+        return "UNRESOLVED";
+    }
+
+    private static String reformat(String resolved) {
+        return resolved
+                .replaceAll("\n", " ");
     }
 }
