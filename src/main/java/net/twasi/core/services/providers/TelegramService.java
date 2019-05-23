@@ -30,7 +30,7 @@ public class TelegramService implements IService {
         if (!config.enabled) return;
         // Load config and check whether telegram should be active or not
 
-        if (config != null && config.botToken != null && config.chatId != 0 && config.username != null) {
+        if (config.botToken != null && config.chatId != 0 && config.username != null) {
             // Load Telegram config and check if settings are set
 
             telegramBot = new TelegramLongPollingBot() {
@@ -129,6 +129,7 @@ public class TelegramService implements IService {
     }
 
     public void sendMessageToTelegramChat(String message) throws TelegramApiException {
+        if(this.telegramBot == null) return;
         SendMessage sendMessage = new SendMessage(config.chatId, message);
         telegramBot.execute(sendMessage);
     }
