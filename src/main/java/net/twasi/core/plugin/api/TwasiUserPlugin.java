@@ -94,6 +94,19 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         commands.add(command);
     }
 
+
+    protected void registerVariable(Class<? extends TwasiVariable> clazz) {
+        try {
+            variables.add(clazz.getDeclaredConstructor(TwasiUserPlugin.class).newInstance(this));
+        } catch (Exception e) {
+            TwasiLogger.log.warn("Variable class " + clazz.getName() + " of plugin " + getCorePlugin().getDescription().getName() + " could not be instantiated.");
+        }
+    }
+
+    protected void registerVariable(TwasiVariable command) {
+        variables.add(command);
+    }
+
     public List<TwasiPluginCommand> getCommands() {
         return commands;
     }
