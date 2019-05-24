@@ -17,6 +17,10 @@ import java.util.List;
 
 public class DatabaseService implements IService {
 
+    public static DatabaseService get() {
+        return ServiceRegistry.get(DatabaseService.class);
+    }
+
     private Morphia morphia;
     private Datastore store;
 

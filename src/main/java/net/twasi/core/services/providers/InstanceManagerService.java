@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InstanceManagerService implements IService {
+    public static InstanceManagerService get(){
+        return ServiceRegistry.get(InstanceManagerService.class);
+    }
+
     private List<TwasiInterface> interfaces = new ArrayList<>();
 
     private List<TwasiEventHandler<NewInstanceEvent>> newInstanceEventHandlers = new ArrayList<>();

@@ -19,6 +19,10 @@ import java.util.List;
 
 public class TelegramService implements IService {
 
+    public static TelegramService get() {
+        return ServiceRegistry.get(TelegramService.class);
+    }
+
     private TelegramLongPollingBot telegramBot = null;
     private TelegramBotCatalog config;
 

@@ -9,6 +9,7 @@ import kotlin.text.Charsets;
 import net.twasi.core.graphql.Query;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.IService;
+import net.twasi.core.services.ServiceRegistry;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApiSchemaManagementService implements IService {
+
+    public static ApiSchemaManagementService get() {
+        return ServiceRegistry.get(ApiSchemaManagementService.class);
+    }
+
     private GraphQLSchema definitiveSchema;
     private SchemaParserBuilder schemaBuilder = SchemaParser.newParser()
             .resolvers(new Query());

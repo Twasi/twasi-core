@@ -240,6 +240,7 @@ public class VariablePreprocessor {
                 return reformat(dependency.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message));
             }
         } catch (Exception ignored) {
+            return "ERROR";
         }
 
         // If there is no handling plugin or dependency return UNRESOLVED

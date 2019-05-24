@@ -7,6 +7,11 @@ import org.simplejavamail.mailer.Mailer;
 import org.simplejavamail.mailer.config.TransportStrategy;
 
 public class MailService implements IService {
+
+    public static MailService get() {
+        return ServiceRegistry.get(MailService.class);
+    }
+
     private Mailer mailer;
 
     private MailService() {
