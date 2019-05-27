@@ -18,13 +18,13 @@ public class BotStatusDTO {
     }
 
     public BotStatusDTO changeStatus(Boolean isRunning) {
+        this.user.getConfig().setActivated(isRunning);
+        DataService.get().get(UserRepository.class).commit(this.user);
         if (isRunning) {
             ServiceRegistry.get(InstanceManagerService.class).start(user);
         } else {
             ServiceRegistry.get(InstanceManagerService.class).stop(user);
         }
-        this.user.getConfig().setActivated(isRunning());
-        DataService.get().get(UserRepository.class).commit(this.user);
         return this;
     }
 }
