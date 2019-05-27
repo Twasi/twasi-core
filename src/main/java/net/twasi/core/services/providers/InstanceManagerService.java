@@ -26,7 +26,7 @@ public class InstanceManagerService implements IService {
     private List<TwasiEventHandler<NewInstanceEvent>> newInstanceEventHandlers = new ArrayList<>();
 
     /**
-     * Registers a single interface (e.g. if someone starts the bot aferwards)
+     * Registers a single interface (e.g. if someone starts the bot afterwards)
      *
      * @param inf The interface to register
      * @return if the interface was registered successfully
