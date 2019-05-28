@@ -99,7 +99,9 @@ type SupportTicket {
     owner: SupportTicketUser,
     topic: String,
     messages: [SupportTicketMessage],
-    state: String
+    state: String,
+    createdAt: String,
+    closedAt: String
 }
 
 type SupportTicketMessage {

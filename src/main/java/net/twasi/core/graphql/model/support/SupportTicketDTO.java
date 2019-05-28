@@ -40,4 +40,12 @@ public class SupportTicketDTO {
     public String getId() {
         return ticket.getId().toString();
     }
+
+    public String getCreatedAt() {
+        return ticket.getCreatedAt().toString();
+    }
+
+    public String getClosedAt() {
+        return ticket.getClosedAt().toString();
+    }
 }

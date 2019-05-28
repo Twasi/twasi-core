@@ -5,6 +5,7 @@ import net.twasi.core.database.models.support.SupportTicket;
 import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.User;
 
+import java.util.Date;
 import java.util.List;
 
 public class SupportTicketRepository extends Repository<SupportTicket> {
@@ -32,6 +33,7 @@ public class SupportTicketRepository extends Repository<SupportTicket> {
 
         if (close) {
             ticket.setOpen(false);
+            ticket.setClosedAt(new Date());
         }
 
         store.save(ticket);
