@@ -4,6 +4,7 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.services.IService;
+import net.twasi.core.services.ServiceRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,10 @@ import java.util.stream.Collectors;
  * Plugin manager does manage the lifecycle of all plugins
  */
 public class PluginManagerService implements IService {
+
+    public static PluginManagerService get() {
+        return ServiceRegistry.get(PluginManagerService.class);
+    }
 
     private List<TwasiPlugin> plugins = new ArrayList<>();
     private List<TwasiDependency> dependencies = new ArrayList<>();

@@ -10,12 +10,11 @@ import java.util.List;
 
 public abstract class TwasiSubCommand implements ISubCommands {
 
-    private final TwasiStructuredCommandEvent event;
+    private final TwasiCustomCommandEvent event;
     private ISubCommands parent;
 
     public TwasiSubCommand(TwasiCustomCommandEvent event, ISubCommands parent) {
-        this.event = new TwasiStructuredCommandEvent(event);
-        TwasiLogger.log.info("Command '" + getCommandName() + "', first arg '" + event.getArgs().get(0) + "', args as one '" + event.getArgsAsOne() + "'");
+        this.event = event;
         this.parent = parent;
     }
 
@@ -38,7 +37,7 @@ public abstract class TwasiSubCommand implements ISubCommands {
                 }
             }
         }
-        return handle(event);
+        return handle(new TwasiStructuredCommandEvent(event));
     }
 
     protected boolean handle(TwasiStructuredCommandEvent event) {

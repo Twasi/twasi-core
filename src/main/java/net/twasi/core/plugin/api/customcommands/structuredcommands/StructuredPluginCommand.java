@@ -20,13 +20,15 @@ public abstract class StructuredPluginCommand extends TwasiPluginCommand impleme
 
     @Override
     protected final boolean execute(TwasiCustomCommandEvent event) {
-        if (event.getArgs().size() > 0 && getSubCommands() != null && getSubCommands().size() > 0) {
+        SubCommandCollection subCommands = getSubCommands();
+        if (event.getArgs().size() > 0 && subCommands != null && subCommands.size() > 0) {
             String subCommand = event.getArgs().get(0);
             for (Class<? extends TwasiSubCommand> cmd : getSubCommands()) {
                 try {
                     TwasiSubCommand sub = cmd.getDeclaredConstructor(TwasiCustomCommandEvent.class, ISubCommands.class).newInstance(new TwasiStructuredCommandEvent(event), this);
                     if (sub.getCommandName().equalsIgnoreCase(subCommand)) return sub.fire();
                 } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+                    ignored.printStackTrace();
                     // Should be never thrown
                 } catch (Exception e) {
                     TwasiLogger.log.debug("Error while trying to execute a subcommand of " +

@@ -238,6 +238,7 @@ public final class JavaPluginLoader implements PluginLoader {
     public void enablePlugin(final Plugin plugin) {
         if (!(plugin instanceof TwasiPlugin)) {
             plugin.getLogger().error("Plugin is not associated with this PluginLoader");
+            return;
         }
 
         if (!plugin.isActivated()) {
