@@ -1,6 +1,9 @@
 package net.twasi.core.graphql;
 
-import graphql.servlet.SimpleGraphQLServlet;
+import graphql.GraphQLError;
+import graphql.execution.AsyncExecutionStrategy;
+import graphql.schema.GraphQLSchema;
+import graphql.servlet.*;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.ApiSchemaManagementService;
 
@@ -8,11 +11,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-public class GraphQLEndpoint extends SimpleGraphQLServlet {
+public class GraphQLEndpoint extends GraphQLHttpServlet {
 
-    public GraphQLEndpoint() {
-        super(ServiceRegistry.get(ApiSchemaManagementService.class).getDefinitiveSchema());
+    private GraphQLSchema schema = ServiceRegistry.get(ApiSchemaManagementService.class).getDefinitiveSchema();
+
+    @Override
+    protected GraphQLConfiguration getConfiguration() {
+        return GraphQLConfiguration
+                .with(schema)
+                .with(GraphQLQueryInvoker.newBuilder()
+                        .withExecutionStrategyProvider(new DefaultExecutionStrategyProvider(new AsyncExecutionStrategy(new GraphQLExceptionHandler())))
+                        .build())
+                .with(GraphQLObjectMapper.newBuilder()
+                        .withGraphQLErrorHandler(list -> list)
+                        .build())
+                .build();
     }
 
     /* private static GraphQLSchema buildSchema() {
