@@ -32,19 +32,22 @@ public class User extends BaseEntity {
 
     private List<EventMessage> events;
 
-    private List<String> installedPlugins = PluginManagerService.get().getDefaultPlugins();
+    private List<String> installedPlugins;
 
     private AccountStatus status;
 
     private UserRank rank;
 
     public User() {
+        if (ServiceRegistry.has(PluginManagerService.class)) {
+            installedPlugins = PluginManagerService.get().getDefaultPlugins();
+        }
         if (ServiceRegistry.has(ConfigService.class)) {
             defaultAccount = new TwitchAccount(
-                    ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultName,
+                    ConfigService.get().getCatalog().twitch.defaultName,
                     null,
-                    new AccessToken(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultToken),
-                    ServiceRegistry.get(ConfigService.class).getCatalog().twitch.defaultUserId,
+                    new AccessToken(ConfigService.get().getCatalog().twitch.defaultToken),
+                    ConfigService.get().getCatalog().twitch.defaultUserId,
                     new ArrayList<>()
             );
         }
@@ -146,7 +149,8 @@ public class User extends BaseEntity {
 
     /**
      * Checks if the given TwitchAccount has the permission to do a certain thing on the User's channel
-     * @param account The TwitchAccount to check
+     *
+     * @param account       The TwitchAccount to check
      * @param permissionKey The Permission to check
      * @return if the user is allowed to take the action
      */
