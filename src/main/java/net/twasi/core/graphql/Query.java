@@ -12,12 +12,6 @@ public class Query extends TwasiCustomResolver {
             return null;
         }
 
-        try {
-            return new PanelDTO(user);
-        } catch (Exception e) {
-            TwasiLogger.log.debug(e.getMessage(), e);
-            e.printStackTrace();
-            return null;
-        }
+        return new PanelDTO(user);
     }
 }

@@ -2,6 +2,7 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
+import net.twasi.core.graphql.TwasiGraphQLHandledException;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.services.ServiceRegistry;
@@ -42,8 +43,8 @@ public class UserDTO {
 
         TwasiInterface instance = ServiceRegistry.get(InstanceManagerService.class).getByUser(user);
 
-        if (instance == null || plugin.getDescription().isHidden()) {
-            return null;
+        if (plugin == null || instance == null || plugin.getDescription().isHidden()) {
+            throw new TwasiGraphQLHandledException("The requested plugin was not found or is not ready for installation.", "plugin.notfound");
         }
 
         instance.installPlugin(plugin);
@@ -60,9 +61,10 @@ public class UserDTO {
 
     public PluginDetailsDTO uninstallPlugin(String name) {
         TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
-        ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
 
-        if (plugin.getDescription().isHidden()) return null;
+        if (plugin.getDescription().isHidden()) throw new TwasiGraphQLHandledException("The requested plugin may not be uninstalled.", "plugin.uninstallforbidden");
+
+        ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
 
         return new PluginDetailsDTO(
                 plugin.getDescription(),
