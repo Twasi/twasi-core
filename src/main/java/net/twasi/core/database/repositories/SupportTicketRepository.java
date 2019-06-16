@@ -4,14 +4,15 @@ import net.twasi.core.database.lib.Repository;
 import net.twasi.core.database.models.support.SupportTicket;
 import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.models.support.SupportTicketType;
 
 import java.util.Date;
 import java.util.List;
 
 public class SupportTicketRepository extends Repository<SupportTicket> {
 
-    public SupportTicket create(User owner, String topic, String message) {
-        SupportTicket st = new SupportTicket(owner, topic);
+    public SupportTicket create(User owner, String topic, String message, SupportTicketType category) {
+        SupportTicket st = new SupportTicket(owner, topic, category);
 
         SupportTicketMessage stm = new SupportTicketMessage(owner, message, false);
 

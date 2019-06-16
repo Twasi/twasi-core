@@ -3,6 +3,7 @@ package net.twasi.core.graphql.model.support;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
 import net.twasi.core.database.models.support.SupportTicket;
+import net.twasi.core.database.models.support.SupportTicketType;
 import net.twasi.core.database.repositories.SupportTicketRepository;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
@@ -37,7 +38,13 @@ public class SupportDTO {
                 .collect(Collectors.toList());
     }
 
-    public SupportTicketDTO create(String topic, String message) {
+    public SupportTicketDTO create(String topic, String message, String category) {
+        try {
+            SupportTicketType categoryType = SupportTicketType.valueOf(category);
+        } catch (IllegalArgumentException e) {
+            // throw new Twasi
+        }
+
         SupportTicket ticket = repository.create(user, topic, message);
 
         return new SupportTicketDTO(ticket);

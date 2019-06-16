@@ -12,18 +12,6 @@ import java.util.List;
 @Entity("supportTickets")
 public class SupportTicket extends BaseEntity {
 
-    public SupportTicket() {
-    }
-
-    public SupportTicket(User owner, String topic) {
-        this.owner = owner;
-        this.isOpen = true;
-        this.entries = new ArrayList<>();
-        this.topic = topic;
-        this.createdAt = new Date();
-        this.closedAt = null;
-    }
-
     @Reference
     private User owner;
 
@@ -33,9 +21,24 @@ public class SupportTicket extends BaseEntity {
 
     private String topic;
 
+    private SupportTicketType category;
+
     private Date createdAt;
 
     private Date closedAt;
+
+    public SupportTicket() {
+    }
+
+    public SupportTicket(User owner, String topic, SupportTicketType category) {
+        this.owner = owner;
+        this.isOpen = true;
+        this.entries = new ArrayList<>();
+        this.topic = topic;
+        this.createdAt = new Date();
+        this.closedAt = null;
+        this.category = category;
+    }
 
     public User getOwner() {
         return owner;
@@ -71,5 +74,9 @@ public class SupportTicket extends BaseEntity {
 
     public void setClosedAt(Date closedAt) {
         this.closedAt = closedAt;
+    }
+
+    public SupportTicketType getCategory() {
+        return category;
     }
 }
