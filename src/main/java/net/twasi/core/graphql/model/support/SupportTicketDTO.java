@@ -46,6 +46,13 @@ public class SupportTicketDTO {
     }
 
     public String getClosedAt() {
+        if (ticket.getClosedAt() == null) {
+            return null;
+        }
         return ticket.getClosedAt().toString();
+    }
+
+    public String getCategory() {
+        return ticket.getCategory().toString();
     }
 }

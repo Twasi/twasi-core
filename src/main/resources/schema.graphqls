@@ -90,7 +90,7 @@ type PluginDetails {
 type Support {
     myTickets: [SupportTicket],
     adminTickets: [SupportTicket],
-    create(topic: String, message: String): SupportTicket,
+    create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }
 
@@ -100,6 +100,7 @@ type SupportTicket {
     topic: String,
     messages: [SupportTicketMessage],
     state: String,
+    category: String,
     createdAt: String,
     closedAt: String
 }

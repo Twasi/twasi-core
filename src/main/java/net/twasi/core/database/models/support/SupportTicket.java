@@ -61,11 +61,10 @@ public class SupportTicket extends BaseEntity {
     }
 
     public Date getCreatedAt() {
+        if (createdAt == null) {
+            createdAt = new Date();
+        }
         return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Date getClosedAt() {
@@ -77,6 +76,9 @@ public class SupportTicket extends BaseEntity {
     }
 
     public SupportTicketType getCategory() {
+        if (category == null) {
+            category = SupportTicketType.OTHER;
+        }
         return category;
     }
 }
