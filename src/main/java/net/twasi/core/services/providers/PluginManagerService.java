@@ -110,4 +110,15 @@ public class PluginManagerService implements IService {
         plugins.forEach(TwasiPlugin::onReady);
         dependencies.forEach(TwasiPlugin::onReady);
     }
+
+    /**
+     * Returns all plugins that are not hidden and should be installed by default
+     *
+     * @return plugins that should be preinstalled
+     */
+    public List<String> getDefaultPlugins() {
+        return plugins.stream().filter(p ->
+                !p.getDescription().isHidden() && p.getDescription().isAutoInstall()
+        ).map(p -> p.getDescription().getName()).collect(Collectors.toList());
+    }
 }

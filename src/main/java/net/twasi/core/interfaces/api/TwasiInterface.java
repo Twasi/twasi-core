@@ -51,7 +51,7 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
      * Installs a certain user plugin for the given user
      *
      * @param plugin The plugin to install
-     * @return if it was installed successfully
+     * @return whether it was installed successfully
      */
     public boolean installPlugin(TwasiPlugin plugin) {
         if (userPlugins.stream().anyMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
@@ -109,6 +109,10 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         }
     }
 
+    /**
+     * @param plugin The plugin to uninstall
+     * @return whether it was uninstalled successfully
+     */
     public boolean uninstallPlugin(TwasiPlugin plugin) {
 
         if (userPlugins.stream().noneMatch(userPlugin -> userPlugin.getClass().equals(plugin.getUserPluginClass()))) {
@@ -134,6 +138,9 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         return userPlugins;
     }
 
+    /**
+     * @return all registered commands of all plugins
+     */
     public List<TwasiCustomCommand> getCustomCommands() {
         List<TwasiCustomCommand> commands = new ArrayList<>();
         for (TwasiUserPlugin p : getPlugins())
@@ -141,14 +148,20 @@ public abstract class TwasiInterface implements TwasiInterfaceInterface {
         return commands.stream().filter(TwasiCustomCommand::allowsListing).collect(Collectors.toList());
     }
 
+    /**
+     * @param command the command's name without prefix
+     * @return all UserPlugins that have registered a handler for the command
+     */
     public List<TwasiUserPlugin> getByCommand(String command) {
         return userPlugins.stream().filter(
-                plugin -> plugin.getCorePlugin().getDescription().getCommands().stream().map(
-                        String::toLowerCase).collect(Collectors.toList()
-                ).contains(command.toLowerCase())
+                plugin -> plugin.getCorePlugin().getDescription().handlesAllCommands() ||
+                        plugin.getCorePlugin().getDescription().getCommands().stream().anyMatch(command::equalsIgnoreCase)
         ).collect(Collectors.toList());
     }
 
+    /**
+     * @return all UserPlugins that have registered a message handler
+     */
     public List<TwasiUserPlugin> getMessagePlugins() {
         return userPlugins.stream().filter(plugin -> plugin.getCorePlugin().getDescription().handlesMessages()).collect(Collectors.toList());
     }

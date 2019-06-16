@@ -18,6 +18,7 @@ public class PluginConfig {
     public String helpText;
     public String api;
     public boolean messageHandler;
+    public boolean dynamicCommandNames;
     public boolean dependency;
     public boolean hidden;
     public boolean autoInstall;
@@ -71,6 +72,10 @@ public class PluginConfig {
 
     public boolean handlesMessages() {
         return messageHandler;
+    }
+
+    public boolean handlesAllCommands() {
+        return dynamicCommandNames;
     }
 
     public boolean isDependency() {

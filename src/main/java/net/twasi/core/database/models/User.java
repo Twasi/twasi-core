@@ -7,6 +7,7 @@ import net.twasi.core.database.models.permissions.Permissions;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
+import net.twasi.core.services.providers.PluginManagerService;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.mongodb.morphia.annotations.Entity;
 
@@ -31,7 +32,7 @@ public class User extends BaseEntity {
 
     private List<EventMessage> events;
 
-    private List<String> installedPlugins;
+    private List<String> installedPlugins = PluginManagerService.get().getDefaultPlugins();
 
     private AccountStatus status;
 
