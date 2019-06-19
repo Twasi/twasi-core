@@ -52,7 +52,9 @@ public class PluginDiscovery {
         try {
             PluginConfig description = loader.getPluginConfig(pluginFile);
 
-            if (description.dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
+            List<String> dependencies = description.dependencies;
+            if (dependencies == null) dependencies = new ArrayList<String>();
+            if (dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
                 if (!unresolvedDependencyPlugins.containsKey(pluginFile))
                     unresolvedDependencyPlugins.put(pluginFile, description.name);
                 return false;
