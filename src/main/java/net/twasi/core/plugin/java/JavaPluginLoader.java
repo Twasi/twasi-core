@@ -42,15 +42,6 @@ public final class JavaPluginLoader implements PluginLoader {
         final File parentFile = file.getParentFile();
         final File dataFolder = new File(parentFile, description.getName());
 
-        // TODO: We need to handle it when a plugin is loaded before another one. Maybe perform a sanity check shortly after loading all plugins? (PluginDiscovery)
-        for (String pluginName : description.getDependencies()) {
-            Plugin dependency = ServiceRegistry.get(PluginManagerService.class).getByName(pluginName);
-
-            if (dependency == null) {
-                TwasiLogger.log.warn("Could not resolve dependency '" + pluginName + "' of plugin '" + description.getName() + "'");
-            }
-        }
-
         final PluginClassLoader loader;
         try {
             loader = new PluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file);

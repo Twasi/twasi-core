@@ -7,10 +7,13 @@ import net.twasi.core.services.providers.ApiSchemaManagementService;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.*;
 
 public class PluginDiscovery {
-    JavaPluginLoader loader = new JavaPluginLoader();
+    private JavaPluginLoader loader = new JavaPluginLoader();
+
+    private List<File> unresolvedDependencyPlugins;
+    private List<String> loadedPlugins;
 
     public void discoverAll() {
         if (!new File("plugins").isDirectory()) {
@@ -20,32 +23,12 @@ public class PluginDiscovery {
 
         File[] pluginJars = new File("plugins").listFiles((dir, name) -> name.endsWith(".jar"));
 
+        unresolvedDependencyPlugins = new ArrayList<>();
+        loadedPlugins = new ArrayList<>();
+
         assert pluginJars != null;
         for (File pluginFile : pluginJars) {
-            Plugin plugin;
-            try {
-                plugin = loader.loadPlugin(pluginFile);
-
-                // Register API, if necessary
-                if (plugin.getDescription().getApi() != null) {
-                    if (plugin.getGraphQLResolver() == null) {
-                        TwasiLogger.log.error("Plugin " + plugin.getName() + " has registered api, but does not provide a resolver. API registration skipped.");
-                    } else {
-                        ServiceRegistry.get(ApiSchemaManagementService.class)
-                                .addForPlugin(plugin.getName(), plugin.getDescription().getApi(), plugin.getGraphQLResolver());
-                    }
-                }
-
-                loader.enablePlugin(plugin);
-
-                if (plugin.getDescription().isDependency()) {
-                    ServiceRegistry.get(PluginManagerService.class).registerDependency((TwasiDependency) plugin);
-                } else {
-                    ServiceRegistry.get(PluginManagerService.class).registerPlugin((TwasiPlugin) plugin);
-                }
-            } catch (Exception e) {
-                TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?", e);
-            }
+            loadPlugin(pluginFile);
         }
 
         TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s), " + ServiceRegistry.get(PluginManagerService.class).getDependencies().size() + " dependency(/ies) loaded.");
@@ -57,6 +40,47 @@ public class PluginDiscovery {
         ));
 
         ServiceRegistry.get(ApiSchemaManagementService.class).executeBuild();
+    }
+
+    private boolean loadPlugin(File pluginFile) {
+        TwasiPlugin plugin;
+        try {
+            plugin = loader.loadPlugin(pluginFile);
+
+            if (plugin.getDescription().dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
+                if (!unresolvedDependencyPlugins.contains(pluginFile))
+                    unresolvedDependencyPlugins.add(pluginFile);
+                return false;
+            }
+
+            // Register API, if necessary
+            if (plugin.getDescription().getApi() != null) {
+                if (plugin.getGraphQLResolver() == null) {
+                    TwasiLogger.log.error("Plugin " + plugin.getName() + " has registered api, but does not provide a resolver. API registration skipped.");
+                } else {
+                    ServiceRegistry.get(ApiSchemaManagementService.class)
+                            .addForPlugin(plugin.getName(), plugin.getDescription().getApi(), plugin.getGraphQLResolver());
+                }
+            }
+
+            loader.enablePlugin(plugin);
+
+            if (plugin.getDescription().isDependency()) {
+                ServiceRegistry.get(PluginManagerService.class).registerDependency((TwasiDependency) plugin);
+            } else {
+                ServiceRegistry.get(PluginManagerService.class).registerPlugin(plugin);
+            }
+        } catch (Exception e) {
+            TwasiLogger.log.error("Error while loading plugin " + pluginFile.getName() + " - is it up to date?", e);
+            return false;
+        }
+
+        this.loadedPlugins.add(plugin.getDescription().name.toLowerCase()); // Add to loaded plugins to allow dependency check for other plugins
+
+        this.unresolvedDependencyPlugins.remove(pluginFile); // Remove if it failed earlier but doesn't fail now
+
+        this.unresolvedDependencyPlugins.forEach(this::loadPlugin); // Check other plugins if they can be loaded now
+        return true;
     }
 
 }
