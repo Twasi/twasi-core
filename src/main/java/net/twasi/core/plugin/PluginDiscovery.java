@@ -88,7 +88,7 @@ public class PluginDiscovery {
 
         this.unresolvedDependencyPlugins.remove(pluginFile); // Remove if it failed earlier but doesn't fail now
 
-        this.unresolvedDependencyPlugins.keySet().forEach(this::loadPlugin); // Check other plugins if they can be loaded now
+        new ArrayList<>(this.unresolvedDependencyPlugins.keySet()).forEach(this::loadPlugin); // Check other plugins if they can be loaded now
         return true;
     }
 
