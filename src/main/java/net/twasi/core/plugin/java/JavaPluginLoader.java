@@ -27,7 +27,7 @@ public final class JavaPluginLoader implements PluginLoader {
     private final Map<String, Class<?>> classes = new HashMap<>();
     private final List<PluginClassLoader> loaders = new CopyOnWriteArrayList<>();
 
-    public TwasiPlugin loadPlugin(final File file) throws Exception {
+    public TwasiPlugin loadPlugin(final File file, PluginConfig description) throws Exception {
         if (file == null) {
             throw new Exception("File can't be null");
         }
@@ -35,9 +35,6 @@ public final class JavaPluginLoader implements PluginLoader {
         if (!file.exists()) {
             throw new Exception(new FileNotFoundException(file.getPath() + " does not exist"));
         }
-
-        final PluginConfig description;
-        description = getPluginConfig(file);
 
         final File parentFile = file.getParentFile();
         final File dataFolder = new File(parentFile, description.getName());
@@ -54,6 +51,10 @@ public final class JavaPluginLoader implements PluginLoader {
         loaders.add(loader);
 
         return loader.plugin;
+    }
+
+    public TwasiPlugin loadPlugin(final File file) throws Exception {
+        return loadPlugin(file, getPluginConfig(file));
     }
 
     public PluginConfig getPluginConfig(File file) throws Exception {

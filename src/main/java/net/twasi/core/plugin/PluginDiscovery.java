@@ -12,7 +12,7 @@ import java.util.*;
 public class PluginDiscovery {
     private JavaPluginLoader loader = new JavaPluginLoader();
 
-    private List<File> unresolvedDependencyPlugins;
+    private Map<File, String> unresolvedDependencyPlugins;
     private List<String> loadedPlugins;
 
     public void discoverAll() {
@@ -23,7 +23,7 @@ public class PluginDiscovery {
 
         File[] pluginJars = new File("plugins").listFiles((dir, name) -> name.endsWith(".jar"));
 
-        unresolvedDependencyPlugins = new ArrayList<>();
+        unresolvedDependencyPlugins = new HashMap<>();
         loadedPlugins = new ArrayList<>();
 
         assert pluginJars != null;
@@ -34,10 +34,15 @@ public class PluginDiscovery {
         TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s), " + ServiceRegistry.get(PluginManagerService.class).getDependencies().size() + " dependency(/ies) loaded.");
         TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(
                 ServiceRegistry.get(PluginManagerService.class).getPlugins().stream().map(plugin -> plugin.getDescription().getName()).toArray()
-        ));
+        ).replaceAll(",\"", ", ").replaceAll("\"", ""));
+
         TwasiLogger.log.info("List of loaded dependencies: " + Arrays.toString(
                 ServiceRegistry.get(PluginManagerService.class).getDependencies().stream().map(plugin -> plugin.getDescription().getName()).toArray()
-        ));
+        ).replaceAll(",\"", ", ").replaceAll("\"", ""));
+
+        TwasiLogger.log.warn("List of plugins that have unsatisfied dependencies: " + Arrays.toString(
+                this.unresolvedDependencyPlugins.values().toArray(new String[0])
+        ).replaceAll(",\"", ", ").replaceAll("\"", ""));
 
         ServiceRegistry.get(ApiSchemaManagementService.class).executeBuild();
     }
@@ -45,13 +50,15 @@ public class PluginDiscovery {
     private boolean loadPlugin(File pluginFile) {
         TwasiPlugin plugin;
         try {
-            plugin = loader.loadPlugin(pluginFile);
+            PluginConfig description = loader.getPluginConfig(pluginFile);
 
-            if (plugin.getDescription().dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
-                if (!unresolvedDependencyPlugins.contains(pluginFile))
-                    unresolvedDependencyPlugins.add(pluginFile);
+            if (description.dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
+                if (!unresolvedDependencyPlugins.containsKey(pluginFile))
+                    unresolvedDependencyPlugins.put(pluginFile, description.name);
                 return false;
             }
+
+            plugin = loader.loadPlugin(pluginFile, description);
 
             // Register API, if necessary
             if (plugin.getDescription().getApi() != null) {
@@ -79,7 +86,7 @@ public class PluginDiscovery {
 
         this.unresolvedDependencyPlugins.remove(pluginFile); // Remove if it failed earlier but doesn't fail now
 
-        this.unresolvedDependencyPlugins.forEach(this::loadPlugin); // Check other plugins if they can be loaded now
+        this.unresolvedDependencyPlugins.keySet().forEach(this::loadPlugin); // Check other plugins if they can be loaded now
         return true;
     }
 
