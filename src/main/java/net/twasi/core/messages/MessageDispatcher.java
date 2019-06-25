@@ -72,7 +72,7 @@ public class MessageDispatcher {
                 try {
                     plugin.onMessage(new TwasiMessageEvent(msg));
                 } catch (Throwable e) {
-                    TwasiLogger.log.error("Exception while  executing onMessage of plugin " + plugin.getClass() + ": " + e.getMessage(), e);
+                    TwasiLogger.log.error("Exception while executing onMessage of plugin " + plugin.getClass() + ": " + e.getMessage(), e);
                 }
             });
             commandExecutionThread.setDaemon(true);

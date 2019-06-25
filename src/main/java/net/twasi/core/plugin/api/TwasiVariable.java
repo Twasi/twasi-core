@@ -20,7 +20,7 @@ public class TwasiVariable implements TwasiVariableInterface {
 
     @Override
     public String process(String name, TwasiInterface inf, String[] params, TwasiMessage message) {
-        TwasiLogger.log.warn("Plugin " + owner.getCorePlugin().getName() + " has registered for variable '" + name + "' but doens't process it :c");
+        TwasiLogger.log.warn("Plugin " + owner.getCorePlugin().getName() + " has registered for variable '" + name + "' but doesn't process it :c");
         return null;
     }
 }
