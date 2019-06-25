@@ -38,6 +38,13 @@ public class UserDTO {
         return user.getRank();
     }
 
+    public String getBanner() {
+        if (user.getChannelInformation() == null) {
+            return null;
+        }
+        return user.getChannelInformation().getProfileBanner();
+    }
+
     public PluginDetailsDTO installPlugin(String name) {
         TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
 

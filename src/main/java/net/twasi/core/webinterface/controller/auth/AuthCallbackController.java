@@ -16,6 +16,7 @@ import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.twitchapi.TwitchAPI;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 import net.twasi.twitchapi.id.oauth2.response.TokenDTO;
+import net.twasi.twitchapi.kraken.channels.response.ChannelDTO;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,8 +65,9 @@ public class AuthCallbackController extends HttpServlet {
         }
 
         TwitchAccount account = TwitchAccount.fromUser(userData, accessToken);
+        ChannelDTO channelData = TwitchAPI.kraken().channels().withAuth(accessToken.toAuthContext(account)).getChannel();
 
-        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchAccountOrCreate(account);
+        User user = ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchAccountOrCreate(account, channelData);
         String jwtToken = ServiceRegistry.get(JWTService.class).getManager().createNewToken(user);
 
         if (!ServiceRegistry.get(InstanceManagerService.class).hasRegisteredInstance(user)) {

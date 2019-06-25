@@ -6,6 +6,7 @@ import net.twasi.core.database.models.AccountStatus;
 import net.twasi.core.database.models.BaseEntity;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.twitchapi.kraken.channels.response.ChannelDTO;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 
@@ -27,12 +28,10 @@ public class UserRepository extends Repository<User> {
     }
 
     public User getByTwitchName(String twitchname) {
-        User user = store.createQuery(User.class).field("twitchAccount.userName").equal(twitchname).get();
-
-        return user;
+        return store.createQuery(User.class).field("twitchAccount.userName").equal(twitchname).get();
     }
 
-    public User getByTwitchAccountOrCreate(TwitchAccount account) {
+    public User getByTwitchAccountOrCreate(TwitchAccount account, ChannelDTO channelData) {
         Query<User> query = store.createQuery(User.class).field("twitchAccount.twitchId").equal(account.getTwitchId());
 
         User user;
@@ -46,6 +45,7 @@ public class UserRepository extends Repository<User> {
         user.getTwitchAccount().setToken(account.getToken());
 
         // TODO also update other information (username, email, avatar etc.)
+        user.setChannelInformation(channelData);
 
         store.save(user);
 
