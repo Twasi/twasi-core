@@ -18,8 +18,8 @@ public class SupportMessageDTO {
         return message.getMessage();
     }
 
-    public String getCreatedAt() {
-        return message.getCreatedAt().toString();
+    public double getCreatedAt() {
+        return message.getCreatedAt().getTime();
     }
 
     public boolean isStaff() {

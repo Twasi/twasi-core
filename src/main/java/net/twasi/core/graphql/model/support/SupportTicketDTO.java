@@ -41,15 +41,15 @@ public class SupportTicketDTO {
         return ticket.getId().toString();
     }
 
-    public String getCreatedAt() {
-        return ticket.getCreatedAt().toString();
+    public long getCreatedAt() {
+        return ticket.getCreatedAt().getTime();
     }
 
-    public String getClosedAt() {
+    public long getClosedAt() {
         if (ticket.getClosedAt() == null) {
-            return null;
+            return 0;
         }
-        return ticket.getClosedAt().toString();
+        return ticket.getClosedAt().getTime();
     }
 
     public String getCategory() {
