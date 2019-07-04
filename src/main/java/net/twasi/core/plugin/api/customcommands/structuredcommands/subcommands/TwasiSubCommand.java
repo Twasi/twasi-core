@@ -53,7 +53,7 @@ public abstract class TwasiSubCommand implements ISubCommands {
     @Override
     public List<String> getParentCommandNames() {
         List<String> subCommands = new ArrayList<>(parent.getParentCommandNames());
-        subCommands.add(getCommandName());
+        subCommands.add(parent.getCommandName());
         return subCommands;
     }
 
