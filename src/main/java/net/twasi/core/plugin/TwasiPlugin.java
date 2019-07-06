@@ -216,7 +216,7 @@ public abstract class TwasiPlugin<T extends TwasiPluginConfiguration> extends Pl
     public final T getConfiguration() {
         try {
             String className = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
-            Class<T> clazz = (Class<T>) Class.forName(className);
+            Class<T> clazz = (Class<T>) getClassLoader().loadClass(className);
 
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
@@ -231,6 +231,7 @@ public abstract class TwasiPlugin<T extends TwasiPluginConfiguration> extends Pl
             return mapper.readValue(configurationFile, clazz);
         } catch (Exception e) {
             TwasiLogger.log.error("Error while loading PluginConfiguration of plugin " + getDescription().name);
+            TwasiLogger.log.debug("PluginConfiguration could not be loaded: ", e);
             return null;
         }
     }

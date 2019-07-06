@@ -3,16 +3,17 @@ package net.twasi.core.plugin;
 import net.twasi.core.database.models.User;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.TwasiVariable;
+import net.twasi.core.plugin.api.configuration.TwasiPluginConfiguration;
 import net.twasi.core.translations.TwasiTranslation;
 import net.twasi.core.translations.renderer.TranslationRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TwasiDependency extends TwasiPlugin {
+public abstract class TwasiDependency<T extends TwasiPluginConfiguration> extends TwasiPlugin<T> {
     private TwasiTranslation twasiTranslation = new TwasiTranslation(getClassLoader());
 
-    public Class<? extends TwasiUserPlugin> getUserPluginClass() {
+    public final Class<? extends TwasiUserPlugin> getUserPluginClass() {
         return null;
     }
 
