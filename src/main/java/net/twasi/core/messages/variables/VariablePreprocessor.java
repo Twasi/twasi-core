@@ -215,7 +215,7 @@ public class VariablePreprocessor {
     }
 
     private static String resolveVar(String name, String[] args, String raw, TwasiInterface twasiInterface, TwasiMessage message) {
-        TwasiDependency dependency;
+        TwasiDependency<?> dependency;
         TwasiUserPlugin plugin;
 
         try {
@@ -232,12 +232,14 @@ public class VariablePreprocessor {
             // Else find handling dependency
             PluginManagerService pm = ServiceRegistry.get(PluginManagerService.class);
             dependency = pm.getDependencies().stream().filter(dep ->
-                    dep.getVariables().stream().anyMatch(var ->
-                            var.getNames().stream().anyMatch(name::equalsIgnoreCase))).findAny().orElse(null);
+                    dep.getVariables().stream().anyMatch(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)))
+                    .findAny().orElse(null);
 
             // If there is a handling dependency then handle the variable
             if (dependency != null) {
-                return reformat(dependency.getVariables().stream().filter(var -> var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get().process(name, twasiInterface, args, message));
+                return reformat(dependency.getVariables().stream().filter(var ->
+                        var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get()
+                        .process(name, twasiInterface, args, message));
             }
         } catch (Exception ignored) {
             return "ERROR";

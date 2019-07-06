@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.WebInterfaceApp;
 import net.twasi.core.logger.TwasiLogger;
-import net.twasi.core.plugin.api.configuration.TwasiPluginConfiguration;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
 import net.twasi.core.translations.TwasiTranslation;
@@ -14,7 +13,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.http.HttpServlet;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.net.URL;
 import java.net.URLConnection;
@@ -22,7 +23,7 @@ import java.net.URLConnection;
 /**
  * Represents a Java plugin
  */
-public abstract class TwasiPlugin<T extends TwasiPluginConfiguration> extends PluginBase {
+public abstract class TwasiPlugin<T> extends PluginBase {
     private boolean isEnabled = false;
     private PluginLoader loader = null;
     private File file = null;

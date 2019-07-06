@@ -20,7 +20,7 @@ public class PluginManagerService implements IService {
     }
 
     private List<TwasiPlugin> plugins = new ArrayList<>();
-    private List<TwasiDependency> dependencies = new ArrayList<>();
+    private List<TwasiDependency<?>> dependencies = new ArrayList<>();
 
     /**
      * Registers a plugin
@@ -59,7 +59,7 @@ public class PluginManagerService implements IService {
         return plugins;
     }
 
-    public List<TwasiDependency> getDependencies() {
+    public List<TwasiDependency<?>> getDependencies() {
         return dependencies;
     }
 
