@@ -1,6 +1,5 @@
 package net.twasi.core.graphql;
 
-import graphql.GraphQLError;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.schema.GraphQLSchema;
 import graphql.servlet.*;
@@ -11,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class GraphQLEndpoint extends GraphQLHttpServlet {
 

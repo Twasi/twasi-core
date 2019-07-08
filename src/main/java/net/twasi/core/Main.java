@@ -2,7 +2,7 @@ package net.twasi.core;
 
 import net.twasi.core.application.ApplicationState;
 import net.twasi.core.cli.CommandLineInterface;
-import net.twasi.core.graphql.WebInterfaceApp;
+import net.twasi.core.api.WebInterfaceApp;
 import net.twasi.core.logger.JettyVoidLogger;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.PluginDiscovery;
@@ -53,12 +53,12 @@ public class Main {
         TwasiLogger.log.info("Connecting to database " + ServiceRegistry.get(ConfigService.class).getCatalog().database.hostname);
         ServiceRegistry.get(DatabaseService.class).connect();
 
+        TwasiLogger.log.info("Preparing webinterface");
+        WebInterfaceApp.prepare();
+
         TwasiLogger.log.debug("Loading plugins");
         PluginDiscovery pd = new PluginDiscovery();
         pd.discoverAll();
-
-        TwasiLogger.log.info("Preparing webinterface");
-        WebInterfaceApp.prepare();
 
         TwasiLogger.log.debug("Loading interfaces and joining active channels");
         ServiceRegistry.get(InstanceManagerService.class).startForAllUsers();

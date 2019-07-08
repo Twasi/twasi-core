@@ -1,6 +1,8 @@
-package net.twasi.core.graphql;
+package net.twasi.core.api;
 
 import io.prometheus.client.exporter.MetricsServlet;
+import net.twasi.core.graphql.GraphQLEndpoint;
+import net.twasi.core.api.oauth.OAuthIntegrationController;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
@@ -18,9 +20,11 @@ public class WebInterfaceApp {
     private static CustomMetrics metrics;
     private static HandlerCollection handlers = new HandlerCollection();
     private static ServletContextHandler context = new ServletContextHandler();
+    private static int port = ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port;
+    private static OAuthIntegrationController oAuthIntegrationController = new OAuthIntegrationController();
 
     public static void prepare() {
-        server = new Server(ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
+        server = new Server(port);
 
         context = new ServletContextHandler();
         context.setContextPath("/");
@@ -30,17 +34,19 @@ public class WebInterfaceApp {
 
         server.setHandler(handlers);
 
-        getServletHandler().addServlet(AuthController.class, "/auth");
-        getServletHandler().addServlet(AuthCallbackController.class, "/auth/callback");
+        context.addServlet(AuthController.class, "/auth");
+        context.addServlet(AuthCallbackController.class, "/auth/callback");
 
-        getServletHandler().addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+        context.addServlet(new ServletHolder(oAuthIntegrationController), "/oauth/*");
+
+        context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
     }
 
     public static void start() {
         // Start server, show message
         try {
             server.start();
-            TwasiLogger.log.info("Web interface started on port " + ServiceRegistry.get(ConfigService.class).getCatalog().webinterface.port);
+            TwasiLogger.log.info("Web interface started on port " + port);
         } catch (Exception e) {
             TwasiLogger.log.error("Error while starting webserver", e);
         }

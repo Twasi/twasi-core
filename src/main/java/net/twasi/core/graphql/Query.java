@@ -2,7 +2,6 @@ package net.twasi.core.graphql;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.model.PanelDTO;
-import net.twasi.core.logger.TwasiLogger;
 
 public class Query extends TwasiCustomResolver {
     public PanelDTO panel(String token) {
