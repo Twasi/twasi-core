@@ -10,7 +10,9 @@ public interface IOauthIntegrationHandler {
 
     String getOauthUri(String context);
 
-    String getStateParameterName();
+    default String getStateParameterName() {
+        return null;
+    }
 
     void handleResponse(Map<String, String[]> parameters, User user);
 

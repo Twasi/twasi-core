@@ -37,6 +37,7 @@ public class OAuthIntegrationController extends HttpServlet implements IService 
             String[] parts = req.getPathInfo().substring(1).split("/"); // Substring to remove leading slash
             String oauthService = parts[0];
             IOauthIntegrationHandler handler = this.handlers.stream().filter(h -> h.getOauthServiceName().equalsIgnoreCase(oauthService)).findFirst().orElse(null);
+            assert handler != null;
 
             boolean callback = parts.length > 1;
             if (callback) callback = parts[1].equals("callback");
@@ -45,8 +46,14 @@ public class OAuthIntegrationController extends HttpServlet implements IService 
             if (params == null) params = new HashMap<>();
 
 
-            if (params.keySet().contains(handler.getStateParameterName()) && callback) {
-                OAuthState state = states.get(req.getParameter(handler.getStateParameterName()));
+            if (callback) {
+                String stateId;
+                if (handler.getStateParameterName() != null) {
+                    stateId = req.getParameter(handler.getStateParameterName());
+                } else {
+                    stateId = req.getSession().getId();
+                }
+                OAuthState state = states.get(stateId);
                 User user = state.user;
                 states.remove(req.getParameter(handler.getStateParameterName()));
                 handler.handleResponse(req.getParameterMap(), user);
@@ -58,8 +65,12 @@ public class OAuthIntegrationController extends HttpServlet implements IService 
             if (states.values().stream().anyMatch(state -> state.user == user))
                 states.remove(states.inverse().get(states.values().stream().filter(state -> state.user == user).findFirst().get()));
             String state;
-            do state = RandomStringUtils.randomAlphanumeric(20);
-            while (states.containsKey(state));
+            if(handler.getStateParameterName() != null) {
+                do state = RandomStringUtils.randomAlphanumeric(20);
+                while (states.containsKey(state));
+            } else {
+                state = req.getSession().getId();
+            }
 
             resp.sendRedirect(handler.getOauthUri(state));
 
