@@ -36,6 +36,11 @@ enum UserStatusType {
     MAINTENANCE
 }
 
+type Setup {
+    isSetUp: Boolean,
+    setup(betaCode: String): Boolean
+}
+
 type Config {
     language: String!
     isActivated: Boolean!
@@ -119,7 +124,8 @@ type SupportTicketUser {
 }
 
 type Query {
-    panel(token: String): Panel%PLUGINS%
+    panel(token: String): Panel,
+    setup(token: String): Setup%PLUGINS%
 }
 
 schema {

@@ -41,6 +41,8 @@ public class User extends BaseEntity {
 
     private UserRank rank;
 
+    private String betaCode;
+
     public User() {
         if (ServiceRegistry.has(PluginManagerService.class)) {
             installedPlugins = PluginManagerService.get().getDefaultPlugins();
@@ -234,5 +236,13 @@ public class User extends BaseEntity {
 
     public void setChannelInformation(ChannelDTO channelInformation) {
         this.channelInformation = channelInformation;
+    }
+
+    public String getBetaCode() {
+        return betaCode;
+    }
+
+    public void setBetaCode(String betaCode) {
+        this.betaCode = betaCode;
     }
 }

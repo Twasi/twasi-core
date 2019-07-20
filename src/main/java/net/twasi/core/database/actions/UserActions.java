@@ -2,6 +2,7 @@ package net.twasi.core.database.actions;
 
 import io.prometheus.client.Counter;
 import net.twasi.core.database.models.AccountStatus;
+import net.twasi.core.database.models.GlobalConfig;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
@@ -29,6 +30,7 @@ public class UserActions {
 
         user.setTwitchAccount(account);
         user.setStatus(AccountStatus.SETUP);
+        user.getConfig().setActivated(false);
 
         PluginManagerService service = ServiceRegistry.get(PluginManagerService.class);
         user.setInstalledPlugins(service.getPlugins().stream().filter(p ->
