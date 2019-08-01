@@ -3,6 +3,7 @@ package net.twasi.core.translations.renderer;
 import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
+import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
@@ -113,6 +114,7 @@ public class TranslationRenderer {
                 return resolveBindings(line.substring(translationKey.length() + 1));
             }
         }
+        TwasiLogger.log.debug("Unable to resolve translation key: '" + translationKey + "'");
         return keyNotFound;
     }
 
