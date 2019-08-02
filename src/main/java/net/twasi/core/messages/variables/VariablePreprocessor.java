@@ -241,6 +241,8 @@ public class VariablePreprocessor {
                         var.getNames().stream().anyMatch(name::equalsIgnoreCase)).findAny().get()
                         .process(name, twasiInterface, args, message));
             }
+        } catch(ArrayIndexOutOfBoundsException ignored) {
+            return "INSUFFICIENT_PARAMETERS";
         } catch (Exception ignored) {
             return "ERROR";
         }

@@ -9,7 +9,9 @@ import net.twasi.core.graphql.TwasiGraphQLHandledException;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
+import net.twasi.core.services.providers.TelegramService;
 import net.twasi.core.services.providers.config.ConfigService;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class SetupDTO {
     private User user;
@@ -52,6 +54,17 @@ public class SetupDTO {
 
         ServiceRegistry.get(InstanceManagerService.class).start(user);
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
+
+        TelegramService telegram = TelegramService.get();
+        if(telegram.isConnected()) {
+            try {
+                telegram.sendMessageToTelegramChat(
+                        "( ͡° ͜ʖ ͡°) Ein neuer Benutzer hat sich soeben registriert: " +
+                                user.getTwitchAccount().getDisplayName()
+                );
+            } catch (TelegramApiException ignored) {
+            }
+        }
 
         return true;
     }

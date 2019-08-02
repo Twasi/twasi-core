@@ -54,4 +54,9 @@ public abstract class StructuredPluginCommand extends TwasiPluginCommand impleme
     public final List<String> getParentCommandNames() {
         return new ArrayList<>();
     }
+
+    @Override
+    public String getSyntaxKey() {
+        return getCommandName() + ".syntax";
+    }
 }
