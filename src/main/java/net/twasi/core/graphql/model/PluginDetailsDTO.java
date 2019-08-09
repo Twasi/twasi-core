@@ -2,6 +2,7 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.plugin.PluginConfig;
+import net.twasi.core.services.providers.InstanceManagerService;
 
 import java.util.List;
 
@@ -69,5 +70,13 @@ public class PluginDetailsDTO {
 
     public boolean isInstalled() {
         return isInstalled;
+    }
+
+    public long getInstallations() {
+        return InstanceManagerService.get()
+                .getInterfaces().stream()
+                .filter(i -> i.getPlugins()
+                        .stream().anyMatch(pl -> pl.getCorePlugin()
+                                .getDescription().name.equalsIgnoreCase(this.name))).count();
     }
 }
