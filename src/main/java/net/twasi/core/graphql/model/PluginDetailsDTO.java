@@ -77,6 +77,6 @@ public class PluginDetailsDTO {
                 .getInterfaces().stream()
                 .filter(i -> i.getPlugins()
                         .stream().anyMatch(pl -> pl.getCorePlugin()
-                                .getDescription().name.equalsIgnoreCase(this.name))).count();
+                                .getDescription().name.equalsIgnoreCase(this.id))).count();
     }
 }
