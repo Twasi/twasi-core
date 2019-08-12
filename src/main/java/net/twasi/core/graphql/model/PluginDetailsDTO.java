@@ -75,8 +75,8 @@ public class PluginDetailsDTO {
     public long getInstallations() {
         return InstanceManagerService.get()
                 .getInterfaces().stream()
-                .filter(i -> i.getPlugins()
-                        .stream().anyMatch(pl -> pl.getCorePlugin()
-                                .getDescription().name.equalsIgnoreCase(this.name))).count();
+                .filter(i -> i.getPlugins().stream().anyMatch(
+                        pl -> pl.getCorePlugin().getDescription().name.equalsIgnoreCase(this.name)
+                )).count();
     }
 }

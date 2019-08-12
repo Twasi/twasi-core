@@ -33,7 +33,8 @@ public abstract class TwasiCustomResolver implements GraphQLQueryResolver {
 
             try {
                 ServiceRegistry.get(DataService.class).get(net.twasi.core.database.repositories.UserRepository.class).commit(user);
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
 
             return user;
         } catch (Throwable t) {

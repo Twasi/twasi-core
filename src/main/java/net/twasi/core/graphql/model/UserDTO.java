@@ -2,10 +2,16 @@ package net.twasi.core.graphql.model;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
+import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.graphql.TwasiGraphQLHandledException;
 import net.twasi.core.interfaces.api.TwasiInterface;
+import net.twasi.core.interfaces.twitch.TwitchInterface;
+import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.TwasiPlugin;
+import net.twasi.core.plugin.api.LifecycleManagement;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.PluginManagerService;
 
@@ -50,8 +56,26 @@ public class UserDTO {
 
         TwasiInterface instance = ServiceRegistry.get(InstanceManagerService.class).getByUser(user);
 
-        if (plugin == null || instance == null || plugin.getDescription().isHidden()) {
+        if (plugin == null || plugin.getDescription().isHidden()) {
             throw new TwasiGraphQLHandledException("The requested plugin was not found or is not ready for installation.", "plugin.notfound");
+        }
+
+        if (instance == null) {
+            if (!user.getInstalledPlugins().contains(plugin.getName())) {
+
+                try {
+                    TwasiUserPlugin userPlugin = plugin.getUserPluginClass().asSubclass(TwasiUserPlugin.class).newInstance();
+                    TwasiInterface inf = new TwitchInterface(new Streamer(user));
+                    LifecycleManagement.initiate(userPlugin, inf, plugin);
+                    LifecycleManagement.handleInstall(userPlugin);
+                } catch (Exception e) {
+                    return new PluginDetailsDTO(plugin.getDescription(), user, false);
+                }
+
+                user.getInstalledPlugins().add(plugin.getName());
+                DataService.get().get(UserRepository.class).commit(user);
+            }
+            return new PluginDetailsDTO(plugin.getDescription(), user, true);
         }
 
         instance.installPlugin(plugin);
@@ -69,7 +93,8 @@ public class UserDTO {
     public PluginDetailsDTO uninstallPlugin(String name) {
         TwasiPlugin plugin = ServiceRegistry.get(PluginManagerService.class).getByName(name);
 
-        if (plugin.getDescription().isHidden()) throw new TwasiGraphQLHandledException("The requested plugin may not be uninstalled.", "plugin.uninstallforbidden");
+        if (plugin.getDescription().isHidden())
+            throw new TwasiGraphQLHandledException("The requested plugin may not be uninstalled.", "plugin.uninstallforbidden");
 
         ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
 
