@@ -71,7 +71,7 @@ public class PluginDetailsDTO {
         try {
             byte[] encoded = Base64.getEncoder().encode(IOUtils.toByteArray(bannerInputStream));
 
-            return "data:image/png," + new String(encoded);
+            return "data:image/png;base64," + new String(encoded);
         } catch (IOException e) {
             TwasiLogger.log.debug("Failed to resolve banner.", e);
             return null;
