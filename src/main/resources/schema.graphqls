@@ -91,7 +91,8 @@ type PluginDetails {
     commands: [String]!
     permissions: [String]!
     id: String!
-    installations: Long!
+    installations: Long!,
+    banner: String
 }
 
 type Support {
