@@ -38,7 +38,7 @@ public class PanelDTO {
                 .getPlugins()
                 .stream()
                 .filter(p -> !p.getDescription().isHidden())
-                .map(p -> new PluginDetailsDTO(p.getDescription(), user, user.getInstalledPlugins().contains(p.getName())))
+                .map(p -> new PluginDetailsDTO(p, user, user.getInstalledPlugins().contains(p.getName())))
                 .collect(Collectors.toList());
     }
 

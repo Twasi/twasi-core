@@ -69,19 +69,19 @@ public class UserDTO {
                     LifecycleManagement.initiate(userPlugin, inf, plugin);
                     LifecycleManagement.handleInstall(userPlugin);
                 } catch (Exception e) {
-                    return new PluginDetailsDTO(plugin.getDescription(), user, false);
+                    return new PluginDetailsDTO(plugin, user, false);
                 }
 
                 user.getInstalledPlugins().add(plugin.getName());
                 DataService.get().get(UserRepository.class).commit(user);
             }
-            return new PluginDetailsDTO(plugin.getDescription(), user, true);
+            return new PluginDetailsDTO(plugin, user, true);
         }
 
         instance.installPlugin(plugin);
 
         return new PluginDetailsDTO(
-                plugin.getDescription(),
+                plugin,
                 user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
@@ -99,7 +99,7 @@ public class UserDTO {
         ServiceRegistry.get(InstanceManagerService.class).getByUser(user).uninstallPlugin(plugin);
 
         return new PluginDetailsDTO(
-                plugin.getDescription(),
+                plugin,
                 user,
                 ServiceRegistry.get(InstanceManagerService.class)
                         .getByUser(user)
