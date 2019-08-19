@@ -13,6 +13,8 @@ import net.twasi.core.services.providers.TelegramService;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Date;
+
 public class SetupDTO {
     private User user;
 
@@ -42,7 +44,7 @@ public class SetupDTO {
             }
 
             // invalidate beta code
-            code.setActivated(true);
+            code.setUnlocked(new Date());
             code.setUserId(user.getId().toString());
             repo.commit(code);
         }

@@ -2,27 +2,33 @@ package net.twasi.core.database.models;
 
 import org.mongodb.morphia.annotations.Entity;
 
-@Entity("betaCodes")
+import java.util.Date;
+
+@Entity(value = "queue-entries", noClassnameStored = true)
 public class BetaCode extends BaseEntity {
 
-    private String code;
-    private boolean isActivated;
+    private String betaCode;
+    private Date unlocked;
     private String userId;
 
-    public String getCode() {
-        return code;
+    public String getBetaCode() {
+        return betaCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setBetaCode(String code) {
+        this.betaCode = code;
     }
 
     public boolean isActivated() {
-        return isActivated;
+        return unlocked != null;
     }
 
-    public void setActivated(boolean activated) {
-        isActivated = activated;
+    public Date getUnlocked() {
+        return unlocked;
+    }
+
+    public void setUnlocked(Date unlocked) {
+        this.unlocked = unlocked;
     }
 
     public String getUserId() {
