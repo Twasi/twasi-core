@@ -6,7 +6,6 @@ import java.util.Date;
 
 @Entity(value = "queue-entries", noClassnameStored = true)
 public class BetaCode extends BaseEntity {
-
     private String betaCode;
     private Date unlocked;
     private String userId;
