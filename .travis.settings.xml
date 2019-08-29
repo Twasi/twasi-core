@@ -12,7 +12,7 @@
             </configuration>
         </server>
         <server>
-            <id>snapshots</id>
+            <id>release</id>
             <username>${env.ARTIFACTORY_USERNAME}</username>
             <password>${env.ARTIFACTORY_PASSWORD}</password>
         </server>
