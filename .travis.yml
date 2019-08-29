@@ -16,13 +16,18 @@ jobs:
     - stage: build
       script:
         - "mvn clean compile assembly:single"
-    - stage: deploy
+    - stage: deploy-docker-dev
       script:
         - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
+    - stage: deploy-dev
+      script:
+        - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single deploy"
 
 stages:
   - tests
   - build
-  - name: deploy
+  - name: deploy-docker-dev
+    if: branch = dev
+  - name: deploy-dev
     if: branch = dev
 
