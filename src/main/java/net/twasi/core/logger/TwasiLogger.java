@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 public class TwasiLogger {
 
+    @Deprecated
     public final static Logger log = Logger.getLogger(TwasiLogger.class);
 
     public static void setLogLevel(Level level) {

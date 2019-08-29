@@ -9,6 +9,7 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
 import net.twasi.core.translations.TwasiTranslation;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -190,6 +191,10 @@ public abstract class TwasiPlugin<T> extends PluginBase {
 
     @Override
     public final Logger getLogger() {
+        if (logger == null) {
+            logger = LogManager.getLogger("plugin." + getDescription().getName());
+        }
+
         return logger;
     }
 
