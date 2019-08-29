@@ -21,7 +21,7 @@ jobs:
         - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single docker:build -DpushImage"
     - stage: deploy-dev
       script:
-        - "sed -i \"s/0.0.1-SNAPSHOT/${TRAVIS_BUILD_NUMBER}/g\" pom.xml
+        - "sed -i \"s/0.0.1-SNAPSHOT/${TRAVIS_BUILD_NUMBER}/g\" pom.xml"
         - "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn clean compile assembly:single deploy"
 
 stages:
