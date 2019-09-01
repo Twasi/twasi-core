@@ -1,7 +1,6 @@
 package net.twasi.core.plugin;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.lf5.LogLevel;
 
 public abstract class TwasiPluginConfiguration {
 
@@ -9,7 +8,7 @@ public abstract class TwasiPluginConfiguration {
 
     public static class PluginLoggingConfiguration {
         public String PREFIX = null;
-        public Level LEVEL = LogLevel.INFO;
+        public Level LEVEL = Level.INFO;
     }
 
 }
