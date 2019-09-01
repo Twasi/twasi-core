@@ -3,12 +3,13 @@ package net.twasi.core.plugin;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import net.twasi.core.database.models.User;
 import net.twasi.core.api.WebInterfaceApp;
+import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.plugin.java.PluginClassLoader;
 import net.twasi.core.translations.TwasiTranslation;
+import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -43,6 +44,8 @@ public abstract class TwasiPlugin<T> extends PluginBase {
 
         translation = new TwasiTranslation(getClassLoader());
         description.setLocalizationPluginClass(this);
+
+        configureLogger();
     }
 
     protected TwasiPlugin(final JavaPluginLoader loader, final PluginConfig description, final File file) {
@@ -54,6 +57,21 @@ public abstract class TwasiPlugin<T> extends PluginBase {
 
         translation = new TwasiTranslation(getClassLoader());
         description.setLocalizationPluginClass(this);
+
+        configureLogger();
+    }
+
+    private void configureLogger() {
+        Level level = Level.INFO;
+        try {
+            Object c = getConfiguration();
+            if (c instanceof TwasiPluginConfiguration) {
+                level = ((TwasiPluginConfiguration) c).LOGGING.LEVEL;
+            }
+        } catch (Exception e) {
+            TwasiLogger.log.error("Unable to load logging configuration for plugin: " + getDescription().name, e);
+        }
+        this.logger.setLevel(level);
     }
 
     /**

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TwasiDependency<T> extends TwasiPlugin<T> {
+
     private TwasiTranslation twasiTranslation = new TwasiTranslation(getClassLoader());
 
     public final Class<? extends TwasiUserPlugin> getUserPluginClass() {
