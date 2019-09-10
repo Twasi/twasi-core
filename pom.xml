@@ -253,5 +253,11 @@
             <version>4.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.bsc</groupId>
+            <artifactId>jvm-npm-core</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
     </dependencies>
 </project>

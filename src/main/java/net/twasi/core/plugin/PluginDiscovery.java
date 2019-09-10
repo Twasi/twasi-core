@@ -1,6 +1,7 @@
 package net.twasi.core.plugin;
 
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.plugin.api.javascript.JSPluginLoader;
 import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.ApiSchemaManagementService;
@@ -30,6 +31,25 @@ public class PluginDiscovery {
         for (File pluginFile : pluginJars) {
             loadPlugin(pluginFile);
         }
+
+        if (!new File("scripts").isDirectory()) {
+            TwasiLogger.log.info("Scripts directory not found, creating.");
+            if (!new File("scripts").mkdir()) TwasiLogger.log.error("Could not create scripts directory.");
+        }
+
+        File[] scriptFolders = new File("scripts").listFiles(File::isDirectory);
+        assert scriptFolders != null;
+
+
+        Arrays.stream(scriptFolders).forEach(folder -> {
+            try {
+                TwasiPlugin<?> plugin = JSPluginLoader.loadPlugin(folder);
+                PluginManagerService.get().registerPlugin(plugin);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // TODO log
+            }
+        });
 
         TwasiLogger.log.info(ServiceRegistry.get(PluginManagerService.class).getPlugins().size() + " plugin(s), " + ServiceRegistry.get(PluginManagerService.class).getDependencies().size() + " dependency(/ies) loaded.");
         TwasiLogger.log.info("List of loaded plugins: " + Arrays.toString(

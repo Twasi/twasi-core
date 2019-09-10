@@ -48,6 +48,13 @@ public abstract class TwasiPlugin<T> extends PluginBase {
         configureLogger();
     }
 
+    // TODO find more clean solution for JSPlugins
+    public TwasiPlugin(TwasiTranslation translation, PluginConfig description) {
+        this.translation = translation;
+        this.description = description;
+        this.logger = TwasiLogger.log;
+    }
+
     protected TwasiPlugin(final JavaPluginLoader loader, final PluginConfig description, final File file) {
         final ClassLoader classLoader = this.getClass().getClassLoader();
         if (classLoader instanceof PluginClassLoader) {
