@@ -66,18 +66,9 @@
 
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>libs-release</name>
-            <url>https://artifactory.twasi.net/artifactory/libs-release</url>
-        </repository>
-        <repository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>libs-snapshot</name>
-            <url>https://artifactory.twasi.net/artifactory/libs-snapshot</url>
+            <id>github</id>
+            <name>GitHub Twasi Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Twasi</url>
         </repository>
         <repository>
             <id>jcenter</id>
@@ -87,9 +78,9 @@
 
     <distributionManagement>
         <repository>
-            <id>release</id>
-            <name>artifactory-release</name>
-            <url>https://artifactory.twasi.net/artifactory/libs-release-local</url>
+            <id>github</id>
+            <name>GitHub Twasi Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Twasi/twasi-core</url>
         </repository>
     </distributionManagement>
 
