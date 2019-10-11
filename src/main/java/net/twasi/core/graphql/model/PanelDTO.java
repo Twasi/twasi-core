@@ -1,11 +1,13 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
 import net.twasi.core.graphql.model.support.SupportDTO;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,5 +54,9 @@ public class PanelDTO {
             return new AdminDTO(user);
         }
         return null;
+    }
+
+    public List<String> getAvailableLanguages() {
+        return Arrays.stream(Language.values()).map(Enum::toString).collect(Collectors.toList());
     }
 }

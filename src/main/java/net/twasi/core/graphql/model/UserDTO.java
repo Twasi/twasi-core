@@ -10,12 +10,15 @@ import net.twasi.core.models.Streamer;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.LifecycleManagement;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
+import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
 import net.twasi.core.services.providers.PluginManagerService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDTO {
     private User user;
@@ -107,4 +110,18 @@ public class UserDTO {
                         .stream()
                         .anyMatch(p -> p.getCorePlugin().getName().equalsIgnoreCase(name)));
     }
+
+
+    public List<PluginCommandDTO> getPluginCommands() {
+        return null;
+    }
+        /* TODO fix
+        List<TwasiPluginCommand> pluginCommands = new ArrayList<>();
+        InstanceManagerService.get().getByUser(user)
+                .getPlugins().forEach(pluginCommands::addAll);
+                .map(cmd -> (TwasiPluginCommand) cmd)
+                .map(PluginCommandDTO::new)
+                .collect(Collectors.toList());
+    }
+     */
 }

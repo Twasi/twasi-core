@@ -35,4 +35,8 @@ public abstract class TwasiPluginCommand extends TwasiCustomCommand {
     protected final TranslationRenderer getTranslationRenderer(){
         return TranslationRenderer.getInstance(twasiUserPlugin);
     }
+
+    public TwasiUserPlugin getProvidingUserPlugin() {
+        return twasiUserPlugin;
+    }
 }

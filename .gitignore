@@ -35,3 +35,4 @@ twasi.yml
 *.iml
 .idea/
 install/*.msi
+/scripts

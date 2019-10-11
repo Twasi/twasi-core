@@ -7,6 +7,14 @@ type User {
     events: [EventMessage]!
     rank: UserRank,
     banner: String
+    pluginCommands: [PluginCommand]!
+}
+
+type PluginCommand {
+    commandName: String!
+    providingPlugin: String!
+    listed: Boolean!
+    timer: Boolean!
 }
 
 type EventMessage {
@@ -53,7 +61,8 @@ type Panel {
     appInfo: AppInfo,
     plugins: [PluginDetails],
     support: Support,
-    admin: Admin
+    admin: Admin,
+    availableLanguages: [String]
 }
 
 type Admin {
@@ -62,7 +71,8 @@ type Admin {
 
 type BotStatus {
     isRunning: Boolean!,
-    changeStatus(isRunning: Boolean): BotStatus
+    changeStatus(isRunning: Boolean): BotStatus,
+    setLanguage(languageCode: String): Boolean
 }
 
 type AppInfo {

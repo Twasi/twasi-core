@@ -1,5 +1,6 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.services.ServiceRegistry;
@@ -26,5 +27,16 @@ public class BotStatusDTO {
             ServiceRegistry.get(InstanceManagerService.class).stop(user);
         }
         return this;
+    }
+
+    public boolean setLanguage(String languageCode) {
+        try {
+            user.getConfig().setLanguage(Language.valueOf(languageCode));
+            UserRepository repo = DataService.get().get(UserRepository.class);
+            repo.commit(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
