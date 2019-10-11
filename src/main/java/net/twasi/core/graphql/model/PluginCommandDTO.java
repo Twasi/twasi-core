@@ -1,7 +1,5 @@
 package net.twasi.core.graphql.model;
 
-import net.twasi.core.plugin.Plugin;
-import net.twasi.core.plugin.api.customcommands.TwasiCustomCommand;
 import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 
 public class PluginCommandDTO {

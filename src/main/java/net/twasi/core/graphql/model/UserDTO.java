@@ -113,15 +113,9 @@ public class UserDTO {
 
 
     public List<PluginCommandDTO> getPluginCommands() {
-        return null;
-    }
-        /* TODO fix
         List<TwasiPluginCommand> pluginCommands = new ArrayList<>();
         InstanceManagerService.get().getByUser(user)
-                .getPlugins().forEach(pluginCommands::addAll);
-                .map(cmd -> (TwasiPluginCommand) cmd)
-                .map(PluginCommandDTO::new)
-                .collect(Collectors.toList());
+                .getPlugins().forEach(pl -> pluginCommands.addAll(pl.getCommands()));
+        return pluginCommands.stream().map(PluginCommandDTO::new).collect(Collectors.toList());
     }
-     */
 }
