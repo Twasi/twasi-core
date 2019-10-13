@@ -65,10 +65,15 @@
     </build>
 
     <repositories>
-        <repository>
+        <!--<repository>
             <id>github</id>
             <name>GitHub Twasi Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/Twasi</url>
+        </repository>-->
+        <repository>
+            <id>central</id>
+            <name>libs-release</name>
+            <url>https://artifactory.twasi.net/artifactory/libs-release</url>
         </repository>
         <repository>
             <id>jcenter</id>
@@ -77,10 +82,15 @@
     </repositories>
 
     <distributionManagement>
-        <repository>
+        <!--<repository>
             <id>github</id>
             <name>GitHub Twasi Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/Twasi/twasi-core</url>
+        </repository>-->
+        <repository>
+            <id>central</id>
+            <name>libs-release-local</name>
+            <url>https://artifactory.twasi.net/artifactory/libs-release-local</url>
         </repository>
     </distributionManagement>
 
