@@ -15,5 +15,5 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: |
-        sed -i "s/LIVE/${TRAVIS_BUILD_NUMBER}/g" pom.xml
+        sed -i "s/LIVE/${GITHUB_SHA}/g" pom.xml
         mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
