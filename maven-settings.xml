@@ -13,7 +13,7 @@
         </server>-->
         <server>
             <id>central</id>
-            <username>${env.ARTIFACTORY_USERNAME}</username>
+            <username>${env.ARTIFACTORY_USER}</username>
             <password>${env.ARTIFACTORY_PASSWORD}</password>
         </server>
     </servers>
