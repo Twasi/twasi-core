@@ -244,5 +244,11 @@
             <version>4.1</version>
         </dependency>
 
+        <!-- CLI-Tools -->
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>2.14.2</version>
+        </dependency>
     </dependencies>
 </project>
