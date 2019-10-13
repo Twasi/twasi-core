@@ -230,7 +230,7 @@
         <dependency>
             <groupId>net.twasi</groupId>
             <artifactId>twitch-web-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>2391519e998d2d8b5ebfc27a4d6985d93ab797ca</version>
         </dependency>
 
         <!-- PircBotX -->
