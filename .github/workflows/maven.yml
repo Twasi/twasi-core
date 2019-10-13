@@ -17,3 +17,6 @@ jobs:
       run: |
         sed -i "s/LIVE/${GITHUB_SHA}/g" pom.xml
         mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
+      env:
+        ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+        ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}

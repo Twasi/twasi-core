@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.twasi</groupId>
-    <artifactId>TwasiCore</artifactId>
+    <artifactId>twasi-core</artifactId>
     <version>LIVE</version>
 
     <build>
