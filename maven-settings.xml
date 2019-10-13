@@ -3,17 +3,17 @@
           xmlns="http://maven.apache.org/SETTINGS/1.1.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <servers>
-        <server>
+        <!--<server>
             <id>docker-hub</id>
             <username>${env.DOCKERHUB_USERNAME}</username>
             <password>${env.DOCKERHUB_PASSWORD}</password>
             <configuration>
                 <email>${env.DOCKERHUB_EMAIL}</email>
             </configuration>
-        </server>
+        </server>-->
         <server>
-            <id>release</id>
-            <username>${env.ARTIFACTORY_USERNAME}</username>
+            <id>central</id>
+            <username>${env.ARTIFACTORY_USER}</username>
             <password>${env.ARTIFACTORY_PASSWORD}</password>
         </server>
     </servers>
