@@ -68,7 +68,11 @@ public class PluginDiscovery {
                     TwasiLogger.log.error("Plugin " + plugin.getName() + " has registered api, but does not provide a resolver. API registration skipped.");
                 } else {
                     ServiceRegistry.get(ApiSchemaManagementService.class)
-                            .addForPlugin(plugin.getName(), plugin.getDescription().getApi(), plugin.getGraphQLResolver());
+                            .addForPlugin(
+                                    plugin.getName(),
+                                    plugin.getDescription().getApi(),
+                                    plugin.getGraphQLResolver()
+                            );
                 }
             }
 

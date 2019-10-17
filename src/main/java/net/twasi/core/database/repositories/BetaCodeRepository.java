@@ -10,6 +10,6 @@ public class BetaCodeRepository extends Repository<BetaCode> {
      * @return the BetaCode object, or null if the code is not valid
      */
     public BetaCode getByCode(String betaCode) {
-        return store.createQuery(BetaCode.class).field("betaCode").equal(betaCode).get();
+        return query().field("betaCode").equal(betaCode).get();
     }
 }

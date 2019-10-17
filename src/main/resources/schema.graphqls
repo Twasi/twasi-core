@@ -106,13 +106,13 @@ type PluginDetails {
 }
 
 type Support {
-    myTickets: [SupportTicket],
-    adminTickets: [SupportTicket],
+    myTickets(page: Int): PagedResult,
+    adminTickets(page: Int): PagedResult,
     create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }
 
-type SupportTicket {
+pageable type SupportTicket {
     id: String,
     owner: SupportTicketUser,
     topic: String,
@@ -142,4 +142,12 @@ type Query {
 
 schema {
     query: Query
+}
+
+type PagedResult {
+    pages: Long,
+    page: Long,
+    total: Long,
+    itemsPerPage: Long,
+    content: [Pageable]
 }

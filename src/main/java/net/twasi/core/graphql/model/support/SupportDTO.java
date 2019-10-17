@@ -7,6 +7,7 @@ import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.support.SupportTicketType;
 import net.twasi.core.database.repositories.SupportTicketRepository;
 import net.twasi.core.graphql.TwasiGraphQLHandledException;
+import net.twasi.core.graphql.model.GraphQLPagination;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.TelegramService;
@@ -19,27 +20,38 @@ public class SupportDTO {
 
     private User user;
     private SupportTicketRepository repository;
+    private int paginationAmount = 10; // TODO add to config
 
     public SupportDTO(User user) {
         repository = ServiceRegistry.get(DataService.class).get(SupportTicketRepository.class);
         this.user = user;
     }
 
-    public List<SupportTicketDTO> getMyTickets() {
-        return repository.getByUser(user).stream()
-                .map(SupportTicketDTO::new)
-                .collect(Collectors.toList());
+    public GraphQLPagination<SupportTicketDTO> getMyTickets(int page) {
+        return new GraphQLPagination<>(
+                repository.countByUser(user),
+                paginationAmount,
+                page,
+                repository.getByUser(user, paginationAmount, page).stream()
+                        .map(SupportTicketDTO::new)
+                        .collect(Collectors.toList())
+        );
     }
 
-    public List<SupportTicketDTO> getAdminTickets() {
+    public GraphQLPagination<SupportTicketDTO> getAdminTickets(int page) {
         if (!user.getRank().equals(UserRank.TEAM)) {
             return null;
         }
 
-        return repository.getAll().stream()
-                .sorted((f1, f2) -> Boolean.compare(f1.isOpen(), f2.isOpen()))
-                .map(SupportTicketDTO::new)
-                .collect(Collectors.toList());
+        return new GraphQLPagination<>(
+                repository.count(),
+                paginationAmount,
+                page,
+                repository.getAll().stream()
+                        .sorted((f1, f2) -> Boolean.compare(f1.isOpen(), f2.isOpen()))
+                        .map(SupportTicketDTO::new)
+                        .collect(Collectors.toList())
+        );
     }
 
     public SupportTicketDTO create(String topic, String message, String category) {
@@ -65,7 +77,7 @@ public class SupportDTO {
         SupportTicketMessage initial = ticket.getEntries().get(0);
 
         TelegramService telegram = TelegramService.get();
-        if(telegram.isConnected()) {
+        if (telegram.isConnected()) {
             try {
                 telegram.sendMessageToTelegramChat(
                         "(☞ﾟヮﾟ)☞ Neues Supportticket: #" +
@@ -90,7 +102,7 @@ public class SupportDTO {
 
         if (!isAdminContext) {
             // Only search for personal tickets
-            ticket = repository.getByUser(user).stream().filter(t -> t.getId().toString().equals(id)).findFirst().orElse(null);
+            ticket = repository.getByUser(user).stream().filter(t -> t.getId().toString().equals(id)).findFirst().orElse(null); // TODO query directly in database
         } else {
             // Search for all tickets, verified admin
             ticket = repository.getById(id);
@@ -111,7 +123,7 @@ public class SupportDTO {
 
         if (!isAdminContext) {
             TelegramService telegram = TelegramService.get();
-            if(telegram.isConnected()) {
+            if (telegram.isConnected()) {
                 try {
                     telegram.sendMessageToTelegramChat(
                             "(☞ﾟヮﾟ)☞ Neues Antwort auf ein Supportticket: #" +

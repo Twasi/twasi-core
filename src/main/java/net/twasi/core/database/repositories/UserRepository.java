@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class UserRepository extends Repository<User> {
 
     public User getByTwitchId(String twitchId) {
-        User user = store.createQuery(User.class).field("twitchAccount.twitchId").equal(twitchId).get();
+        User user = query().field("twitchAccount.twitchId").equal(twitchId).get();
 
         /* if (cache.exist(user)) {
             return cache.get(user);
@@ -28,11 +28,11 @@ public class UserRepository extends Repository<User> {
     }
 
     public User getByTwitchName(String twitchname) {
-        return store.createQuery(User.class).field("twitchAccount.userName").equal(twitchname).get();
+        return query().field("twitchAccount.userName").equal(twitchname).get();
     }
 
     public User getByTwitchAccountOrCreate(TwitchAccount account, ChannelDTO channelData) {
-        Query<User> query = store.createQuery(User.class).field("twitchAccount.twitchId").equal(account.getTwitchId());
+        Query<User> query = query().field("twitchAccount.twitchId").equal(account.getTwitchId());
 
         User user;
         if (query.count() == 0) {
@@ -53,7 +53,7 @@ public class UserRepository extends Repository<User> {
     }
 
     public List<ObjectId> getAllRunningIds() {
-        Query<User> query = store.createQuery(User.class);
+        Query<User> query = query();
         query.or(
                 query.criteria("status").equal(AccountStatus.OK),
                 query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
@@ -62,7 +62,7 @@ public class UserRepository extends Repository<User> {
     }
 
     public List<User> getAllRunning() {
-        Query<User> query = store.createQuery(User.class);
+        Query<User> query = query();
         query.or(
                 query.criteria("status").equal(AccountStatus.OK),
                 query.criteria("status").equal(AccountStatus.EMAIL_CONFIRMATION)
