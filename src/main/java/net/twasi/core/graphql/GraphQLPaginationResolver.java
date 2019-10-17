@@ -25,7 +25,7 @@ public class GraphQLPaginationResolver {
     }
 
     public static String getPaginationTypeDefinition() {
-        return "union Pageable = " + String.join(" | ", paginationTypes) + ";";
+        return "union Pageable = " + String.join(" | ", paginationTypes);
     }
 
 }
