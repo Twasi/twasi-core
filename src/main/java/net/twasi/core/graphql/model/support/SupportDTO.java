@@ -27,31 +27,46 @@ public class SupportDTO {
         this.user = user;
     }
 
-    public GraphQLPagination<SupportTicketDTO> getMyTickets(int page) {
+    public GraphQLPagination<SupportTicketDTO> getMyTickets(int page, boolean open) {
         return new GraphQLPagination<>(
                 repository.countByUser(user),
                 paginationAmount,
                 page,
-                repository.getByUser(user, paginationAmount, page).stream()
+                repository.getByUser(user, paginationAmount, page, open).stream()
                         .map(SupportTicketDTO::new)
                         .collect(Collectors.toList())
         );
     }
 
-    public GraphQLPagination<SupportTicketDTO> getAdminTickets(int page) {
+    public GraphQLPagination<SupportTicketDTO> getMyClosedTickets(int page) {
+        return getMyTickets(page, false);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getMyOpenTickets(int page) {
+        return getMyTickets(page, true);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getAdminTickets(int page, boolean open) {
         if (!user.getRank().equals(UserRank.TEAM)) {
             return null;
         }
 
         return new GraphQLPagination<>(
-                repository.count(),
+                repository.countAll(open),
                 paginationAmount,
                 page,
-                repository.getAll().stream()
-                        .sorted((f1, f2) -> Boolean.compare(f1.isOpen(), f2.isOpen()))
+                repository.getAll(paginationAmount, page, open).stream()
                         .map(SupportTicketDTO::new)
                         .collect(Collectors.toList())
         );
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getOpenAdminTickets(int page) {
+        return getAdminTickets(page, true);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getClosedAdminTickets(int page) {
+        return getAdminTickets(page, false);
     }
 
     public SupportTicketDTO create(String topic, String message, String category) {

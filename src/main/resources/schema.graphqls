@@ -106,8 +106,10 @@ type PluginDetails {
 }
 
 type Support {
-    myTickets(page: Int): PagedResult,
-    adminTickets(page: Int): PagedResult,
+    myClosedTickets(page: Int): PagedResult,
+    myOpenTickets(page: Int): PagedResult,
+    closedAdminTickets(page: Int): PagedResult,
+    openAdminTickets(page: Int): PagedResult,
     create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }

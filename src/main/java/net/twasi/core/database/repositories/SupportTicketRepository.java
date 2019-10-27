@@ -6,11 +6,17 @@ import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.support.SupportTicketType;
 import org.mongodb.morphia.query.FindOptions;
+import org.mongodb.morphia.query.Query;
 
 import java.util.Date;
 import java.util.List;
 
 public class SupportTicketRepository extends Repository<SupportTicket> {
+
+    @Override
+    protected Query<SupportTicket> query() {
+        return super.query().order("-createdAt");
+    }
 
     public SupportTicket create(User owner, String topic, String message, SupportTicketType category) {
         SupportTicket st = new SupportTicket(owner, topic, category);
@@ -28,12 +34,20 @@ public class SupportTicketRepository extends Repository<SupportTicket> {
         return query().field("owner").equal(owner).asList(new FindOptions().skip((page - 1) * max).limit(max));
     }
 
+    public List<SupportTicket> getByUser(User owner, int max, int page, boolean open) {
+        return query().field("owner").equal(owner).field("isOpen").equal(open).asList(new FindOptions().skip((page - 1) * max).limit(max));
+    }
+
     public List<SupportTicket> getByUser(User owner) {
         return query().field("owner").equal(owner).asList();
     }
 
     public List<SupportTicket> getAll(int max, int page) {
         return query().asList(new FindOptions().skip((page - 1) * max).limit(max));
+    }
+
+    public List<SupportTicket> getAll(int max, int page, boolean open) {
+        return query().field("isOpen").equal(open).asList(new FindOptions().skip((page - 1) * max).limit(max));
     }
 
     public SupportTicketMessage addReply(SupportTicket ticket, User user, boolean isAdminContext, String message, boolean close) {
@@ -53,5 +67,13 @@ public class SupportTicketRepository extends Repository<SupportTicket> {
 
     public long countByUser(User owner) {
         return query().field("owner").equal(owner).count();
+    }
+
+    public long countByUser(User owner, boolean open) {
+        return query().field("owner").equal(owner).field("isOpen").equal(open).count();
+    }
+
+    public long countAll(boolean open) {
+        return query().field("isOpen").equal(open).count();
     }
 }
