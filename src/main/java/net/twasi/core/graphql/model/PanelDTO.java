@@ -3,6 +3,7 @@ package net.twasi.core.graphql.model;
 import net.twasi.core.database.models.Language;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
+import net.twasi.core.graphql.model.customthemes.CustomThemesDTO;
 import net.twasi.core.graphql.model.support.SupportDTO;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.PluginManagerService;
@@ -58,5 +59,9 @@ public class PanelDTO {
 
     public List<String> getAvailableLanguages() {
         return Arrays.stream(Language.values()).map(Enum::toString).collect(Collectors.toList());
+    }
+
+    public CustomThemesDTO getThemes() {
+        return new CustomThemesDTO(user);
     }
 }

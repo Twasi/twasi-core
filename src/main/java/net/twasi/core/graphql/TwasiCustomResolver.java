@@ -42,5 +42,4 @@ public abstract class TwasiCustomResolver implements GraphQLQueryResolver {
             return null;
         }
     }
-
 }

@@ -44,6 +44,7 @@ class ConfigLoader {
                 writer.println("webinterface:");
                 writer.println("  port: 8000");
                 writer.println("  self: https://localhost:8000");
+                writer.println("  paginationMax: 10");
                 writer.println("bot:");
                 writer.println("  prefix: \"!\"");
                 writer.println("mail:");

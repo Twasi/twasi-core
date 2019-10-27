@@ -7,8 +7,6 @@ import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.support.SupportTicketType;
 import net.twasi.core.database.repositories.SupportTicketRepository;
 import net.twasi.core.graphql.TwasiGraphQLHandledException;
-import net.twasi.core.graphql.model.GraphQLPagination;
-import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.TelegramService;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -23,14 +21,13 @@ public class SupportDTO {
     private int paginationAmount = 10; // TODO add to config
 
     public SupportDTO(User user) {
-        repository = ServiceRegistry.get(DataService.class).get(SupportTicketRepository.class);
+        repository = DataService.get().get(SupportTicketRepository.class);
         this.user = user;
     }
 
-    public GraphQLPagination<SupportTicketDTO> getMyTickets(int page, boolean open) {
-        return new GraphQLPagination<>(
+    public SupportTicketPagination getMyTickets(int page, boolean open) {
+        return new SupportTicketPagination(
                 repository.countByUser(user),
-                paginationAmount,
                 page,
                 repository.getByUser(user, paginationAmount, page, open).stream()
                         .map(SupportTicketDTO::new)
@@ -38,22 +35,21 @@ public class SupportDTO {
         );
     }
 
-    public GraphQLPagination<SupportTicketDTO> getMyClosedTickets(int page) {
+    public SupportTicketPagination getMyClosedTickets(int page) {
         return getMyTickets(page, false);
     }
 
-    public GraphQLPagination<SupportTicketDTO> getMyOpenTickets(int page) {
+    public SupportTicketPagination getMyOpenTickets(int page) {
         return getMyTickets(page, true);
     }
 
-    public GraphQLPagination<SupportTicketDTO> getAdminTickets(int page, boolean open) {
+    public SupportTicketPagination getAdminTickets(int page, boolean open) {
         if (!user.getRank().equals(UserRank.TEAM)) {
             return null;
         }
 
-        return new GraphQLPagination<>(
+        return new SupportTicketPagination(
                 repository.countAll(open),
-                paginationAmount,
                 page,
                 repository.getAll(paginationAmount, page, open).stream()
                         .map(SupportTicketDTO::new)
@@ -61,11 +57,11 @@ public class SupportDTO {
         );
     }
 
-    public GraphQLPagination<SupportTicketDTO> getOpenAdminTickets(int page) {
+    public SupportTicketPagination getOpenAdminTickets(int page) {
         return getAdminTickets(page, true);
     }
 
-    public GraphQLPagination<SupportTicketDTO> getClosedAdminTickets(int page) {
+    public SupportTicketPagination getClosedAdminTickets(int page) {
         return getAdminTickets(page, false);
     }
 

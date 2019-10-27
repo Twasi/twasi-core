@@ -44,6 +44,17 @@ enum UserStatusType {
     MAINTENANCE
 }
 
+enum PanelResultType {
+    OK,
+    WARNING,
+    ERROR
+}
+
+type PanelResult {
+    status: PanelResultType,
+    translationKey: String
+}
+
 type Setup {
     isSetUp: Boolean,
     setup(betaCode: String): Boolean
@@ -62,7 +73,8 @@ type Panel {
     plugins: [PluginDetails],
     support: Support,
     admin: Admin,
-    availableLanguages: [String]
+    availableLanguages: [String],
+    themes: CustomThemes
 }
 
 type Admin {
@@ -106,10 +118,10 @@ type PluginDetails {
 }
 
 type Support {
-    myClosedTickets(page: Int): PagedResult,
-    myOpenTickets(page: Int): PagedResult,
-    closedAdminTickets(page: Int): PagedResult,
-    openAdminTickets(page: Int): PagedResult,
+    myClosedTickets(page: Int): SupportTicketPageable,
+    myOpenTickets(page: Int): SupportTicketPageable,
+    closedAdminTickets(page: Int): SupportTicketPageable,
+    openAdminTickets(page: Int): SupportTicketPageable,
     create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }
@@ -146,10 +158,50 @@ schema {
     query: Query
 }
 
-type PagedResult {
-    pages: Long,
-    page: Long,
-    total: Long,
-    itemsPerPage: Long,
-    content: [Pageable]
+type CustomThemes {
+    myThemes(page: Int): StoreCustomThemePageable,
+    installedThemes: [StoreCustomTheme],
+    availableThemes(page: Int, approvedOnly: Boolean): StoreCustomThemePageable,
+    uninstall(themeId: String): PanelResult,
+    install(themeId: String): PanelResult,
+    create(name: String, theme: CustomThemeInput): PanelResult,
+    delete(id: String): PanelResult
+}
+
+type CustomTheme {
+    backgroundColor: String,
+    contentColor: String,
+    specialContentColor: String,
+    primaryColor: String,
+    secondaryColor: String,
+    fontColor: String,
+    borderRadius: Int,
+    font: String,
+    shadows: Boolean,
+    pillButtons: Boolean,
+    customHeader: String
+}
+
+input CustomThemeInput {
+    backgroundColor: String,
+    contentColor: String,
+    specialContentColor: String,
+    primaryColor: String,
+    secondaryColor: String,
+    fontColor: String,
+    borderRadius: Int,
+    font: String,
+    shadows: Boolean,
+    pillButtons: Boolean,
+    customHeader: String
+}
+
+pageable type StoreCustomTheme {
+    id: String,
+    name: String,
+    creator: String,
+    created: String,
+    installed: Boolean,
+    approved: Boolean,
+    theme: CustomTheme
 }

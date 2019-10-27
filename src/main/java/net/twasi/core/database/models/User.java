@@ -35,6 +35,8 @@ public class User extends BaseEntity {
 
     private List<String> installedPlugins;
 
+    private List<String> installedThemes;
+
     private AccountStatus status;
 
     private ChannelDTO channelInformation;
@@ -244,5 +246,13 @@ public class User extends BaseEntity {
 
     public void setBetaCode(String betaCode) {
         this.betaCode = betaCode;
+    }
+
+    public List<String> getInstalledThemes() {
+        return installedThemes == null ? new ArrayList<>() : installedThemes;
+    }
+
+    public void setInstalledThemes(List<String> installedThemes) {
+        this.installedThemes = installedThemes;
     }
 }

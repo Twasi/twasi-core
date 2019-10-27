@@ -1,5 +1,7 @@
 package net.twasi.core.graphql.model;
 
+import net.twasi.core.services.providers.config.ConfigService;
+
 import java.util.List;
 
 public class GraphQLPagination<T> {
@@ -9,11 +11,16 @@ public class GraphQLPagination<T> {
     private long page;
     private List<T> content;
 
+    @Deprecated
     public GraphQLPagination(long total, long itemsPerPage, long page, List<T> content) {
         this.total = total;
         this.itemsPerPage = itemsPerPage;
         this.page = page;
         this.content = content;
+    }
+
+    public GraphQLPagination(long total, long page, List<T> content) {
+        this(total, ConfigService.get().getCatalog().webinterface.paginationMax, page, content);
     }
 
     public final long getPages() {

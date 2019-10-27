@@ -4,5 +4,5 @@ public class WebInterfaceConfig {
 
     public int port;
     public String self;
-
+    public int paginationMax;
 }
