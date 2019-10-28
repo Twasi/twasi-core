@@ -6,7 +6,7 @@ type User {
     uninstallPlugin(name: String): PluginDetails
     events: [EventMessage]!
     rank: UserRank,
-    banner: String
+    banner: String,
     pluginCommands: [PluginCommand]!
 }
 
@@ -118,10 +118,10 @@ type PluginDetails {
 }
 
 type Support {
-    myClosedTickets(page: Int): SupportTicketPageable,
-    myOpenTickets(page: Int): SupportTicketPageable,
-    closedAdminTickets(page: Int): SupportTicketPageable,
-    openAdminTickets(page: Int): SupportTicketPageable,
+    myClosedTickets: SupportTicketPageable,
+    myOpenTickets: SupportTicketPageable,
+    closedAdminTickets: SupportTicketPageable,
+    openAdminTickets: SupportTicketPageable,
     create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }
@@ -159,9 +159,9 @@ schema {
 }
 
 type CustomThemes {
-    myThemes(page: Int): StoreCustomThemePageable,
+    myThemes: StoreCustomThemePageable,
     installedThemes: [StoreCustomTheme],
-    availableThemes(page: Int, approvedOnly: Boolean): StoreCustomThemePageable,
+    availableThemes(approvedOnly: Boolean): StoreCustomThemePageable,
     uninstall(themeId: String): PanelResult,
     install(themeId: String): PanelResult,
     create(name: String, theme: CustomThemeInput): PanelResult,

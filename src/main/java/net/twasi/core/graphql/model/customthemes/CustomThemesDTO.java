@@ -3,6 +3,7 @@ package net.twasi.core.graphql.model.customthemes;
 import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.CustomThemeRepository;
 import net.twasi.core.database.repositories.UserRepository;
+import net.twasi.core.graphql.model.GraphQLPagination;
 import net.twasi.core.graphql.model.PanelResultDTO;
 import net.twasi.core.services.providers.DataService;
 
@@ -24,11 +25,10 @@ public class CustomThemesDTO {
         this.repo = DataService.get().get(CustomThemeRepository.class);
     }
 
-    public CustomThemePagination getMyThemes(int page) {
-        return new CustomThemePagination(
-                repo.countThemesByUser(user),
-                page,
-                repo.getThemesByUser(user, page)
+    public GraphQLPagination<StoreCustomThemeDTO> getMyThemes() {
+        return new GraphQLPagination<>(
+                () -> repo.countThemesByUser(user),
+                (pg) -> repo.getThemesByUser(user, pg)
         );
     }
 
@@ -41,11 +41,10 @@ public class CustomThemesDTO {
         return null;
     }
 
-    public CustomThemePagination getAvailableThemes(int page, boolean approvedOnly) {
-        return new CustomThemePagination(
-                repo.countAvailableThemes(approvedOnly),
-                page,
-                repo.getAvailableThemes(page, user, approvedOnly)
+    public GraphQLPagination<StoreCustomThemeDTO> getAvailableThemes(boolean approvedOnly) {
+        return new GraphQLPagination<>(
+                () -> repo.countAvailableThemes(approvedOnly),
+                (pg) -> repo.getAvailableThemes(pg, user, approvedOnly)
         );
     }
 
@@ -59,7 +58,7 @@ public class CustomThemesDTO {
 
     public PanelResultDTO install(String themeId) {
         List<String> installedThemes = new ArrayList<>(user.getInstalledThemes());
-        if(installedThemes.contains(themeId)) {
+        if (installedThemes.contains(themeId)) {
             return new PanelResultDTO(WARNING, "CUSTOM-THEMES.ALREADY-INSTALLED");
         }
         installedThemes.add(themeId);

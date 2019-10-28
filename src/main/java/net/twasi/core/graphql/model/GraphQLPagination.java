@@ -6,41 +6,38 @@ import java.util.List;
 
 public class GraphQLPagination<T> {
 
-    private long total;
-    private long itemsPerPage;
-    private long page;
-    private List<T> content;
+    private static long itemsPerPage = ConfigService.get().getCatalog().webinterface.paginationMax;
+    private ICount countFunction;
+    private IResolve<T> resolveFunction;
 
-    @Deprecated
-    public GraphQLPagination(long total, long itemsPerPage, long page, List<T> content) {
-        this.total = total;
-        this.itemsPerPage = itemsPerPage;
-        this.page = page;
-        this.content = content;
-    }
-
-    public GraphQLPagination(long total, long page, List<T> content) {
-        this(total, ConfigService.get().getCatalog().webinterface.paginationMax, page, content);
+    public GraphQLPagination(ICount countFunction, IResolve<T> resolveFunction) {
+        this.countFunction = countFunction;
+        this.resolveFunction = resolveFunction;
     }
 
     public final long getPages() {
+        long total = countFunction.countFunction();
         return total / itemsPerPage + ((total % itemsPerPage) == 0 ? 0 : 1);
     }
 
-    public final long getPage() {
-        return page;
-    }
-
     public final long getTotal() {
-        return total;
+        return countFunction.countFunction();
     }
 
     public final long getItemsPerPage() {
         return itemsPerPage;
     }
 
-    public final List<T> getContent() {
-        return content;
+    public final List<T> getContent(int page) {
+        return resolveFunction.resolveFunction(page);
+    }
+
+    public interface ICount {
+        long countFunction();
+    }
+
+    public interface IResolve<T> {
+        List<T> resolveFunction(int page);
     }
 
 }

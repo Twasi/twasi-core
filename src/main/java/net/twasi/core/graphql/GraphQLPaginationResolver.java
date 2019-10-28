@@ -30,7 +30,7 @@ public class GraphQLPaginationResolver {
         return "union Pageable = " + String.join(" | ", paginationTypes);
          */
         StringBuilder definitions = new StringBuilder();
-        paginationTypes.forEach(type -> definitions.append("\ntype %TYPE%Pageable { pages: Long, page: Long, total: Long, itemsPerPage: Long, content: [%TYPE%] } \n".replace("%TYPE%", type)));
+        paginationTypes.forEach(type -> definitions.append("\ntype %TYPE%Pageable { pages: Long, page: Long, total: Long, itemsPerPage: Long, content(page: Int): [%TYPE%] } \n".replace("%TYPE%", type)));
         return definitions.toString();
     }
 
