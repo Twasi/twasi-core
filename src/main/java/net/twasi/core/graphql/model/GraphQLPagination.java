@@ -3,6 +3,7 @@ package net.twasi.core.graphql.model;
 import net.twasi.core.services.providers.config.ConfigService;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class GraphQLPagination<T> {
 
@@ -30,7 +31,7 @@ public class GraphQLPagination<T> {
         return amount = countFunction.countFunction();
     }
 
-    public final long getItemsPerPage() {
+    public static long getItemsPerPage() {
         return itemsPerPage;
     }
 
@@ -44,6 +45,12 @@ public class GraphQLPagination<T> {
 
     public interface IResolve<T> {
         List<T> resolveFunction(int page);
+    }
+
+    public static <U> Stream<U> paginateStream(Stream<U> stream, int page) {
+        return stream
+                .skip(((page > 0 ? page : 1) - 1) * itemsPerPage)
+                .limit(itemsPerPage);
     }
 
 }

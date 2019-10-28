@@ -70,7 +70,8 @@ type Panel {
     status: BotStatus,
     userStatus: UserStatus,
     appInfo: AppInfo,
-    plugins: [PluginDetails],
+    installedPlugins: [PluginDetails],
+    availablePlugins: PluginDetailsPageable,
     support: Support,
     admin: Admin,
     availableLanguages: [String],
@@ -104,7 +105,7 @@ type TwitchAccount {
     update: TwitchAccount
 }
 
-type PluginDetails {
+pageable type PluginDetails {
     isInstalled: Boolean!
     name: String!
     description: String!

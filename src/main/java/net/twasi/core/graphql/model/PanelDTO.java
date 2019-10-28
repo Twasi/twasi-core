@@ -5,16 +5,18 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.database.models.UserRank;
 import net.twasi.core.graphql.model.customthemes.CustomThemesDTO;
 import net.twasi.core.graphql.model.support.SupportDTO;
-import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.services.providers.PluginManagerService;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PanelDTO {
     private User user;
     private AppInfoDTO appInfo = new AppInfoDTO();
+    PluginManagerService pm = PluginManagerService.get();
 
     public PanelDTO(User user) {
         this.user = user;
@@ -36,13 +38,24 @@ public class PanelDTO {
         return appInfo;
     }
 
-    public List<PluginDetailsDTO> getPlugins() {
-        return ServiceRegistry.get(PluginManagerService.class)
-                .getPlugins()
-                .stream()
-                .filter(p -> !p.getDescription().isHidden())
-                .map(p -> new PluginDetailsDTO(p, user, user.getInstalledPlugins().contains(p.getName())))
+    private Stream<TwasiPlugin> getPlStream() {
+        return pm.getPlugins().stream()
+                .filter(p -> !p.getDescription().isHidden());
+    }
+
+    public List<PluginDetailsDTO> getInstalledPlugins() {
+        return getPlStream()
+                .filter(pl -> user.getInstalledPlugins().contains(pl.getDescription().name))
+                .map(pl -> new PluginDetailsDTO(pl, user, true))
                 .collect(Collectors.toList());
+    }
+
+    public GraphQLPagination<PluginDetailsDTO> getAvailablePlugins() {
+        return new GraphQLPagination<>(
+                getPlStream()::count,
+                (pg) -> GraphQLPagination.paginateStream(getPlStream(), pg)
+                        .map(p -> new PluginDetailsDTO(p, user, user.getInstalledPlugins().contains(p.getName())))
+                        .collect(Collectors.toList()));
     }
 
     public SupportDTO getSupport() {
