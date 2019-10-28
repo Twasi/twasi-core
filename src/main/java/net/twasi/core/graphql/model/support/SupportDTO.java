@@ -56,11 +56,11 @@ public class SupportDTO {
         );
     }
 
-    public GraphQLPagination<SupportTicketDTO> getOpenAdminTickets(int page) {
+    public GraphQLPagination<SupportTicketDTO> getOpenAdminTickets() {
         return getAdminTickets(true);
     }
 
-    public GraphQLPagination<SupportTicketDTO> getClosedAdminTickets(int page) {
+    public GraphQLPagination<SupportTicketDTO> getClosedAdminTickets() {
         return getAdminTickets(false);
     }
 

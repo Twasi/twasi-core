@@ -10,18 +10,24 @@ public class GraphQLPagination<T> {
     private ICount countFunction;
     private IResolve<T> resolveFunction;
 
+    private boolean counted = false;
+    private long amount = 0;
+
     public GraphQLPagination(ICount countFunction, IResolve<T> resolveFunction) {
         this.countFunction = countFunction;
         this.resolveFunction = resolveFunction;
     }
 
     public final long getPages() {
-        long total = countFunction.countFunction();
+        long total = getTotal();
         return total / itemsPerPage + ((total % itemsPerPage) == 0 ? 0 : 1);
     }
 
     public final long getTotal() {
-        return countFunction.countFunction();
+        // Prevent counting twice
+        if (counted) return amount;
+        counted = true;
+        return amount = countFunction.countFunction();
     }
 
     public final long getItemsPerPage() {
