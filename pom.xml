@@ -6,7 +6,7 @@
 
     <groupId>net.twasi</groupId>
     <artifactId>twasi-core</artifactId>
-    <version>LIVE</version>
+    <version>4cc6dae2419533f15a4553f0e86a4b95a6416f4d</version>
 
     <build>
         <plugins>
@@ -82,16 +82,16 @@
     </repositories>
 
     <distributionManagement>
-        <!--<repository>
-            <id>github</id>
-            <name>GitHub Twasi Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/Twasi/twasi-core</url>
-        </repository>-->
         <repository>
             <id>central</id>
             <name>libs-release-local</name>
             <url>https://artifactory.twasi.net/artifactory/libs-release-local</url>
         </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>artifactory-snapshots</name>
+            <url>http://artifactory.twasi.net/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencies>

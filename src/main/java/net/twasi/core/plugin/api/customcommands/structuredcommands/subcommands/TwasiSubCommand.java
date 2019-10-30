@@ -1,6 +1,7 @@
 package net.twasi.core.plugin.api.customcommands.structuredcommands.subcommands;
 
 import net.twasi.core.logger.TwasiLogger;
+import net.twasi.core.plugin.api.TwasiUserPlugin;
 import net.twasi.core.plugin.api.customcommands.TwasiCustomCommandEvent;
 import net.twasi.core.plugin.api.customcommands.structuredcommands.TwasiStructuredCommandEvent;
 
@@ -59,4 +60,8 @@ public abstract class TwasiSubCommand implements ISubCommands {
 
     public abstract String getCommandName();
 
+    @Override
+    public final TwasiUserPlugin getProvidingUserPlugin() {
+        return parent.getProvidingUserPlugin();
+    }
 }
