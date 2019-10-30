@@ -6,7 +6,7 @@
 
     <groupId>net.twasi</groupId>
     <artifactId>twasi-core</artifactId>
-    <version>4cc6dae2419533f15a4553f0e86a4b95a6416f4d</version>
+    <version>4848378bcc348da98acbeaf319b98fc81e88015b</version>
 
     <build>
         <plugins>
