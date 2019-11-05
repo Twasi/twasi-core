@@ -3,27 +3,67 @@ package net.twasi.core.graphql.model.customthemes;
 public class CustomThemeDTO {
 
     private String backgroundColor;
-    private String contentColor;
-    private String specialContentColor;
+    private int buttonRadius;
+    private int panelRadius;
+    private int specialContentRadius;
+    private String panelBackgroundColor;
+    private String fontColor;
+    private String buttonFontColor;
     private String primaryColor;
     private String secondaryColor;
-    private String fontColor;
-    private int borderRadius = 10;
-    private String font = null;
-    private boolean shadows = true;
-    private boolean pillButtons = true;
-    private String customHeader = null;
+    private String specialContentColor;
+
+    private String outlineTextLogo;
+    private String shadowPrimaryTextLogo;
+    private String shadowSecondaryTextLogo;
+    private String mainTextLogo;
+
+    public CustomThemeDTO() {
+    }
+
+    public CustomThemeDTO(String backgroundColor, int buttonRadius, int panelRadius, int specialContentRadius, String panelBackgroundColor, String fontColor, String buttonFontColor, String primaryColor, String secondaryColor, String specialContentColor, String outlineTextLogo, String shadowPrimaryTextLogo, String shadowSecondaryTextLogo, String mainTextLogo) {
+        this.backgroundColor = backgroundColor;
+        this.buttonRadius = buttonRadius;
+        this.panelRadius = panelRadius;
+        this.specialContentRadius = specialContentRadius;
+        this.panelBackgroundColor = panelBackgroundColor;
+        this.fontColor = fontColor;
+        this.buttonFontColor = buttonFontColor;
+        this.primaryColor = primaryColor;
+        this.secondaryColor = secondaryColor;
+        this.specialContentColor = specialContentColor;
+        this.outlineTextLogo = outlineTextLogo;
+        this.shadowPrimaryTextLogo = shadowPrimaryTextLogo;
+        this.shadowSecondaryTextLogo = shadowSecondaryTextLogo;
+        this.mainTextLogo = mainTextLogo;
+    }
 
     public String getBackgroundColor() {
         return backgroundColor;
     }
 
-    public String getContentColor() {
-        return contentColor;
+    public int getButtonRadius() {
+        return buttonRadius;
     }
 
-    public String getSpecialContentColor() {
-        return specialContentColor;
+    public int getPanelRadius() {
+        return panelRadius;
+    }
+
+    public int getSpecialContentRadius() {
+        return specialContentRadius;
+    }
+
+    public String getPanelBackgroundColor() {
+        return panelBackgroundColor;
+    }
+
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public String getButtonFontColor() {
+        return buttonFontColor;
     }
 
     public String getPrimaryColor() {
@@ -34,27 +74,23 @@ public class CustomThemeDTO {
         return secondaryColor;
     }
 
-    public String getFontColor() {
-        return fontColor;
+    public String getSpecialContentColor() {
+        return specialContentColor;
     }
 
-    public int getBorderRadius() {
-        return borderRadius;
+    public String getOutlineTextLogo() {
+        return outlineTextLogo;
     }
 
-    public String getFont() {
-        return font;
+    public String getShadowPrimaryTextLogo() {
+        return shadowPrimaryTextLogo;
     }
 
-    public boolean isShadows() {
-        return shadows;
+    public String getShadowSecondaryTextLogo() {
+        return shadowSecondaryTextLogo;
     }
 
-    public boolean isPillButtons() {
-        return pillButtons;
-    }
-
-    public String getCustomHeader() {
-        return customHeader;
+    public String getMainTextLogo() {
+        return mainTextLogo;
     }
 }

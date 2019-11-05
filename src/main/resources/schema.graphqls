@@ -171,30 +171,36 @@ type CustomThemes {
 
 type CustomTheme {
     backgroundColor: String,
-    contentColor: String,
-    specialContentColor: String,
+    buttonRadius: Int,
+    panelRadius: Int,
+    specialContentRadius: Int,
+    panelBackgroundColor: String,
+    fontColor: String,
+    buttonFontColor: String,
     primaryColor: String,
     secondaryColor: String,
-    fontColor: String,
-    borderRadius: Int,
-    font: String,
-    shadows: Boolean,
-    pillButtons: Boolean,
-    customHeader: String
+    specialContentColor: String,
+    outlineTextLogo: String,
+    shadowPrimaryTextLogo: String,
+    shadowSecondaryTextLogo: String,
+    mainTextLogo: String
 }
 
 input CustomThemeInput {
     backgroundColor: String,
-    contentColor: String,
-    specialContentColor: String,
+    buttonRadius: Int,
+    panelRadius: Int,
+    specialContentRadius: Int,
+    panelBackgroundColor: String,
+    fontColor: String,
+    buttonFontColor: String,
     primaryColor: String,
     secondaryColor: String,
-    fontColor: String,
-    borderRadius: Int,
-    font: String,
-    shadows: Boolean,
-    pillButtons: Boolean,
-    customHeader: String
+    specialContentColor: String,
+    outlineTextLogo: String,
+    shadowPrimaryTextLogo: String,
+    shadowSecondaryTextLogo: String,
+    mainTextLogo: String
 }
 
 pageable type StoreCustomTheme {
