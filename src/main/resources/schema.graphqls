@@ -165,8 +165,7 @@ type CustomThemes {
     availableThemes(approvedOnly: Boolean): StoreCustomThemePageable,
     uninstall(themeId: String): PanelResult,
     install(themeId: String): PanelResult,
-    create(name: String, theme: CustomThemeInput): PanelResult,
-    delete(id: String): PanelResult
+    create(name: String, theme: CustomThemeInput): PanelResult
 }
 
 type CustomTheme {

@@ -61,19 +61,23 @@ public class CustomThemesDTO {
         if (installedThemes.contains(themeId)) {
             return new PanelResultDTO(WARNING, "CUSTOM-THEMES.ALREADY-INSTALLED");
         }
+        if (!repo.themeExists(themeId)) {
+            return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NOT-EXISTING");
+        }
         installedThemes.add(themeId);
         user.setInstalledThemes(installedThemes);
         userRepo.commit(user);
         return new PanelResultDTO(OK);
     }
 
+    /*
     public PanelResultDTO delete(String themeId) {
         if (repo.delete(themeId, user) > 0) {
             return new PanelResultDTO(OK);
         } else {
             return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NO-THEME-FOUND");
         }
-    }
+    }*/
 
     public PanelResultDTO create(String name, CustomThemeDTO properties) {
         repo.create(properties, user, name);

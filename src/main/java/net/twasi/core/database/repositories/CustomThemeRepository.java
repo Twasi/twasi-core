@@ -5,6 +5,7 @@ import net.twasi.core.database.models.CustomTheme;
 import net.twasi.core.database.models.User;
 import net.twasi.core.graphql.model.customthemes.CustomThemeDTO;
 import net.twasi.core.graphql.model.customthemes.StoreCustomThemeDTO;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class CustomThemeRepository extends Repository<CustomTheme> {
     }
 
     public List<StoreCustomThemeDTO> getInstalledThemesByUser(User user) {
-        return map(query().field("id").in(user.getInstalledThemes()).asList(), user);
+        return map(query().field("_id").in(user.getInstalledThemes().stream().map(ObjectId::new).collect(Collectors.toList())).asList(), user);
     }
 
     public StoreCustomThemeDTO create(CustomThemeDTO properties, User user, String name) {
@@ -48,6 +49,10 @@ public class CustomThemeRepository extends Repository<CustomTheme> {
     }
 
     public int delete(String id, User user) {
-        return store.delete(query().field("creator").equal(user).field("id").equal(id)).getN();
+        return store.delete(query().field("creator").equal(user).field("_id").equal(new ObjectId(id))).getN();
+    }
+
+    public boolean themeExists(String themeId) {
+        return query().field("_id").equal(new ObjectId(themeId)).count() > 0;
     }
 }
