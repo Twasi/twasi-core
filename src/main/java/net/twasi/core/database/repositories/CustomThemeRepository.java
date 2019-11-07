@@ -24,6 +24,10 @@ public class CustomThemeRepository extends Repository<CustomTheme> {
         return query().field("creator").equal(user.getId()).count();
     }
 
+    public long countThemesByUser(User user, boolean approved) {
+        return query().field("creator").equal(user.getId()).field("approved").equal(approved).count();
+    }
+
     public List<StoreCustomThemeDTO> getAvailableThemes(int page, User user, boolean approvedOnly) {
         if (approvedOnly)
             return map(query().field("approved").equal(true).asList(paginated(page)), user);
@@ -54,5 +58,15 @@ public class CustomThemeRepository extends Repository<CustomTheme> {
 
     public boolean themeExists(String themeId) {
         return query().field("_id").equal(new ObjectId(themeId)).count() > 0;
+    }
+
+    public boolean approveTheme(String themeId) {
+        CustomTheme byId = query().field("_id").equal(new ObjectId(themeId)).get();
+        if (byId == null) {
+            return false;
+        }
+        byId.setApproved(true);
+        commit(byId);
+        return true;
     }
 }

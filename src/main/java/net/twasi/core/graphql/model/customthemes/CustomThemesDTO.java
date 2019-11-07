@@ -1,6 +1,7 @@
 package net.twasi.core.graphql.model.customthemes;
 
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.models.UserRank;
 import net.twasi.core.database.repositories.CustomThemeRepository;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.graphql.model.GraphQLPagination;
@@ -10,8 +11,7 @@ import net.twasi.core.services.providers.DataService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.twasi.core.graphql.model.PanelResultDTO.PanelResultType.OK;
-import static net.twasi.core.graphql.model.PanelResultDTO.PanelResultType.WARNING;
+import static net.twasi.core.graphql.model.PanelResultDTO.PanelResultType.*;
 
 public class CustomThemesDTO {
 
@@ -80,7 +80,21 @@ public class CustomThemesDTO {
     }*/
 
     public PanelResultDTO create(String name, CustomThemeDTO properties) {
+        if (repo.countThemesByUser(user, false) >= 3) {
+            return new PanelResultDTO(WARNING, "CUSTOM-THEMES.TOO-MANY-THEMES");
+        }
         repo.create(properties, user, name);
         return new PanelResultDTO(OK);
+    }
+
+    public PanelResultDTO approve(String themeId) {
+        if (user.getRank().equals(UserRank.TEAM)) {
+            if(repo.approveTheme(themeId)) {
+                return new PanelResultDTO(OK);
+            } else {
+                return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NOT-EXISTING");
+            }
+        }
+        return new PanelResultDTO(UNPERMITTED);
     }
 }

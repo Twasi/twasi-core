@@ -25,7 +25,8 @@ public class PanelResultDTO {
     public enum PanelResultType {
         OK,
         WARNING,
-        ERROR
+        ERROR,
+        UNPERMITTED;
     }
 }
 
