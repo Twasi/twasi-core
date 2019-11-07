@@ -11,6 +11,9 @@
 .idea/
 out/
 
+# Moquette config
+moquette.conf
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

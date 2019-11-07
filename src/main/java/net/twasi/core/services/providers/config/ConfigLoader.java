@@ -58,6 +58,8 @@ class ConfigLoader {
                 writer.println("#  botToken: null # Get yours from the telegram botfather");
                 writer.println("#  userName: null # The telegram-bot's username");
                 writer.println("#  chatId: null # The chat-ID the bot should send messages to");
+                writer.println("websocket:");
+                writer.println("  port: 1883");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {
