@@ -70,14 +70,22 @@ public class CustomThemesDTO {
         return new PanelResultDTO(OK);
     }
 
-    /*
     public PanelResultDTO delete(String themeId) {
-        if (repo.delete(themeId, user) > 0) {
+        if (user.getRank() == UserRank.TEAM) {
+            if (repo.delete(themeId) > 0) {
+                return new PanelResultDTO(OK);
+            } else {
+                return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NO-THEME-FOUND");
+            }
+        }
+        if (userRepo.getThemeInstallations(themeId) > 0) {
+            return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NO-USED-THEME-DELETION");
+        } else if (repo.delete(themeId, user) > 0) {
             return new PanelResultDTO(OK);
         } else {
             return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NO-THEME-FOUND");
         }
-    }*/
+    }
 
     public PanelResultDTO create(String name, CustomThemeDTO properties) {
         if (repo.countThemesByUser(user, false) >= 3) {
@@ -89,7 +97,7 @@ public class CustomThemesDTO {
 
     public PanelResultDTO approve(String themeId) {
         if (user.getRank().equals(UserRank.TEAM)) {
-            if(repo.approveTheme(themeId)) {
+            if (repo.approveTheme(themeId)) {
                 return new PanelResultDTO(OK);
             } else {
                 return new PanelResultDTO(WARNING, "CUSTOM-THEMES.NOT-EXISTING");

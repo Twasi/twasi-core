@@ -69,4 +69,8 @@ public class UserRepository extends Repository<User> {
         );
         return query.asList();
     }
+
+    public long getThemeInstallations(String themeId) {
+       return query().field("installedThemes").contains(themeId).count();
+    }
 }

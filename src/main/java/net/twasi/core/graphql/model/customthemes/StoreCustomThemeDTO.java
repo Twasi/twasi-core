@@ -2,6 +2,8 @@ package net.twasi.core.graphql.model.customthemes;
 
 import net.twasi.core.database.models.CustomTheme;
 import net.twasi.core.database.models.User;
+import net.twasi.core.database.repositories.UserRepository;
+import net.twasi.core.services.providers.DataService;
 
 public class StoreCustomThemeDTO {
 
@@ -39,6 +41,10 @@ public class StoreCustomThemeDTO {
 
     public CustomThemeDTO getTheme() {
         return theme.getProperties();
+    }
+
+    public long getInstallations() {
+        return DataService.get().get(UserRepository.class).getThemeInstallations(getId());
     }
 
 }

@@ -56,6 +56,10 @@ public class CustomThemeRepository extends Repository<CustomTheme> {
         return store.delete(query().field("creator").equal(user).field("_id").equal(new ObjectId(id))).getN();
     }
 
+    public int delete(String themeId) {
+        return store.delete(query().field("_id").equal(new ObjectId(themeId))).getN();
+    }
+
     public boolean themeExists(String themeId) {
         return query().field("_id").equal(new ObjectId(themeId)).count() > 0;
     }
