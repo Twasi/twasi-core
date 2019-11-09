@@ -7,5 +7,6 @@ public enum SupportTicketType {
     JOKE,
     QUESTION,
     PROBLEM,
+    THEME,
     OTHER
 }

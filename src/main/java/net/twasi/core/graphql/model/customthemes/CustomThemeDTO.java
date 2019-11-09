@@ -17,11 +17,12 @@ public class CustomThemeDTO {
     private String shadowPrimaryTextLogo;
     private String shadowSecondaryTextLogo;
     private String mainTextLogo;
+    private Boolean darkMode;
 
     public CustomThemeDTO() {
     }
 
-    public CustomThemeDTO(String backgroundColor, int buttonRadius, int panelRadius, int specialContentRadius, String panelBackgroundColor, String fontColor, String buttonFontColor, String primaryColor, String secondaryColor, String specialContentColor, String outlineTextLogo, String shadowPrimaryTextLogo, String shadowSecondaryTextLogo, String mainTextLogo) {
+    public CustomThemeDTO(String backgroundColor, int buttonRadius, int panelRadius, int specialContentRadius, String panelBackgroundColor, String fontColor, String buttonFontColor, String primaryColor, String secondaryColor, String specialContentColor, String outlineTextLogo, String shadowPrimaryTextLogo, String shadowSecondaryTextLogo, String mainTextLogo, Boolean darkMode) {
         this.backgroundColor = backgroundColor;
         this.buttonRadius = buttonRadius;
         this.panelRadius = panelRadius;
@@ -36,6 +37,7 @@ public class CustomThemeDTO {
         this.shadowPrimaryTextLogo = shadowPrimaryTextLogo;
         this.shadowSecondaryTextLogo = shadowSecondaryTextLogo;
         this.mainTextLogo = mainTextLogo;
+        this.darkMode = darkMode;
     }
 
     public String getBackgroundColor() {
@@ -92,5 +94,9 @@ public class CustomThemeDTO {
 
     public String getMainTextLogo() {
         return mainTextLogo;
+    }
+
+    public Boolean getDarkMode() {
+        return darkMode;
     }
 }

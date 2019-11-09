@@ -184,7 +184,8 @@ type CustomTheme {
     outlineTextLogo: String,
     shadowPrimaryTextLogo: String,
     shadowSecondaryTextLogo: String,
-    mainTextLogo: String
+    mainTextLogo: String,
+    darkMode: Boolean
 }
 
 input CustomThemeInput {
@@ -201,7 +202,8 @@ input CustomThemeInput {
     outlineTextLogo: String,
     shadowPrimaryTextLogo: String,
     shadowSecondaryTextLogo: String,
-    mainTextLogo: String
+    mainTextLogo: String,
+    darkMode: Boolean
 }
 
 pageable type StoreCustomTheme {
