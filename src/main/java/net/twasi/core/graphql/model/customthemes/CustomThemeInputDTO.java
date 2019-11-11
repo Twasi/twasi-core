@@ -1,6 +1,6 @@
 package net.twasi.core.graphql.model.customthemes;
 
-public class CustomThemeDTO {
+public class CustomThemeInputDTO {
 
     private String backgroundColor;
     private int buttonRadius;
@@ -18,12 +18,12 @@ public class CustomThemeDTO {
     private String shadowSecondaryTextLogo;
     private String mainTextLogo;
     private Boolean darkMode;
-    private CustomThemeSpecialProperties specialProperties;
+    private CustomThemeSpecialPropertiesInput specialProperties;
 
-    public CustomThemeDTO() {
+    public CustomThemeInputDTO() {
     }
 
-    public CustomThemeDTO(String backgroundColor, int buttonRadius, int panelRadius, int specialContentRadius, String panelBackgroundColor, String fontColor, String buttonFontColor, String primaryColor, String secondaryColor, String specialContentColor, String outlineTextLogo, String shadowPrimaryTextLogo, String shadowSecondaryTextLogo, String mainTextLogo, Boolean darkMode, CustomThemeSpecialProperties specialProperties) {
+    public CustomThemeInputDTO(String backgroundColor, int buttonRadius, int panelRadius, int specialContentRadius, String panelBackgroundColor, String fontColor, String buttonFontColor, String primaryColor, String secondaryColor, String specialContentColor, String outlineTextLogo, String shadowPrimaryTextLogo, String shadowSecondaryTextLogo, String mainTextLogo, Boolean darkMode, CustomThemeSpecialPropertiesInput specialProperties) {
         this.backgroundColor = backgroundColor;
         this.buttonRadius = buttonRadius;
         this.panelRadius = panelRadius;
@@ -102,14 +102,14 @@ public class CustomThemeDTO {
         return darkMode;
     }
 
-    public CustomThemeSpecialProperties getSpecialProperties() {
+    public CustomThemeSpecialPropertiesInput getSpecialProperties() {
         return specialProperties;
     }
 
-    public static class CustomThemeSpecialProperties {
+    public static class CustomThemeSpecialPropertiesInput {
         private boolean snow;
 
-        public CustomThemeSpecialProperties(boolean snow) {
+        public CustomThemeSpecialPropertiesInput(boolean snow) {
             this.snow = snow;
         }
 

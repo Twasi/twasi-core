@@ -186,7 +186,8 @@ type CustomTheme {
     shadowPrimaryTextLogo: String,
     shadowSecondaryTextLogo: String,
     mainTextLogo: String,
-    darkMode: Boolean
+    darkMode: Boolean,
+    specialProperties: CustomThemeSpecialProperties
 }
 
 input CustomThemeInput {
@@ -204,7 +205,16 @@ input CustomThemeInput {
     shadowPrimaryTextLogo: String,
     shadowSecondaryTextLogo: String,
     mainTextLogo: String,
-    darkMode: Boolean
+    darkMode: Boolean,
+    specialProperties: CustomThemeSpecialPropertiesInput
+}
+
+type CustomThemeSpecialProperties {
+    snow: Boolean
+}
+
+input CustomThemeSpecialPropertiesInput {
+    snow: Boolean
 }
 
 pageable type StoreCustomTheme {
