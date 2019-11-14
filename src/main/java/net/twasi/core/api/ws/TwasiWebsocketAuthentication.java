@@ -12,9 +12,13 @@ public class TwasiWebsocketAuthentication {
     private List<String> topics = new ArrayList<>(); // User is granted all topic
 
     public TwasiWebsocketAuthentication(AuthenticationType type, String token) throws RuntimeException {
+        this.authenticate(type, token);
+    }
+
+    public void authenticate(AuthenticationType type, String token) throws RuntimeException {
         if (type.equals(AuthenticationType.JWT_TOKEN)) {
             if ((user = JWTService.get().getManager().getUserFromToken(token)) == null)
-                throw new RuntimeException();
+                throw new RuntimeException("The JWT token provided does not belong to any user or is invalid");
         } else if (type.equals(AuthenticationType.EXPLICIT_GRANT_TOKEN)) {
             // TODO Not implemented yet
         }
