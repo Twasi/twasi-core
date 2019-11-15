@@ -18,7 +18,7 @@ public class CustomThemeInputDTO {
     private String shadowSecondaryTextLogo;
     private String mainTextLogo;
     private Boolean darkMode;
-    private CustomThemeSpecialPropertiesInput specialProperties;
+    private CustomThemeSpecialPropertiesInput specialProperties = new CustomThemeSpecialPropertiesInput();
 
     public CustomThemeInputDTO() {
     }
@@ -107,10 +107,9 @@ public class CustomThemeInputDTO {
     }
 
     public static class CustomThemeSpecialPropertiesInput {
-        private boolean snow;
+        private boolean snow = false;
 
-        public CustomThemeSpecialPropertiesInput(boolean snow) {
-            this.snow = snow;
+        public CustomThemeSpecialPropertiesInput() {
         }
 
         public boolean isSnow() {

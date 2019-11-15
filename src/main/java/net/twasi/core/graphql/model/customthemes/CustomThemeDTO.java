@@ -18,7 +18,7 @@ public class CustomThemeDTO {
     private String shadowSecondaryTextLogo;
     private String mainTextLogo;
     private Boolean darkMode;
-    private CustomThemeSpecialProperties specialProperties;
+    private CustomThemeSpecialProperties specialProperties = new CustomThemeSpecialProperties();
 
     public CustomThemeDTO() {
     }
@@ -107,10 +107,9 @@ public class CustomThemeDTO {
     }
 
     public static class CustomThemeSpecialProperties {
-        private boolean snow;
+        private boolean snow = false;
 
-        public CustomThemeSpecialProperties(boolean snow) {
-            this.snow = snow;
+        public CustomThemeSpecialProperties() {
         }
 
         public boolean isSnow() {
