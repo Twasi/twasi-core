@@ -55,7 +55,6 @@ public class ApiSchemaManagementService implements IService {
             TwasiLogger.log.debug("Plugin API definitions: " + pluginDefinitions);
 
             schemaBuilder.schemaString(defaultSchemaString);
-            schemaBuilder.schemaString(GraphQLPaginationResolver.getPaginationTypeDefinition());
 
             definitiveSchema = schemaBuilder.build().makeExecutableSchema();
         } catch (IOException e) {
