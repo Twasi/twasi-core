@@ -1,8 +1,10 @@
 package net.twasi.core.api;
 
 import io.prometheus.client.exporter.MetricsServlet;
-import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.api.oauth.OAuthIntegrationController;
+import net.twasi.core.api.upload.CSVUploadHandler;
+import net.twasi.core.api.upload.ImageUploadHandler;
+import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
@@ -38,6 +40,9 @@ public class WebInterfaceApp {
         context.addServlet(AuthCallbackController.class, "/auth/callback");
 
         context.addServlet(new ServletHolder(oAuthIntegrationController), "/oauth/*");
+
+        context.addServlet(ImageUploadHandler.class, "/upload/img");
+        context.addServlet(CSVUploadHandler.class, "/upload/csv");
 
         context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
     }
