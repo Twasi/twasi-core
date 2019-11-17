@@ -36,7 +36,7 @@ public class WebsocketServer extends WebSocketServer {
         JsonElement result = new JsonObject();
         try {
             JsonObject element = new JsonParser().parse(s).getAsJsonObject();
-            topicManager.handle(clients.stream().filter(c -> c.getConnection().equals(webSocket)).findFirst().orElse(null), element);
+            result = topicManager.handle(clients.stream().filter(c -> c.getConnection().equals(webSocket)).findFirst().orElse(null), element);
         } catch (JsonParseException e) {
             JsonObject ob = new JsonObject();
             ob.add("status", new JsonPrimitive("INVALID_INPUT"));
@@ -46,10 +46,12 @@ public class WebsocketServer extends WebSocketServer {
             JsonObject ob = new JsonObject();
             ob.add("status", new JsonPrimitive("ERROR"));
             ob.add("description", new JsonPrimitive("A known Error occurred: " + e.getMessage() + " Error ref-id: " /* TODO Add ref id */));
+            result = ob;
         } catch (Exception e) {
             JsonObject ob = new JsonObject();
             ob.add("status", new JsonPrimitive("ERROR"));
             ob.add("description", new JsonPrimitive("An Error occurred. If this keeps happening please inform the team with error ref-id: " /* TODO Add ref id */));
+            result = ob;
         }
         webSocket.send(result.toString());
     }

@@ -1,5 +1,6 @@
 package net.twasi.core.api.ws.models;
 
+import net.twasi.core.api.ws.WebsocketHandledException;
 import net.twasi.core.database.models.User;
 import net.twasi.core.services.providers.JWTService;
 
@@ -11,14 +12,14 @@ public class TwasiWebsocketAuthentication {
     private User user = null;
     private List<String> topics = new ArrayList<>();
 
-    public TwasiWebsocketAuthentication(AuthenticationType type, String token) throws RuntimeException {
+    public TwasiWebsocketAuthentication(AuthenticationType type, String token) throws WebsocketHandledException {
         this.authenticate(type, token);
     }
 
-    public void authenticate(AuthenticationType type, String token) throws RuntimeException {
+    public void authenticate(AuthenticationType type, String token) throws WebsocketHandledException {
         if (type.equals(AuthenticationType.JWT_TOKEN)) {
             if ((user = JWTService.get().getManager().getUserFromToken(token)) == null)
-                throw new RuntimeException("The JWT token provided does not belong to any user or is invalid");
+                throw new WebsocketHandledException("The JWT token provided does not belong to any user or is invalid");
         } else if (type.equals(AuthenticationType.EXPLICIT_GRANT_TOKEN)) {
             // TODO Not implemented yet
         }

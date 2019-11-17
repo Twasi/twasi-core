@@ -20,4 +20,7 @@ public class TwasiWebsocketClient {
         return authentication;
     }
 
+    public void setAuthentication(TwasiWebsocketAuthentication authentication) {
+        this.authentication = authentication;
+    }
 }
