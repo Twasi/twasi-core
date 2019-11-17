@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import net.twasi.core.api.WebInterfaceApp;
+import net.twasi.core.api.ws.TwasiWebsocketEndpoint;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
@@ -21,6 +22,8 @@ import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a Java plugin
@@ -326,5 +329,9 @@ public abstract class TwasiPlugin<T> extends PluginBase {
             throw new IllegalStateException("Cannot get plugin for " + clazz + " from a static initializer");
         }
         return plugin;
+    }
+
+    public List<TwasiWebsocketEndpoint> getWebsocketEndpoints() {
+        return new ArrayList<>();
     }
 }

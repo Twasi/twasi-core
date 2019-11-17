@@ -1,4 +1,4 @@
-package net.twasi.core.api.ws;
+package net.twasi.core.api.ws.models;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.services.providers.JWTService;
@@ -9,7 +9,7 @@ import java.util.List;
 public class TwasiWebsocketAuthentication {
 
     private User user = null;
-    private List<String> topics = new ArrayList<>(); // User is granted all topic
+    private List<String> topics = new ArrayList<>();
 
     public TwasiWebsocketAuthentication(AuthenticationType type, String token) throws RuntimeException {
         this.authenticate(type, token);

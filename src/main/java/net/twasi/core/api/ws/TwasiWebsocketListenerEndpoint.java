@@ -1,6 +1,7 @@
 package net.twasi.core.api.ws;
 
 import com.google.gson.JsonElement;
+import net.twasi.core.api.ws.models.TwasiWebsocketClient;
 
 import java.util.ArrayList;
 import java.util.List;

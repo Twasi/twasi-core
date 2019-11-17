@@ -1,4 +1,4 @@
-package net.twasi.core.api.ws;
+package net.twasi.core.api.ws.models;
 
 import org.java_websocket.WebSocket;
 

@@ -1,6 +1,7 @@
 package net.twasi.core.api.ws;
 
 import com.google.gson.JsonElement;
+import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
 import net.twasi.core.plugin.TwasiPlugin;
 
 public abstract class TwasiWebsocketEndpoint {

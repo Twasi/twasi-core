@@ -2,6 +2,9 @@ package net.twasi.core.api.ws;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
+import net.twasi.core.api.ws.models.TwasiWebsocketClient;
+import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
 
 import java.util.HashMap;
 import java.util.Map;

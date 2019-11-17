@@ -5,6 +5,7 @@ import net.twasi.core.plugin.java.JavaPluginLoader;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.ApiSchemaManagementService;
 import net.twasi.core.services.providers.PluginManagerService;
+import net.twasi.core.services.providers.WebsocketService;
 
 import java.io.File;
 import java.util.*;
@@ -48,12 +49,12 @@ public class PluginDiscovery {
     }
 
     private boolean loadPlugin(File pluginFile) {
-        TwasiPlugin plugin;
+        TwasiPlugin<?> plugin;
         try {
             PluginConfig description = loader.getPluginConfig(pluginFile);
 
             List<String> dependencies = description.dependencies;
-            if (dependencies == null) dependencies = new ArrayList<String>();
+            if (dependencies == null) dependencies = new ArrayList<>();
             if (dependencies.stream().anyMatch(dep -> !loadedPlugins.contains(dep.toLowerCase()))) {
                 if (!unresolvedDependencyPlugins.containsKey(pluginFile))
                     unresolvedDependencyPlugins.put(pluginFile, description.name);
@@ -67,7 +68,7 @@ public class PluginDiscovery {
                 if (plugin.getGraphQLResolver() == null) {
                     TwasiLogger.log.error("Plugin " + plugin.getName() + " has registered api, but does not provide a resolver. API registration skipped.");
                 } else {
-                    ServiceRegistry.get(ApiSchemaManagementService.class)
+                    ApiSchemaManagementService.get()
                             .addForPlugin(
                                     plugin.getName(),
                                     plugin.getDescription().getApi(),
@@ -75,6 +76,16 @@ public class PluginDiscovery {
                             );
                 }
             }
+
+            // Register Websocket API Endpoints
+            plugin.getWebsocketEndpoints().forEach(ep -> {
+                try {
+                    ep.setProvidingPlugin(plugin);
+                    WebsocketService.get().addEndpoint(ep);
+                } catch (Exception e) {
+                    TwasiLogger.log.error("Unable to register websocket-endpoint '" + ep.getTopic() + "' for plugin " + plugin.getName() + ".", e);
+                }
+            });
 
             loader.enablePlugin(plugin);
 

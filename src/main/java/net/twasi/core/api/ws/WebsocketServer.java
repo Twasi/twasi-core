@@ -1,6 +1,7 @@
 package net.twasi.core.api.ws;
 
 import com.google.gson.*;
+import net.twasi.core.api.ws.models.TwasiWebsocketClient;
 import net.twasi.core.logger.TwasiLogger;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
