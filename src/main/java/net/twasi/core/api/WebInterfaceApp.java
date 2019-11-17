@@ -55,6 +55,14 @@ public class WebInterfaceApp {
         } catch (Exception e) {
             TwasiLogger.log.error("Error while starting webserver", e);
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                TwasiLogger.log.info("Web interface stopping...");
+                server.stop();
+                TwasiLogger.log.info("Web interface was shut down successfully.");
+            } catch (Exception ignored) {
+            }
+        }));
     }
 
     public static Server getServer() {
@@ -65,5 +73,7 @@ public class WebInterfaceApp {
         return handlers;
     }
 
-    public static ServletContextHandler getServletHandler() { return context; }
+    public static ServletContextHandler getServletHandler() {
+        return context;
+    }
 }

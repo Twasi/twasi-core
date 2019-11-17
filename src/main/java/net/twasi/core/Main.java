@@ -35,6 +35,7 @@ public class Main {
         ServiceRegistry.register(new ApiSchemaManagementService());
         ApiContextInitializer.init(); // Init Telegram API context from a static block
         ServiceRegistry.register(new TelegramService());
+        ServiceRegistry.register(new WebsocketService());
 
         TwitchAPI.initialize(new AuthorizationContext(
                 ServiceRegistry.get(ConfigService.class).getCatalog().twitch.clientId,
