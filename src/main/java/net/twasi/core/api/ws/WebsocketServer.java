@@ -35,9 +35,11 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        JsonElement result = new JsonObject();
+        String ref = null;
+        JsonElement result;
         try {
             JsonObject element = new JsonParser().parse(s).getAsJsonObject();
+            if (element.has("ref")) ref = element.get("ref").getAsString();
             result = topicManager.handle(clients.stream().filter(c -> c.getConnection().equals(webSocket)).findFirst().orElse(null), element);
         } catch (JsonParseException e) {
             JsonObject ob = new JsonObject();
@@ -55,7 +57,12 @@ public class WebsocketServer extends WebSocketServer {
             ob.add("description", new JsonPrimitive("An Error occurred. If this keeps happening please inform the team with error ref-id: " /* TODO Add ref id */));
             result = ob;
         }
-        webSocket.send(result.toString());
+        JsonObject response = new JsonObject();
+        if (ref != null) response.add("ref", new JsonPrimitive(ref));
+        else response.add("ref", null);
+        response.add("result", result);
+
+        webSocket.send(response.toString());
     }
 
     @Override
@@ -73,7 +80,7 @@ public class WebsocketServer extends WebSocketServer {
                     e.printStackTrace();
                 }
                 JsonObject ob = new JsonObject();
-                ob.add("info", new JsonPrimitive("keepalive"));
+                ob.add("type", new JsonPrimitive("keepalive"));
                 ob.add("timestamp", new JsonPrimitive(Calendar.getInstance().getTime().getTime()));
                 broadcast(ob.toString());
             }
@@ -82,7 +89,7 @@ public class WebsocketServer extends WebSocketServer {
         thread.start();
 
         JsonObject ob = new JsonObject();
-        ob.add("info", new JsonPrimitive("shutdown"));
+        ob.add("type", new JsonPrimitive("shutdown"));
         ob.add("reason", new JsonPrimitive("Twasi Core is shutting down. This hasn't to do with you, my friend. Maybe it's restarting, we will find out!"));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> this.clients.forEach(c -> {
             c.getConnection().send(ob.toString());
