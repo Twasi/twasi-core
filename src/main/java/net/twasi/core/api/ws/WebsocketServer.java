@@ -9,7 +9,9 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class WebsocketServer extends WebSocketServer {
@@ -63,6 +65,30 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onStart() {
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                JsonObject ob = new JsonObject();
+                ob.add("info", new JsonPrimitive("keepalive"));
+                ob.add("timestamp", new JsonPrimitive(Calendar.getInstance().getTime().getTime()));
+                broadcast(ob.toString());
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+
+        JsonObject ob = new JsonObject();
+        ob.add("info", new JsonPrimitive("shutdown"));
+        ob.add("reason", new JsonPrimitive("Twasi Core is shutting down. This hasn't to do with you, my friend. Maybe it's restarting, we will find out!"));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> this.clients.forEach(c -> {
+            c.getConnection().send(ob.toString());
+            c.getConnection().close(1012); // 1012 = Service restarting
+        })));
+
         TwasiLogger.log.info("Websocket API listening.");
     }
 
