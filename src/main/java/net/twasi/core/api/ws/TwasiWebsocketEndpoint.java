@@ -4,7 +4,11 @@ import com.google.gson.JsonElement;
 import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
 import net.twasi.core.plugin.TwasiPlugin;
 
-public abstract class TwasiWebsocketEndpoint {
+public abstract class TwasiWebsocketEndpoint<T extends WebsocketClientConfig> {
+
+    public final Class<? extends WebsocketClientConfig> getConfigClass() {
+        return getClass().getTypeParameters()[0].getClass().asSubclass(WebsocketClientConfig.class);
+    }
 
     public abstract String getTopic();
 

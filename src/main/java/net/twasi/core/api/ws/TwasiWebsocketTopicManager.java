@@ -1,5 +1,6 @@
 package net.twasi.core.api.ws;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
@@ -11,9 +12,9 @@ import java.util.Map;
 
 public class TwasiWebsocketTopicManager {
 
-    private Map<String, TwasiWebsocketEndpoint> topicEndpoints = new HashMap<>();
+    private Map<String, TwasiWebsocketEndpoint<WebsocketClientConfig>> topicEndpoints = new HashMap<>();
 
-    public void addTopic(TwasiWebsocketEndpoint endpoint) {
+    public void addTopic(TwasiWebsocketEndpoint<WebsocketClientConfig> endpoint) {
         String topicName = endpoint.getTopic();
         if (endpoint.getProvidingPlugin() != null)
             topicName = endpoint.getProvidingPlugin().getName() + '/' + topicName;
@@ -30,7 +31,7 @@ public class TwasiWebsocketTopicManager {
         if (!topicEndpoints.containsKey(topic))
             throw new WebsocketHandledException("There is no topic with that name (" + topic + ").");
 
-        TwasiWebsocketEndpoint endpoint = topicEndpoints.get(topic);
+        TwasiWebsocketEndpoint<WebsocketClientConfig> endpoint = topicEndpoints.get(topic);
 
         String scope = msg.get("scope").getAsString();
         if (scope.equalsIgnoreCase("action")) {
@@ -46,11 +47,18 @@ public class TwasiWebsocketTopicManager {
             if (!(endpoint instanceof TwasiWebsocketListenerEndpoint))
                 throw new WebsocketHandledException("You tried to subscribe to a topic that is unsubscribable (" + topic + ").");
 
-            TwasiWebsocketListenerEndpoint lEndpoint = (TwasiWebsocketListenerEndpoint) endpoint;
+            TwasiWebsocketListenerEndpoint<?> lEndpoint = (TwasiWebsocketListenerEndpoint) endpoint;
             if (ws.getAuthentication() == null && !lEndpoint.allowAnonymousListening())
                 throw new WebsocketHandledException("You have to be authenticated to subscribe to this topic (" + topic + ").");
 
-            lEndpoint.addListener(ws);
+            Gson gson = new Gson();
+            WebsocketClientConfig config = gson.fromJson(msg.get("config"), lEndpoint.getConfigClass());
+
+            try {
+                lEndpoint.addListener(ws, config);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new WebsocketHandledException("Invalid config provided");
+            }
             return TwasiWebsocketAnswer.success();
         }
 

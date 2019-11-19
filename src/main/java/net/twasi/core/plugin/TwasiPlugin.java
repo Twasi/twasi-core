@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import net.twasi.core.api.WebInterfaceApp;
 import net.twasi.core.api.ws.TwasiWebsocketEndpoint;
+import net.twasi.core.api.ws.WebsocketClientConfig;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;
@@ -331,7 +332,7 @@ public abstract class TwasiPlugin<T> extends PluginBase {
         return plugin;
     }
 
-    public List<TwasiWebsocketEndpoint> getWebsocketEndpoints() {
+    public List<TwasiWebsocketEndpoint<WebsocketClientConfig>> getWebsocketEndpoints() {
         return new ArrayList<>();
     }
 }
