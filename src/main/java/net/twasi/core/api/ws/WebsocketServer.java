@@ -1,6 +1,7 @@
 package net.twasi.core.api.ws;
 
 import com.google.gson.*;
+import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
 import net.twasi.core.api.ws.models.TwasiWebsocketClient;
 import net.twasi.core.logger.TwasiLogger;
 import org.java_websocket.WebSocket;
@@ -26,6 +27,7 @@ public class WebsocketServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
         clients.add(new TwasiWebsocketClient(webSocket, null));
+        webSocket.send(TwasiWebsocketAnswer.success(new JsonPrimitive("Connection established sucessfully")).toString());
     }
 
     @Override

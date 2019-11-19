@@ -51,5 +51,6 @@ public class TwitchInterfaceMaintainer extends Thread {
     public void stopMaintainer() {
         TwasiLogger.log.debug("TwitchInterfaceMaintainer stopped for user " + twitchInterface.getStreamer().getUser().getTwitchAccount().getUserName());
         run = false;
+        this.twitchInterface.disconnect();
     }
 }

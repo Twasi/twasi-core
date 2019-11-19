@@ -99,10 +99,10 @@ public class TwitchInterface extends TwasiInterface {
                     })
                     .buildConfiguration();
 
-            //Create our bot with the configuration
+            // Create our bot with the configuration
             bot = new PircBotX(configuration);
-            //Connect to the server
 
+            // Connect to the server
             TwitchInterfaceMaintainer maintainer;
             if (!maintainers.containsKey(TwitchInterface.this)) {
                 maintainer = new TwitchInterfaceMaintainer(TwitchInterface.this);
@@ -111,6 +111,8 @@ public class TwitchInterface extends TwasiInterface {
                 maintainer = maintainers.get(TwitchInterface.this);
             }
             maintainer.start(); // Maintainer automatically starts the bot
+
+            Runtime.getRuntime().addShutdownHook(new Thread(maintainer::stopMaintainer));
 
             /* socket = new Socket(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname, ServiceRegistry.get(ConfigService.class).getCatalog().twitch.port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
