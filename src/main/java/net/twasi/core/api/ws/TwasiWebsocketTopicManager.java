@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class TwasiWebsocketTopicManager {
 
-    private Map<String, TwasiWebsocketEndpoint<WebsocketClientConfig>> topicEndpoints = new HashMap<>();
+    private Map<String, TwasiWebsocketEndpoint<?>> topicEndpoints = new HashMap<>();
 
-    public void addTopic(TwasiWebsocketEndpoint<WebsocketClientConfig> endpoint) {
+    public void addTopic(TwasiWebsocketEndpoint<?> endpoint) {
         String topicName = endpoint.getTopic();
         if (endpoint.getProvidingPlugin() != null)
             topicName = endpoint.getProvidingPlugin().getName() + '/' + topicName;
@@ -31,7 +31,7 @@ public class TwasiWebsocketTopicManager {
         if (!topicEndpoints.containsKey(topic))
             throw new WebsocketHandledException("There is no topic with that name (" + topic + ").");
 
-        TwasiWebsocketEndpoint<WebsocketClientConfig> endpoint = topicEndpoints.get(topic);
+        TwasiWebsocketEndpoint<?> endpoint = topicEndpoints.get(topic);
 
         String scope = msg.get("scope").getAsString();
         if (scope.equalsIgnoreCase("action")) {

@@ -30,4 +30,11 @@ public class TwasiWebsocketAuthentication {
         EXPLICIT_GRANT_TOKEN // Used to grant access to specific topics by explicit grant tokens
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public List<String> getTopics() {
+        return topics;
+    }
 }

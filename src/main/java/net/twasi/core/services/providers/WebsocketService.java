@@ -22,7 +22,7 @@ public class WebsocketService implements IService {
         registerDefaultWebsocketEndpoints();
     }
 
-    public void addEndpoint(TwasiWebsocketEndpoint<WebsocketClientConfig> endpoint) {
+    public void addEndpoint(TwasiWebsocketEndpoint<?> endpoint) {
         server.getTopicManager().addTopic(endpoint);
     }
 
