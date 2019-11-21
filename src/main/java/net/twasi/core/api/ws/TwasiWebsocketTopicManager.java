@@ -25,7 +25,7 @@ public class TwasiWebsocketTopicManager {
         topicEndpoints.put(topicName, endpoint);
     }
 
-    public JsonElement handle(TwasiWebsocketClient ws, JsonObject msg) {
+    public JsonElement handle(TwasiWebsocketClient ws, JsonObject msg) throws Exception {
         String topic = msg.get("topic").getAsString();
 
         if (!topicEndpoints.containsKey(topic))

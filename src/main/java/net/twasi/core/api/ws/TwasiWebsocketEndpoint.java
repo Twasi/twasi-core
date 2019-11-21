@@ -26,7 +26,7 @@ public abstract class TwasiWebsocketEndpoint<T extends WebsocketClientConfig> {
         this.providingPlugin = providingPlugin;
     }
 
-    public JsonElement handle(TwasiWebsocketMessage msg) {
+    public JsonElement handle(TwasiWebsocketMessage msg) throws Exception {
         return null;
     }
 
