@@ -7,12 +7,14 @@ import java.util.Calendar;
 
 public class TwasiWebsocketEvent<T> {
 
+    public final String event;
     public final T details;
     public final long timeStamp;
 
-    public TwasiWebsocketEvent(T t) {
+    public TwasiWebsocketEvent(T t, String eventName) {
         this.details = t;
         this.timeStamp = Calendar.getInstance().getTime().getTime();
+        this.event = eventName;
     }
 
     public JsonElement toSendable() {
