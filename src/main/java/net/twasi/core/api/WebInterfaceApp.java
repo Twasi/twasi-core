@@ -7,6 +7,7 @@ import net.twasi.core.api.upload.ImageUploadHandler;
 import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.ServletService;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.webinterface.controller.auth.AuthCallbackController;
 import net.twasi.core.webinterface.controller.auth.AuthController;
@@ -45,6 +46,8 @@ public class WebInterfaceApp {
         context.addServlet(CSVUploadHandler.class, "/upload/csv");
 
         context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+
+        ServiceRegistry.register(new ServletService((handler, path) -> context.addServlet(handler, "/plugin-handlers/" + path)));
     }
 
     public static void start() {
