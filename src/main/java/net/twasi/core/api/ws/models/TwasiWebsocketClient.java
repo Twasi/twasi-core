@@ -1,18 +1,20 @@
 package net.twasi.core.api.ws.models;
 
-import org.java_websocket.WebSocket;
+import org.eclipse.jetty.websocket.api.Session;
+
+import java.io.IOException;
 
 public class TwasiWebsocketClient {
 
-    private WebSocket connection;
+    private Session connection;
     private TwasiWebsocketAuthentication authentication;
 
-    public TwasiWebsocketClient(WebSocket connection, TwasiWebsocketAuthentication authentication) {
+    public TwasiWebsocketClient(Session connection, TwasiWebsocketAuthentication authentication) {
         this.connection = connection;
         this.authentication = authentication;
     }
 
-    public WebSocket getConnection() {
+    public Session getConnection() {
         return connection;
     }
 
@@ -22,5 +24,9 @@ public class TwasiWebsocketClient {
 
     public void setAuthentication(TwasiWebsocketAuthentication authentication) {
         this.authentication = authentication;
+    }
+
+    public void send(String s) throws IOException {
+        this.connection.getRemote().sendString(s);
     }
 }

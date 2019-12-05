@@ -3,9 +3,13 @@ package net.twasi.core.api.ws;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.twasi.core.api.ws.api.TwasiWebsocketEndpoint;
+import net.twasi.core.api.ws.api.TwasiWebsocketListenerEndpoint;
+import net.twasi.core.api.ws.api.WebsocketClientConfig;
 import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
 import net.twasi.core.api.ws.models.TwasiWebsocketClient;
 import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
+import net.twasi.core.api.ws.models.WebsocketHandledException;
 
 import java.util.HashMap;
 import java.util.Map;

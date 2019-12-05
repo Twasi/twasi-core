@@ -1,4 +1,4 @@
-package net.twasi.core.api.ws;
+package net.twasi.core.api.ws.api;
 
 import com.google.gson.JsonElement;
 import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
@@ -16,13 +16,13 @@ public abstract class TwasiWebsocketEndpoint<T extends WebsocketClientConfig> {
         return false;
     }
 
-    private TwasiPlugin providingPlugin = null;
+    private TwasiPlugin<?> providingPlugin = null;
 
-    public TwasiPlugin getProvidingPlugin() {
+    public TwasiPlugin<?> getProvidingPlugin() {
         return providingPlugin;
     }
 
-    public void setProvidingPlugin(TwasiPlugin providingPlugin) {
+    public void setProvidingPlugin(TwasiPlugin<?> providingPlugin) {
         this.providingPlugin = providingPlugin;
     }
 

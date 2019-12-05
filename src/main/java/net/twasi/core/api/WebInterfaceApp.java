@@ -4,6 +4,7 @@ import io.prometheus.client.exporter.MetricsServlet;
 import net.twasi.core.api.oauth.OAuthIntegrationController;
 import net.twasi.core.api.upload.CSVUploadHandler;
 import net.twasi.core.api.upload.ImageUploadHandler;
+import net.twasi.core.api.ws.TwasiWebsocketServlet;
 import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
@@ -32,6 +33,8 @@ public class WebInterfaceApp {
         context = new ServletContextHandler();
         context.setContextPath("/");
         context.addServlet(GraphQLEndpoint.class, "/graphql");
+
+        context.addServlet(TwasiWebsocketServlet.class, "/ws");
 
         handlers.addHandler(context);
 

@@ -4,7 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import net.twasi.core.api.WebInterfaceApp;
-import net.twasi.core.api.ws.TwasiWebsocketEndpoint;
+import net.twasi.core.api.ws.api.TwasiWebsocketEndpoint;
 import net.twasi.core.database.models.User;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.java.JavaPluginLoader;

@@ -2,9 +2,9 @@ package net.twasi.core.api.ws.providers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.twasi.core.api.ws.TwasiWebsocketEndpoint;
-import net.twasi.core.api.ws.WebsocketClientConfig;
-import net.twasi.core.api.ws.WebsocketHandledException;
+import net.twasi.core.api.ws.api.TwasiWebsocketEndpoint;
+import net.twasi.core.api.ws.api.WebsocketClientConfig;
+import net.twasi.core.api.ws.models.WebsocketHandledException;
 import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
 import net.twasi.core.api.ws.models.TwasiWebsocketAuthentication;
 import net.twasi.core.api.ws.models.TwasiWebsocketAuthentication.AuthenticationType;

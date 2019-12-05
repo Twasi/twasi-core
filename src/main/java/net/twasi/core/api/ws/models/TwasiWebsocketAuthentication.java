@@ -1,6 +1,5 @@
 package net.twasi.core.api.ws.models;
 
-import net.twasi.core.api.ws.WebsocketHandledException;
 import net.twasi.core.database.models.User;
 import net.twasi.core.services.providers.JWTService;
 
