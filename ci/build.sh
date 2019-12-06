@@ -24,6 +24,8 @@ esac
 # get current commit hash
 commit=$(git rev-parse HEAD)
 
+git config --global user.email "info@twasi.net"
+git config --global user.name "Twasi Team"
 git tag -a $new -m "new version $new" $commit
 
 git show $new
