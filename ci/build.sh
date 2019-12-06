@@ -15,9 +15,9 @@ echo Version before: $t
 
 # supports #major, #minor, #patch (anything else will be ignored)
 case "$log" in
-    *#major* ) new=$(semver -i major $t);;
-    *#patch* ) new=$(semver -i patch $t);;
-    *#minor* ) new=$(semver -i minor $t);;
+    *#major* ) new=$(bash ci/semver.sh bump major $t);;
+    *#patch* ) new=$(bash ci/semver.sh bump patch $t);;
+    *#minor* ) new=$(bash ci/semver.sh bump minor $t);;
 esac
 
 if [ -z "$new" ]
