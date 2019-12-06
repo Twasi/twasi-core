@@ -22,18 +22,16 @@ esac
 
 if [ -z "$new" ]
 then
-  echo No new version found, not tagging anything.
-  new=$t
+  echo No new version found, not tagging anything. Build version will be: $t-unstable
+  new=$t-unstable
 else
   git config --global user.email "info@twasi.net"
   git config --global user.name "Twasi Team"
   git tag -a $new -m "new version $new"
-
-  git tag
 fi
 
 mvn versions:set -DnewVersion=$new
-mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
+mvn -q -B -s maven-settings.xml clean compile assembly:single deploy -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
 # Tag only after build completed so we do not have a possibly broken version
 git push "https://${GITHUB_ACCOUNT}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --tags;
