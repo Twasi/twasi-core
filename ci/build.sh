@@ -30,7 +30,7 @@ else
   git tag -a $new -m "new version $new"
 fi
 
-mvn versions:set -DnewVersion=$new
+mvn -q -B --no-transfer-progress versions:set -DnewVersion=$new
 mvn -q -B --no-transfer-progress -s maven-settings.xml clean compile assembly:single deploy
 
 # Tag only after build completed so we do not have a possibly broken version
