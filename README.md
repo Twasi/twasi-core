@@ -1,7 +1,7 @@
 # Twasi-Core
 Twasi Core is the Core Application of the Twasi Twitchbot. It hosts all the other plugins, manages the connection to the interface (Twitch IRC) and manages data persistence.
 
-[![Build Status](https://travis-ci.org/Twasi/twasi-core.svg?branch=dev)](https://travis-ci.org/Twasi/twasi-core)
+[![Build Status](https://github.com/twasi/twasi-core/workflows/Maven%20build/badge.svg)](https://github.com/Twasi/twasi-core/actions?query=workflow%3A%22Maven+build%22)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=alert_status)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=coverage)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
 [![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=net.twasi%3ATwasiCore&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=net.twasi%3ATwasiCore)
