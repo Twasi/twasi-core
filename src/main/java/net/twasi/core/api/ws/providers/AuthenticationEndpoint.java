@@ -1,6 +1,5 @@
 package net.twasi.core.api.ws.providers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.twasi.core.api.ws.api.TwasiWebsocketEndpoint;
@@ -39,13 +38,12 @@ public class AuthenticationEndpoint extends TwasiWebsocketEndpoint<WebsocketClie
         TwasiWebsocketAuthentication auth = new TwasiWebsocketAuthentication(type, token);
         msg.getClient().setAuthentication(auth);
 
-        JsonObject result = new JsonObject();
-        TwitchAccount user = auth.getUser().getTwitchAccount();
-        result.add("user", new Gson().toJsonTree(new Object() {
-            public String twitchId = user.getTwitchId();
-            public String userName = user.getUserName();
-            public String displayName = user.getDisplayName();
-        }));
+        JsonObject result = new JsonObject(), user = new JsonObject();
+        TwitchAccount acc = auth.getUser().getTwitchAccount();
+        user.addProperty("twitchId", acc.getTwitchId());
+        user.addProperty("userName", acc.getUserName());
+        user.addProperty("displayName", acc.getDisplayName());
+        result.add("user", user);
 
         return TwasiWebsocketAnswer.success(result);
     }

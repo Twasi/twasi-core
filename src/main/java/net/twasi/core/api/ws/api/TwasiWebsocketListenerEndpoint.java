@@ -18,6 +18,7 @@ public abstract class TwasiWebsocketListenerEndpoint<T extends WebsocketClientCo
     public final void addListener(TwasiWebsocketClient client, WebsocketClientConfig config) throws IllegalAccessException, InstantiationException {
         if (config == null) config = getConfigClass().newInstance();
         listeners.put(client, (T) config);
+        this.onListenerRegistered(client, (T) config);
     }
 
     final void removeListener(TwasiWebsocketClient client) {
@@ -69,6 +70,9 @@ public abstract class TwasiWebsocketListenerEndpoint<T extends WebsocketClientCo
 
     public boolean allowAnonymousListening() {
         return false;
+    }
+
+    protected void onListenerRegistered(TwasiWebsocketClient client, T config) {
     }
 
 }
