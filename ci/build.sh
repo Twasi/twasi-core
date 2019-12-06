@@ -1,6 +1,3 @@
-sed -i "s/LIVE/$GITHUB_SHA/g" pom.xml
-# mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
-
 # get current version
 t=$(git describe --tags `git rev-list --tags --max-count=1`)
 
@@ -33,3 +30,6 @@ else
 
   git tag
 fi
+
+sed -i "s/LIVE/$GITHUB_SHA/g" pom.xml
+mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
