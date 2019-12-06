@@ -17,4 +17,5 @@ jobs:
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          GITHUB_SHA: ${ GITHUB_SHA }
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_ACCOUNT: ${{ secrets.GH_ACCOUNT }}

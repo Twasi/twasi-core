@@ -33,3 +33,6 @@ fi
 
 sed -i "s/LIVE/$GITHUB_SHA/g" pom.xml
 mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
+
+# Tag only after build completed so we do not have a possibly broken version
+git push "https://${GITHUB_ACCOUNT}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --tags;
