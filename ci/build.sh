@@ -23,6 +23,7 @@ esac
 if [ -z "$new" ]
 then
   echo No new version found, not tagging anything.
+  new=$t
 else
   git config --global user.email "info@twasi.net"
   git config --global user.name "Twasi Team"
@@ -31,7 +32,7 @@ else
   git tag
 fi
 
-sed -i "s/LIVE/$GITHUB_SHA/g" pom.xml
+mvn versions:set -DnewVersion=$new
 mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
 
 # Tag only after build completed so we do not have a possibly broken version
