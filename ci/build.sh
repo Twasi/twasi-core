@@ -1,5 +1,5 @@
 sed -i "s/LIVE/$GITHUB_SHA/g" pom.xml
-mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
+# mvn -q -B -s maven-settings.xml clean compile assembly:single deploy
 
 # get current version
 t=$(git describe --tags `git rev-list --tags --max-count=1`)
@@ -7,25 +7,29 @@ t=$(git describe --tags `git rev-list --tags --max-count=1`)
 # if we have a blank tag, get all commits
 if [ -z "$t" ]
 then
-    log=$(git log --pretty=oneline)
-    t=0.0.0
+  log=$(git log --pretty=oneline)
+  t=0.0.0
 # otherwise, get commits since last tag
 else
-    log=$(git log $t..HEAD --pretty=oneline)
+  log=$(git log $t..HEAD --pretty=oneline)
 fi
 
-# supports #major, #minor, #patch (anything else will be 'minor')
+echo Version before: $t
+
+# supports #major, #minor, #patch (anything else will be ignored)
 case "$log" in
-    *#major* ) new=$(semver bump major $t);;
-    *#patch* ) new=$(semver bump patch $t);;
-    *#minor* ) new=$(semver bump minor $t);;
+    *#major* ) new=$(semver -i major $t);;
+    *#patch* ) new=$(semver -i patch $t);;
+    *#minor* ) new=$(semver -i minor $t);;
 esac
 
-# get current commit hash
-commit=$(git rev-parse HEAD)
+if [ -z "$new" ]
+then
+  echo No new version found, not tagging anything.
+else
+  git config --global user.email "info@twasi.net"
+  git config --global user.name "Twasi Team"
+  git tag -a $new -m "new version $new"
 
-git config --global user.email "info@twasi.net"
-git config --global user.name "Twasi Team"
-git tag -a $new -m "new version $new" $commit
-
-git show $new
+  git tag
+fi
