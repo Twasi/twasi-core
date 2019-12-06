@@ -31,7 +31,7 @@ else
 fi
 
 mvn versions:set -DnewVersion=$new
-mvn -q -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -s maven-settings.xml clean compile assembly:single deploy
+mvn -q -B --no-transfer-progress -s maven-settings.xml clean compile assembly:single deploy
 
 # Tag only after build completed so we do not have a possibly broken version
 git push "https://${GITHUB_ACCOUNT}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --tags;
