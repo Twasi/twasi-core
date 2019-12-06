@@ -3,7 +3,6 @@ package net.twasi.core.api.ws.api;
 import com.google.gson.JsonElement;
 import net.twasi.core.api.ws.models.TwasiWebsocketClient;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,10 @@ public abstract class TwasiWebsocketListenerEndpoint<T extends WebsocketClientCo
 
     protected final void publish(String s) {
         listeners.keySet().stream().distinct().forEach(l -> {
+            if (!l.getConnection().isOpen()) return;
             try {
                 l.send(s);
-            } catch (IOException ignored) {
+            } catch (Exception ignored) {
             }
         });
     }
@@ -44,9 +44,10 @@ public abstract class TwasiWebsocketListenerEndpoint<T extends WebsocketClientCo
 
     protected final void publish(Stream<TwasiWebsocketClient> stream, String s) {
         stream.distinct().forEach(l -> {
+            if (!l.getConnection().isOpen()) return;
             try {
                 l.send(s);
-            } catch (IOException ignored) {
+            } catch (Exception ignored) {
             }
         });
     }
