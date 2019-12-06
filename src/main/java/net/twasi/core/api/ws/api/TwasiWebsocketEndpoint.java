@@ -4,10 +4,17 @@ import com.google.gson.JsonElement;
 import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
 import net.twasi.core.plugin.TwasiPlugin;
 
+import java.lang.reflect.ParameterizedType;
+
 public abstract class TwasiWebsocketEndpoint<T extends WebsocketClientConfig> {
 
-    public final Class<? extends WebsocketClientConfig> getConfigClass() {
-        return getClass().getTypeParameters()[0].getClass().asSubclass(WebsocketClientConfig.class);
+    public final Class<T> getConfigClass() {
+        String className = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
+        try {
+            return (Class<T>) getClass().getClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     public abstract String getTopic();
