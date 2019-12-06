@@ -23,33 +23,18 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
 
     public static final TwasiWebsocketTopicManager topicManager = new TwasiWebsocketTopicManager();
     private static List<TwasiWebsocketClient> clients = new ArrayList<>();
+
     private Session session;
+    private TwasiWebsocketClient client;
+    private boolean keepAlive = true;
 
     public TwasiWebsocketServlet() {
-        Thread thread = new Thread(() -> {
-            while (true) {
-                try {
-                    TimeUnit.SECONDS.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                JsonObject ob = new JsonObject();
-                ob.add("type", new JsonPrimitive("keepalive"));
-                ob.add("timestamp", new JsonPrimitive(Calendar.getInstance().getTime().getTime()));
-                broadcast(ob.toString());
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
-
         JsonObject ob = new JsonObject();
         ob.add("type", new JsonPrimitive("shutdown"));
         ob.add("reason", new JsonPrimitive("Twasi Core is shutting down. This hasn't to do with you, my friend. Maybe it's restarting, we will find out!"));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> clients.forEach(c -> {
             c.getConnection().close(new CloseStatus(1012, "Twasi Core is shutting down. This hasn't to do with you, my friend. Maybe it's restarting, we will find out!")); // 1012 = Service restarting
         })));
-
-        TwasiLogger.log.info("Websocket API listening.");
     }
 
     private void broadcast(String s) {
@@ -80,8 +65,26 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
     public void onConnect(Session session) throws IOException {
         this.session = session;
         TwasiWebsocketClient client = new TwasiWebsocketClient(session, null);
-        clients.add(client);
+        clients.add(this.client = client);
         client.send(TwasiWebsocketAnswer.success(new JsonPrimitive("Connection established sucessfully")).toString());
+        Thread thread = new Thread(() -> {
+            while (keepAlive) {
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                JsonObject ob = new JsonObject();
+                ob.add("type", new JsonPrimitive("keepalive"));
+                ob.add("timestamp", new JsonPrimitive(Calendar.getInstance().getTime().getTime()));
+                try {
+                    session.getRemote().sendString(ob.toString());
+                } catch (IOException ignored) {
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @OnWebSocketMessage
@@ -91,7 +94,7 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
         try {
             JsonObject element = new JsonParser().parse(s).getAsJsonObject();
             if (element.has("ref")) ref = element.get("ref").getAsString();
-            result = topicManager.handle(clients.stream().filter(c -> c.getConnection().equals(session)).findFirst().orElse(null), element);
+            result = topicManager.handle(client, element);
         } catch (JsonParseException e) {
             JsonObject ob = new JsonObject();
             ob.add("status", new JsonPrimitive("INVALID_INPUT"));

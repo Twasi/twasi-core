@@ -51,7 +51,7 @@ public class TwasiWebsocketTopicManager {
             if (!(endpoint instanceof TwasiWebsocketListenerEndpoint))
                 throw new WebsocketHandledException("You tried to subscribe to a topic that is unsubscribable (" + topic + ").");
 
-            TwasiWebsocketListenerEndpoint<?> lEndpoint = (TwasiWebsocketListenerEndpoint) endpoint;
+            TwasiWebsocketListenerEndpoint<?> lEndpoint = (TwasiWebsocketListenerEndpoint<?>) endpoint;
             if (ws.getAuthentication() == null && !lEndpoint.allowAnonymousListening())
                 throw new WebsocketHandledException("You have to be authenticated to subscribe to this topic (" + topic + ").");
 
