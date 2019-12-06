@@ -37,15 +37,6 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
         })));
     }
 
-    private void broadcast(String s) {
-        clients.forEach(c -> {
-            try {
-                c.send(s);
-            } catch (IOException e) {
-            }
-        });
-    }
-
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
         webSocketServletFactory.register(getClass());
@@ -78,7 +69,7 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
                 ob.add("type", new JsonPrimitive("keepalive"));
                 ob.add("timestamp", new JsonPrimitive(Calendar.getInstance().getTime().getTime()));
                 try {
-                    session.getRemote().sendString(ob.toString());
+                    client.send(ob.toString());
                 } catch (IOException ignored) {
                 }
             }

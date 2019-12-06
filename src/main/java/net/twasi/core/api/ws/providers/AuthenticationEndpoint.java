@@ -1,14 +1,16 @@
 package net.twasi.core.api.ws.providers;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.twasi.core.api.ws.api.TwasiWebsocketEndpoint;
 import net.twasi.core.api.ws.api.WebsocketClientConfig;
-import net.twasi.core.api.ws.models.WebsocketHandledException;
 import net.twasi.core.api.ws.models.TwasiWebsocketAnswer;
 import net.twasi.core.api.ws.models.TwasiWebsocketAuthentication;
 import net.twasi.core.api.ws.models.TwasiWebsocketAuthentication.AuthenticationType;
 import net.twasi.core.api.ws.models.TwasiWebsocketMessage;
+import net.twasi.core.api.ws.models.WebsocketHandledException;
+import net.twasi.core.database.models.TwitchAccount;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -36,7 +38,16 @@ public class AuthenticationEndpoint extends TwasiWebsocketEndpoint<WebsocketClie
             throw new WebsocketHandledException("Already authenticated. Please just authenticate once per client.");
         TwasiWebsocketAuthentication auth = new TwasiWebsocketAuthentication(type, token);
         msg.getClient().setAuthentication(auth);
-        return TwasiWebsocketAnswer.success();
+
+        JsonObject result = new JsonObject();
+        TwitchAccount user = auth.getUser().getTwitchAccount();
+        result.add("user", new Gson().toJsonTree(new Object() {
+            public String twitchId = user.getTwitchId();
+            public String userName = user.getUserName();
+            public String displayName = user.getDisplayName();
+        }));
+
+        return TwasiWebsocketAnswer.success(result);
     }
 
     @Override
