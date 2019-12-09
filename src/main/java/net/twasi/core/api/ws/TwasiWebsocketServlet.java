@@ -7,6 +7,7 @@ import net.twasi.core.api.ws.models.WebsocketHandledException;
 import net.twasi.core.logger.TwasiLogger;
 import org.eclipse.jetty.websocket.api.CloseStatus;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
@@ -71,6 +72,8 @@ public class TwasiWebsocketServlet extends WebSocketServlet {
                 try {
                     client.send(ob.toString());
                 } catch (IOException ignored) {
+                } catch (WebSocketException e) {
+                    this.onClose(0, "");
                 }
             }
         });
