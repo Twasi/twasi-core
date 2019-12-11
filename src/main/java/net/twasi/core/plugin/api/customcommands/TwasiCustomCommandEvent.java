@@ -4,6 +4,7 @@ import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.interfaces.api.TwasiInterface;
 import net.twasi.core.models.Message.TwasiCommand;
 import net.twasi.core.models.Streamer;
+import net.twasi.core.plugin.TwasiDependency;
 import net.twasi.core.plugin.api.events.TwasiCommandEvent;
 import net.twasi.core.translations.renderer.TranslationRenderer;
 
@@ -74,9 +75,9 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         return this.streamer.getUser().hasPermission(this.sender, key);
     }
 
-    public TranslationRenderer getRenderer(TranslationRenderer copyBindings) {
+    public TranslationRenderer getRenderer(TranslationRenderer copyBindings, String folder) {
         TranslationRenderer renderer = TranslationRenderer
-                .getInstance(loader, streamer.getUser().getConfig().getLanguage())
+                .getInstance(loader, streamer.getUser().getConfig().getLanguage(), folder)
                 .bindAll(copyBindings.getBindings())
                 .bindAllObjects(copyBindings.getObjectBindings())
                 .multiBindObject(streamer.getUser().getTwitchAccount(), "user", "streamer")
@@ -93,10 +94,15 @@ public class TwasiCustomCommandEvent extends TwasiCommandEvent {
         return this;
     }
 
-    public TranslationRenderer getRenderer() {
+    public TranslationRenderer getRenderer(String folder) {
         return getRenderer(
-                (addBindings != null) ? addBindings : TranslationRenderer.getInstance(null, null) // Can be null, will be replaced by the other method any way
+                (addBindings != null) ? addBindings : TranslationRenderer.getInstance(null, null, folder), // Can be null, will be replaced by the other method any way
+                folder
         );
+    }
+
+    public final TranslationRenderer getRenderer() {
+        return getRenderer("");
     }
 
     public ClassLoader getLoader() {

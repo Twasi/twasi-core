@@ -33,7 +33,7 @@ public abstract class TwasiDependency<T> extends TwasiPlugin<T> {
     }
 
     public final TranslationRenderer getTranslationRenderer(){
-        return TranslationRenderer.getInstance(this);
+        return TranslationRenderer.getInstance(this, "");
     }
 
     public List<TwasiVariable> getVariables() {

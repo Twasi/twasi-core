@@ -33,7 +33,7 @@ public abstract class TwasiPluginCommand extends TwasiCustomCommand {
 
     @Override
     protected final TranslationRenderer getTranslationRenderer(){
-        return TranslationRenderer.getInstance(twasiUserPlugin);
+        return TranslationRenderer.getInstance(twasiUserPlugin, "");
     }
 
     public TwasiUserPlugin getProvidingUserPlugin() {
