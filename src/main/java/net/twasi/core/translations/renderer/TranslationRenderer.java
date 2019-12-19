@@ -197,6 +197,7 @@ public class TranslationRenderer {
             for (String part : parts) { // Loop through sub-objects
                 Class resolvingClass = ob.getClass(); // Get class of parent object
 
+                // TODO rewrite so that every object can have properties not only the last one
                 if (part.contains(":")) {
                     options = part.split(":")[1];
                     part = part.split(":")[0];

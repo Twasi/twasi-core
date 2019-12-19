@@ -2,7 +2,7 @@ package net.twasi.core.plugin;
 
 import net.twasi.core.database.models.User;
 import net.twasi.core.plugin.api.TwasiUserPlugin;
-import net.twasi.core.plugin.api.TwasiVariable;
+import net.twasi.core.plugin.api.variables.TwasiVariableBase;
 import net.twasi.core.translations.TwasiTranslation;
 import net.twasi.core.translations.renderer.TranslationRenderer;
 
@@ -36,7 +36,7 @@ public abstract class TwasiDependency<T> extends TwasiPlugin<T> {
         return TranslationRenderer.getInstance(this, "");
     }
 
-    public List<TwasiVariable> getVariables() {
+    public List<TwasiVariableBase> getVariables() {
         return new ArrayList<>();
     }
 
