@@ -57,6 +57,8 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
         boolean found = false;
         String exactName = null;
 
+        Class clazz = object.getClass();
+
         // Try to resolve as field
         outerLoop:
         for (boolean insensitive : Arrays.asList(false, true)) // first case sensitive, then case insensitive
@@ -69,7 +71,7 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
                     continue;
 
                 // Check whether resolving this object is allowed
-                if (!f.isAnnotationPresent(Resolvable.class))
+                if (!f.isAnnotationPresent(Resolvable.class) || !clazz.isAnnotationPresent(Resolvable.class) || (clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class)))
                     throw new ForbiddenException();
 
                 // Break loop to resolve
@@ -95,7 +97,8 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
                         continue;
 
                     // Check whether resolving this object is allowed
-                    if (!m.isAnnotationPresent(Resolvable.class)) throw new ForbiddenException();
+                    if (!m.isAnnotationPresent(Resolvable.class) || !clazz.isAnnotationPresent(Resolvable.class) || (clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class)))
+                        throw new ForbiddenException();
 
                     // Break loop to resolve
                     found = true;
@@ -124,7 +127,12 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD, ElementType.METHOD})
+    @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
     public @interface Resolvable {
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.METHOD})
+    public @interface Protected {
     }
 }
