@@ -42,15 +42,29 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
 
     public abstract T getObject(String name, TwasiInterface inf, List<String> params, TwasiMessage message);
 
+    public String handleNullObject() {
+        return "NULL";
+    }
+
+    public String handleException(Exception e) {
+        return "ERROR";
+    }
+
     private String resolveFields(String fields, T object) throws Exception, ForbiddenException {
-        String[] splitted = fields.split(".");
-        Object currentObject = object;
+        try {
+            String[] splitted = fields.split(".");
+            Object currentObject = object;
 
-        for (String part : splitted) {
-            currentObject = resolveField(part, currentObject);
+            if (currentObject == null) return handleNullObject();
+
+            for (String part : splitted) {
+                currentObject = resolveField(part, currentObject);
+            }
+
+            return resolveObject(currentObject);
+        } catch (Exception e) {
+            return handleException(e);
         }
-
-        return resolveObject(currentObject);
     }
 
     private Object resolveField(String field, Object object) throws Exception, ForbiddenException {
