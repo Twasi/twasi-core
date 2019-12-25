@@ -85,7 +85,7 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
                     continue;
 
                 // Check whether resolving this object is allowed
-                if (!f.isAnnotationPresent(Resolvable.class) || !clazz.isAnnotationPresent(Resolvable.class) || (clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class)))
+                if (!f.isAnnotationPresent(Resolvable.class) || (!clazz.isAnnotationPresent(Resolvable.class) || (clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class))))
                     throw new ForbiddenException();
 
                 // Break loop to resolve
@@ -111,7 +111,7 @@ public abstract class TwasiObjectVariable<T> extends TwasiVariableBase {
                         continue;
 
                     // Check whether resolving this object is allowed
-                    if (!m.isAnnotationPresent(Resolvable.class) || !clazz.isAnnotationPresent(Resolvable.class) || (clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class)))
+                    if (!m.isAnnotationPresent(Resolvable.class) || (!clazz.isAnnotationPresent(Resolvable.class) || clazz.isAnnotationPresent(Resolvable.class) && clazz.isAnnotationPresent(Protected.class)))
                         throw new ForbiddenException();
 
                     // Break loop to resolve
