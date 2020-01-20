@@ -67,6 +67,9 @@ public class TwitchInterface extends TwasiInterface {
                     //.setNickservPassword(streamer.getUser().getTwitchBotAccountOrDefault().getToken().getAccessToken())
                     .addServer(ServiceRegistry.get(ConfigService.class).getCatalog().twitch.hostname)
                     .addAutoJoinChannel(streamer.getUser().getTwitchAccount().getChannel())
+                    .setAutoNickChange(false) //Twitch doesn't support multiple users
+                    .setOnJoinWhoEnabled(false) //Twitch doesn't support WHO command
+                    .setCapEnabled(true)
                     .addCapHandler(new EnableCapHandler("twitch.tv/commands"))
                     .addCapHandler(new EnableCapHandler("twitch.tv/membership"))
                     .addCapHandler(new EnableCapHandler("twitch.tv/tags"))
