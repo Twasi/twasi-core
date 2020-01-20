@@ -94,7 +94,8 @@ public class TwitchInterface extends TwasiInterface {
                                 TwasiLogger.log.debug("Incoming message: " + messageEvent.getMessage());
                                 messageReader.onMessage(messageEvent);
                             }
-                            //TwasiLogger.log.debug("New event: " + event.toString());
+                            TwasiLogger.log.trace("New event [" + event.getClass().getCanonicalName() + "]: " + event.toString());
+                            messageReader.onRawEvent(event);
                         }
                     })
                     .buildConfiguration();
