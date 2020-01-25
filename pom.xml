@@ -230,14 +230,14 @@
         <dependency>
             <groupId>net.twasi</groupId>
             <artifactId>twitch-web-api</artifactId>
-            <version>2391519e998d2d8b5ebfc27a4d6985d93ab797ca</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- PircBotX -->
         <dependency>
-            <groupId>org.pircbotx</groupId>
+            <groupId>net.twasi</groupId>
             <artifactId>pircbotx</artifactId>
-            <version>2.1</version>
+            <version>2.3</version>
         </dependency>
 
         <!-- YouTube API -->
