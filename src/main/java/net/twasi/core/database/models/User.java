@@ -5,7 +5,6 @@ import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.core.database.models.permissions.Permissions;
 import net.twasi.core.database.repositories.UserRepository;
-import net.twasi.core.plugin.api.variables.objectvariables.TwasiObjectVariable;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.PluginManagerService;
@@ -23,32 +22,26 @@ public class User extends BaseEntity {
 
     private static TwitchAccount defaultAccount;
 
-    @TwasiObjectVariable.Resolvable
     private TwitchAccount twitchAccount;
 
-    @TwasiObjectVariable.Resolvable
     private TwitchAccount twitchBotAccount;
 
     private String JWTSecret;
 
-    @TwasiObjectVariable.Resolvable
     private GlobalConfig config;
 
     private List<Permissions> permissions;
 
     private List<EventMessage> events;
 
-    @TwasiObjectVariable.Resolvable
     private List<String> installedPlugins;
 
     private List<String> installedThemes;
 
-    @TwasiObjectVariable.Resolvable
     private AccountStatus status;
 
     private ChannelDTO channelInformation;
 
-    @TwasiObjectVariable.Resolvable
     private UserRank rank;
 
     private String betaCode;

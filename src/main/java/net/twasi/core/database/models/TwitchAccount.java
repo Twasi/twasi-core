@@ -1,7 +1,6 @@
 package net.twasi.core.database.models;
 
 import net.twasi.core.database.models.permissions.PermissionGroups;
-import net.twasi.core.plugin.api.variables.objectvariables.TwasiObjectVariable;
 import net.twasi.twitchapi.auth.PersonalAuthorizationContext;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 import org.bson.types.ObjectId;
@@ -12,19 +11,15 @@ import java.util.List;
 
 @Entity("twitchAccounts")
 public class TwitchAccount {
-    @TwasiObjectVariable.Resolvable
     @Id
     private ObjectId id;
 
-    @TwasiObjectVariable.Resolvable
     private String userName;
 
-    @TwasiObjectVariable.Resolvable
     private String displayName;
 
     private AccessToken token;
 
-    @TwasiObjectVariable.Resolvable
     private String twitchId;
 
     private String avatar;
