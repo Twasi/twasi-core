@@ -85,12 +85,12 @@
         <repository>
             <id>central</id>
             <name>libs-release-local</name>
-            <url>https://artifactory.twasi.net/artifactory/libs-release-local</url>
+            <url>https://nexus.twasi.net/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>artifactory-snapshots</name>
-            <url>http://artifactory.twasi.net/artifactory/libs-snapshot-local</url>
+            <url>https://nexus.twasi.net/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
