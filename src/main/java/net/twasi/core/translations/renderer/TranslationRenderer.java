@@ -102,9 +102,9 @@ public class TranslationRenderer {
     }
 
     private InputStream getInputStream(Language language) {
-        InputStream inputStream = loader.getResourceAsStream("translations/" + folder + "/" + language.toString() + ".lang");
+        InputStream inputStream = loader.getResourceAsStream("translations/" + (!folder.equals("") ? folder + "/" : "") + language.toString() + ".lang");
         if (inputStream == null && language != Language.EN_GB)
-            inputStream = loader.getResourceAsStream("translations/" + folder + "/" + Language.EN_GB.toString() + ".lang");
+            inputStream = loader.getResourceAsStream("translations/" + (!folder.equals("") ? folder + "/" : "") + Language.EN_GB.toString() + ".lang");
         return inputStream;
     }
 
