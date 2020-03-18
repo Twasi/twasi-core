@@ -73,7 +73,7 @@
         <repository>
             <id>central</id>
             <name>libs-release</name>
-            <url>https://artifactory.twasi.net/artifactory/libs-release</url>
+            <url>https://nexus.twasi.net/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
             <id>jcenter</id>
