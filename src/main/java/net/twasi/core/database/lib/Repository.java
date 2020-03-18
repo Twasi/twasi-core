@@ -3,8 +3,11 @@ package net.twasi.core.database.lib;
 import net.twasi.core.database.models.BaseEntity;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DatabaseService;
+import net.twasi.core.services.providers.config.ConfigService;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.FindOptions;
+import org.mongodb.morphia.query.Query;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -84,5 +87,18 @@ public class Repository<T extends BaseEntity> implements IRepository<T> {
     public List<ObjectId> getAllIds() {
         List<ObjectId> ids = (List<ObjectId>) store.find(entityType).asList().stream().map(e -> ((BaseEntity) e).getId()).collect(Collectors.toList());
         return ids;
+    }
+
+    public long count() {
+        return store.createQuery(entityType).count();
+    }
+
+    protected Query<T> query() {
+        return store.createQuery(entityType);
+    }
+
+    protected static FindOptions paginated(int page) {
+        int max = ConfigService.get().getCatalog().webinterface.paginationMax;
+        return new FindOptions().skip((page - 1) * max).limit(max);
     }
 }

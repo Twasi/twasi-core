@@ -73,7 +73,7 @@ public class JWTManager {
         } else {
             DecodedJWT decodedJWT = JWT.decode(jwt);
             String twitchId = decodedJWT.getClaim("twitchid").asString();
-            return ServiceRegistry.get(DataService.class).get(UserRepository.class).getByTwitchId(twitchId);
+            return DataService.get().get(UserRepository.class).getByTwitchId(twitchId);
         }
     }
 

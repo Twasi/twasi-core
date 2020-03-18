@@ -85,4 +85,5 @@ public abstract class TwasiCustomCommand {
     }
 
     protected abstract TranslationRenderer getTranslationRenderer();
+
 }

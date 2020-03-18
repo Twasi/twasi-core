@@ -28,32 +28,36 @@ public class TranslationRenderer {
 
     private ClassLoader loader;
     private Language language;
+    private String folder;
 
     private Map<String, String> bindings = new HashMap<>();
     private Map<String, Object> objectBindings = new HashMap<>();
     private Map<String, DynamicBindingInterface> dynamicBindings = new HashMap<>();
 
-    private TranslationRenderer(@NotNull ClassLoader loader, Language language) {
+    private TranslationRenderer(@NotNull ClassLoader loader, Language language, String folder) {
         this.loader = loader;
         this.language = language;
+        if (folder.startsWith("/")) folder = folder.substring(1);
+        if (folder.endsWith("/")) folder = folder.substring(0, folder.length() - 1);
+        this.folder = folder;
         if (language != null) defaultBindings();
     }
 
-    public static TranslationRenderer getInstance(TwasiUserPlugin plugin) {
+    public static TranslationRenderer getInstance(TwasiUserPlugin plugin, String folder) {
         User user = plugin.getTwasiInterface().getStreamer().getUser();
-        TranslationRenderer renderer = new TranslationRenderer(plugin.getCorePlugin().getClassLoader(), user.getConfig().getLanguage());
+        TranslationRenderer renderer = new TranslationRenderer(plugin.getCorePlugin().getClassLoader(), user.getConfig().getLanguage(), folder);
         return renderer
                 .multiBindObject(user.getTwitchAccount(), "user", "streamer")
                 .multiBindObject(plugin.getCorePlugin().getDescription(), "plugin", "p");
     }
 
-    public static TranslationRenderer getInstance(TwasiDependency twasiDependency) {
-        return new TranslationRenderer(twasiDependency.getClassLoader(), Language.EN_GB)
+    public static TranslationRenderer getInstance(TwasiDependency twasiDependency, String folder) {
+        return new TranslationRenderer(twasiDependency.getClassLoader(), Language.EN_GB, folder)
                 .multiBindObject(twasiDependency.getDescription(), "dependency", "dep", "plugin", "p");
     }
 
-    public static TranslationRenderer getInstance(ClassLoader loader, Language language) {
-        return new TranslationRenderer(loader, language);
+    public static TranslationRenderer getInstance(ClassLoader loader, Language language, String folder) {
+        return new TranslationRenderer(loader, language, folder);
     }
 
     public TranslationRenderer bind(String key, String value) {
@@ -98,9 +102,9 @@ public class TranslationRenderer {
     }
 
     private InputStream getInputStream(Language language) {
-        InputStream inputStream = loader.getResourceAsStream("translations/" + language.toString() + ".lang");
+        InputStream inputStream = loader.getResourceAsStream("translations/" + (!folder.equals("") ? folder + "/" : "") + language.toString() + ".lang");
         if (inputStream == null && language != Language.EN_GB)
-            inputStream = loader.getResourceAsStream("translations/" + Language.EN_GB.toString() + ".lang");
+            inputStream = loader.getResourceAsStream("translations/" + (!folder.equals("") ? folder + "/" : "") + Language.EN_GB.toString() + ".lang");
         return inputStream;
     }
 
@@ -189,10 +193,11 @@ public class TranslationRenderer {
         String options = null;
 
         try {
-            outerloop:
+            outerLoop:
             for (String part : parts) { // Loop through sub-objects
                 Class resolvingClass = ob.getClass(); // Get class of parent object
 
+                // TODO rewrite so that every object can have properties not only the last one
                 if (part.contains(":")) {
                     options = part.split(":")[1];
                     part = part.split(":")[0];
@@ -216,7 +221,7 @@ public class TranslationRenderer {
                         found = Arrays.stream(resolvingClass.getMethods()).filter(m -> m.getName().equalsIgnoreCase(method)).findFirst().orElse(null); // Search case insensitive
                     if (found != null) { // If there is a case-insensitive match
                         ob = found.invoke(ob); // Set new parent object to the methods's return value
-                        continue outerloop; // And search for it's sub-objects
+                        continue outerLoop; // And search for it's sub-objects
                     }
                 }
                 return bindingNotFound;
@@ -232,8 +237,8 @@ public class TranslationRenderer {
         if (ob == null) return null_value;
         String value = ob.toString();
 
-        if (ob instanceof List) {
-            List list = (List) ob;
+        if (ob instanceof List<?>) {
+            List<?> list = (List<?>) ob;
             if (list.size() > 0) {
                 int index = -1;
                 if (options != null && !options.equals("")) {
@@ -245,7 +250,7 @@ public class TranslationRenderer {
                 try {
                     if (index >= 0) ob = list.get(index);
                     else {
-                        list = new ArrayList(list);
+                        list = new ArrayList<>(list);
                         Collections.shuffle(list);
                         ob = list.get(0);
                     }

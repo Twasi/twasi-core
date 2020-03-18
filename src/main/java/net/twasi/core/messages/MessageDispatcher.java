@@ -53,7 +53,7 @@ public class MessageDispatcher {
                                     .forEach(e -> {
                                         try {
                                             e.getKey().on(new CommandExecutedEvent(twasiCommand, plugin));
-                                        } catch(Throwable ignored){
+                                        } catch (Throwable ignored) {
                                         }
                                     });
                         } catch (Throwable e) {
@@ -81,11 +81,11 @@ public class MessageDispatcher {
         return true;
     }
 
-    public static void registerCommandExecutedEventHandler(TwasiEventHandler<CommandExecutedEvent> handler){
+    public static void registerCommandExecutedEventHandler(TwasiEventHandler<CommandExecutedEvent> handler) {
         handlers.put(handler, null);
     }
 
-    public static void registerCommandExecutedEventHandler(User target, TwasiEventHandler<CommandExecutedEvent> handler){
+    public static void registerCommandExecutedEventHandler(User target, TwasiEventHandler<CommandExecutedEvent> handler) {
         handlers.put(handler, target.getId());
     }
 

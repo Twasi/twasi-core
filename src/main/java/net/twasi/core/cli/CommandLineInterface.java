@@ -1,18 +1,33 @@
 package net.twasi.core.cli;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import net.twasi.core.cli.commands.DumpCommand;
+import net.twasi.core.cli.commands.HelpCommand;
+import net.twasi.core.cli.commands.LogLevelCommand;
+import net.twasi.core.cli.commands.VersionCommand;
 import net.twasi.core.logger.TwasiLogger;
-import org.apache.log4j.Level;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class CommandLineInterface {
 
+    private static List<TwasiCLICommand> commands = new ArrayList<>();
+
+    public static void registerCommand(TwasiCLICommand cmd) {
+        if(commands.stream().anyMatch(c -> cmd.getCommandName().equalsIgnoreCase(c.getCommandName()))) {
+            TwasiLogger.log.warn(String.format("Tried to register cli-command '%s' multiple times. Skipping.", cmd.getCommandName().toLowerCase()));
+            return;
+        }
+        commands.add(cmd);
+    }
+
     public void start() {
+        registerDefaultCommands();
+
         Scanner scanner = new Scanner(System.in);
-        TwasiLogger.log.info("Started Twasi CLI. Use /help for a list of commands.");
-        System.out.print("> ");
+        TwasiLogger.log.info("Started Twasi CLI. Use 'help' for a list of commands.");
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
@@ -20,51 +35,29 @@ public class CommandLineInterface {
 
             String command = params[0];
 
-            switch (command) {
-                case "/help":
-                    System.out.println("Available commands:\n" +
-                            "/help: Show all commands\n" +
-                            "/loglevel: Show loglevel\n" +
-                            "/loglevel [LOGLEVEL(OFF/FATAL/ERROR/WARN/INFO/DEBUG/TRACE/ALL)]: Set loglevel");
-                    break;
-
-                case "/version":
-                    System.out.println("Not implemented");
-                    break;
-
-                case "/loglevel":
-                    if (params.length == 1) {
-                        System.out.println("Loglevel: " + TwasiLogger.log.getLevel().toString());
-                    } else if (params.length == 2) {
-                        TwasiLogger.setLogLevel(Level.toLevel(params[1]));
-                        System.out.println("Loglevel changed to " + Level.toLevel(params[1]));
-                    }
-                    break;
-
-                case "/dump":
-                case "/formdump":
-                    Gson gson;
-                    if (params[0].equals("/dump")) {
-                        gson = new GsonBuilder().create();
-                    } else {
-                        gson = new GsonBuilder().setPrettyPrinting().create();
-                    }
-                    /* if (params.length == 1) {
-                        System.out.println("Missing object");
-                    } else if (params.length == 2) {
-                        if (params[1].equalsIgnoreCase("users")) {
-                            System.out.println(gson.toJson(UserStore.getUsers()));
-                        } else {
-                            System.out.println("Unknown object: " + params[1]);
-                        }
-                    }*/
-                    break;
-
-                default:
-                    System.out.println("TwasiCommand not found. Use /help for help.");
+            TwasiCLICommand cmd = commands.stream().filter(c -> c.getCommandName().equalsIgnoreCase(command)).findFirst().orElse(null);
+            if(cmd == null) {
+                System.out.println("TwasiCommand not found. Use 'help' for help.");
+                return;
             }
-            System.out.print("> ");
+
+            List<String> args = new ArrayList<>(Arrays.asList(params));
+            args.remove(0);
+
+            try {
+                System.out.println(cmd.execute(args));
+            } catch (Exception e) {
+                System.out.println("An error occurred while executing the command.");
+                TwasiLogger.log.debug(e);
+            }
         }
+    }
+
+    private void registerDefaultCommands() {
+        registerCommand(new HelpCommand(commands));
+        registerCommand(new DumpCommand());
+        registerCommand(new VersionCommand());
+        registerCommand(new LogLevelCommand());
     }
 
 }

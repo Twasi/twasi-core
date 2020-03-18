@@ -7,7 +7,7 @@ import net.twasi.core.database.models.support.SupportTicketMessage;
 import net.twasi.core.database.models.support.SupportTicketType;
 import net.twasi.core.database.repositories.SupportTicketRepository;
 import net.twasi.core.graphql.TwasiGraphQLHandledException;
-import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.graphql.model.GraphQLPagination;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.TelegramService;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,27 +19,49 @@ public class SupportDTO {
 
     private User user;
     private SupportTicketRepository repository;
+    private int paginationAmount = 10; // TODO add to config
 
     public SupportDTO(User user) {
-        repository = ServiceRegistry.get(DataService.class).get(SupportTicketRepository.class);
+        repository = DataService.get().get(SupportTicketRepository.class);
         this.user = user;
     }
 
-    public List<SupportTicketDTO> getMyTickets() {
-        return repository.getByUser(user).stream()
-                .map(SupportTicketDTO::new)
-                .collect(Collectors.toList());
+    public GraphQLPagination<SupportTicketDTO> getMyTickets(boolean open) {
+        return new GraphQLPagination<>(
+                () -> repository.countByUser(user),
+                (pg) -> repository.getByUser(user, paginationAmount, pg, open).stream()
+                        .map(SupportTicketDTO::new)
+                        .collect(Collectors.toList())
+        );
     }
 
-    public List<SupportTicketDTO> getAdminTickets() {
+    public GraphQLPagination<SupportTicketDTO> getMyClosedTickets() {
+        return getMyTickets(false);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getMyOpenTickets() {
+        return getMyTickets(true);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getAdminTickets(boolean open) {
         if (!user.getRank().equals(UserRank.TEAM)) {
             return null;
         }
 
-        return repository.getAll().stream()
-                .sorted((f1, f2) -> Boolean.compare(f1.isOpen(), f2.isOpen()))
-                .map(SupportTicketDTO::new)
-                .collect(Collectors.toList());
+        return new GraphQLPagination<>(
+                () -> repository.countAll(open),
+                (pg) -> repository.getAll(paginationAmount, pg, open).stream()
+                        .map(SupportTicketDTO::new)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getOpenAdminTickets() {
+        return getAdminTickets(true);
+    }
+
+    public GraphQLPagination<SupportTicketDTO> getClosedAdminTickets() {
+        return getAdminTickets(false);
     }
 
     public SupportTicketDTO create(String topic, String message, String category) {
@@ -65,7 +87,7 @@ public class SupportDTO {
         SupportTicketMessage initial = ticket.getEntries().get(0);
 
         TelegramService telegram = TelegramService.get();
-        if(telegram.isConnected()) {
+        if (telegram.isConnected()) {
             try {
                 telegram.sendMessageToTelegramChat(
                         "(☞ﾟヮﾟ)☞ Neues Supportticket: #" +
@@ -90,7 +112,7 @@ public class SupportDTO {
 
         if (!isAdminContext) {
             // Only search for personal tickets
-            ticket = repository.getByUser(user).stream().filter(t -> t.getId().toString().equals(id)).findFirst().orElse(null);
+            ticket = repository.getByUser(user).stream().filter(t -> t.getId().toString().equals(id)).findFirst().orElse(null); // TODO query directly in database
         } else {
             // Search for all tickets, verified admin
             ticket = repository.getById(id);
@@ -111,7 +133,7 @@ public class SupportDTO {
 
         if (!isAdminContext) {
             TelegramService telegram = TelegramService.get();
-            if(telegram.isConnected()) {
+            if (telegram.isConnected()) {
                 try {
                     telegram.sendMessageToTelegramChat(
                             "(☞ﾟヮﾟ)☞ Neues Antwort auf ein Supportticket: #" +

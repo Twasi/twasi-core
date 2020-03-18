@@ -6,7 +6,7 @@ type User {
     uninstallPlugin(name: String): PluginDetails
     events: [EventMessage]!
     rank: UserRank,
-    banner: String
+    banner: String,
     pluginCommands: [PluginCommand]!
 }
 
@@ -44,9 +44,21 @@ enum UserStatusType {
     MAINTENANCE
 }
 
+enum PanelResultType {
+    OK,
+    WARNING,
+    ERROR
+}
+
+type PanelResult {
+    status: PanelResultType,
+    translationKey: String
+}
+
 type Setup {
     isSetUp: Boolean,
-    setup(betaCode: String): Boolean
+    setup(betaCode: String): Boolean,
+    defaultPlugins: [PluginDetails]
 }
 
 type Config {
@@ -59,10 +71,12 @@ type Panel {
     status: BotStatus,
     userStatus: UserStatus,
     appInfo: AppInfo,
-    plugins: [PluginDetails],
+    installedPlugins: [PluginDetails],
+    availablePlugins: PluginDetailsPageable,
     support: Support,
     admin: Admin,
-    availableLanguages: [String]
+    availableLanguages: [String],
+    themes: CustomThemes
 }
 
 type Admin {
@@ -92,7 +106,7 @@ type TwitchAccount {
     update: TwitchAccount
 }
 
-type PluginDetails {
+pageable type PluginDetails {
     isInstalled: Boolean!
     name: String!
     description: String!
@@ -106,13 +120,15 @@ type PluginDetails {
 }
 
 type Support {
-    myTickets: [SupportTicket],
-    adminTickets: [SupportTicket],
+    myClosedTickets: SupportTicketPageable,
+    myOpenTickets: SupportTicketPageable,
+    closedAdminTickets: SupportTicketPageable,
+    openAdminTickets: SupportTicketPageable,
     create(topic: String, message: String, category: String): SupportTicket,
     reply(id: String, message: String, close: Boolean, isAdminContext: Boolean): SupportTicket
 }
 
-type SupportTicket {
+pageable type SupportTicket {
     id: String,
     owner: SupportTicketUser,
     topic: String,
@@ -142,4 +158,72 @@ type Query {
 
 schema {
     query: Query
+}
+
+type CustomThemes {
+    myThemes: StoreCustomThemePageable,
+    installedThemes: [StoreCustomTheme],
+    availableThemes(approvedOnly: Boolean): StoreCustomThemePageable,
+    uninstall(themeId: String): PanelResult,
+    install(themeId: String): PanelResult,
+    create(name: String, theme: CustomThemeInput): PanelResult,
+    approve(themeId: String): PanelResult,
+    delete(themeId: String): PanelResult
+}
+
+type CustomTheme {
+    backgroundColor: String,
+    buttonRadius: Int,
+    panelRadius: Int,
+    specialContentRadius: Int,
+    panelBackgroundColor: String,
+    fontColor: String,
+    buttonFontColor: String,
+    primaryColor: String,
+    secondaryColor: String,
+    specialContentColor: String,
+    outlineTextLogo: String,
+    shadowPrimaryTextLogo: String,
+    shadowSecondaryTextLogo: String,
+    mainTextLogo: String,
+    darkMode: Boolean,
+    specialProperties: CustomThemeSpecialProperties
+}
+
+input CustomThemeInput {
+    backgroundColor: String,
+    buttonRadius: Int,
+    panelRadius: Int,
+    specialContentRadius: Int,
+    panelBackgroundColor: String,
+    fontColor: String,
+    buttonFontColor: String,
+    primaryColor: String,
+    secondaryColor: String,
+    specialContentColor: String,
+    outlineTextLogo: String,
+    shadowPrimaryTextLogo: String,
+    shadowSecondaryTextLogo: String,
+    mainTextLogo: String,
+    darkMode: Boolean,
+    specialProperties: CustomThemeSpecialPropertiesInput
+}
+
+type CustomThemeSpecialProperties {
+    snow: Boolean
+}
+
+input CustomThemeSpecialPropertiesInput {
+    snow: Boolean
+}
+
+pageable type StoreCustomTheme {
+    id: String,
+    name: String,
+    creator: String,
+    created: String,
+    installed: Boolean,
+    approved: Boolean,
+    theme: CustomTheme,
+    installations: Long
 }

@@ -3,15 +3,24 @@ package net.twasi.core.database.models.permissions;
 public enum PermissionGroups {
 
     // Only the broadcaster
-    BROADCASTER,
+    BROADCASTER(40),
 
     // Only moderators (inherits broadcaster)
-    MODERATOR,
+    MODERATOR(30),
 
     // Subscriber (inherits moderator)
-    SUBSCRIBERS,
+    SUBSCRIBERS(10),
 
     // Viewer (all)
-    VIEWER
+    VIEWER(0);
 
+    private int weight;
+
+    PermissionGroups(int weight) {
+        this.weight = weight;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
 }

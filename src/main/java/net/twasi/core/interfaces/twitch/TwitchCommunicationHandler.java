@@ -30,7 +30,7 @@ public class TwitchCommunicationHandler extends CommunicationHandler {
 
     @Override
     public boolean sendMessageInternal(String message) {
-        if (message.startsWith("/") && !message.toLowerCase().startsWith("/me") || message.startsWith(".")) {
+        if (message.startsWith("/") && !message.toLowerCase().startsWith("/me ") || message.startsWith(".")) {
             message = "7" + message.substring(1);
         }
         getInterface().getBot().sendIRC().message(getInterface().getStreamer().getUser().getTwitchAccount().getChannel(), message);

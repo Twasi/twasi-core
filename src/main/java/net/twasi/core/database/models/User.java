@@ -23,6 +23,7 @@ public class User extends BaseEntity {
     private static TwitchAccount defaultAccount;
 
     private TwitchAccount twitchAccount;
+
     private TwitchAccount twitchBotAccount;
 
     private String JWTSecret;
@@ -34,6 +35,8 @@ public class User extends BaseEntity {
     private List<EventMessage> events;
 
     private List<String> installedPlugins;
+
+    private List<String> installedThemes;
 
     private AccountStatus status;
 
@@ -244,5 +247,13 @@ public class User extends BaseEntity {
 
     public void setBetaCode(String betaCode) {
         this.betaCode = betaCode;
+    }
+
+    public List<String> getInstalledThemes() {
+        return installedThemes == null ? new ArrayList<>() : installedThemes;
+    }
+
+    public void setInstalledThemes(List<String> installedThemes) {
+        this.installedThemes = installedThemes;
     }
 }

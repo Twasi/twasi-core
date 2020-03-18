@@ -5,6 +5,7 @@ import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.plugin.TwasiPlugin;
 import net.twasi.core.plugin.api.customcommands.TwasiPluginCommand;
 import net.twasi.core.plugin.api.events.*;
+import net.twasi.core.plugin.api.variables.TwasiVariableBase;
 import net.twasi.core.translations.TwasiTranslation;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     private transient TwasiTranslation translations;
 
     private List<TwasiPluginCommand> commands = new ArrayList<>();
-    private List<TwasiVariable> variables = new ArrayList<>();
+    private List<TwasiVariableBase> variables = new ArrayList<>();
 
     public void onEnable(TwasiEnableEvent e) {
     }
@@ -78,7 +79,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         return twasiInterface;
     }
 
-    public List<TwasiVariable> getVariables() {
+    public List<TwasiVariableBase> getVariables() {
         return variables;
     }
 
@@ -95,7 +96,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
     }
 
 
-    protected void registerVariable(Class<? extends TwasiVariable> clazz) {
+    protected void registerVariable(Class<? extends TwasiVariableBase> clazz) {
         try {
             variables.add(clazz.getDeclaredConstructor(TwasiUserPlugin.class).newInstance(this));
         } catch (Exception e) {
@@ -103,7 +104,7 @@ public abstract class TwasiUserPlugin implements TwasiUserPluginInterface {
         }
     }
 
-    protected void registerVariable(TwasiVariable variable) {
+    protected void registerVariable(TwasiVariableBase variable) {
         variables.add(variable);
     }
 

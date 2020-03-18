@@ -5,7 +5,7 @@ import net.twasi.core.translations.renderer.TranslationRenderer;
 
 public abstract class TwasiPluginCommand extends TwasiCustomCommand {
 
-    private TwasiUserPlugin twasiUserPlugin;
+    protected TwasiUserPlugin twasiUserPlugin;
 
     public TwasiPluginCommand(TwasiUserPlugin twasiUserPlugin) {
         this.twasiUserPlugin = twasiUserPlugin;
@@ -33,7 +33,7 @@ public abstract class TwasiPluginCommand extends TwasiCustomCommand {
 
     @Override
     protected final TranslationRenderer getTranslationRenderer(){
-        return TranslationRenderer.getInstance(twasiUserPlugin);
+        return TranslationRenderer.getInstance(twasiUserPlugin, "");
     }
 
     public TwasiUserPlugin getProvidingUserPlugin() {

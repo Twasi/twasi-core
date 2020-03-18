@@ -6,14 +6,18 @@ import net.twasi.core.database.models.User;
 import net.twasi.core.database.repositories.BetaCodeRepository;
 import net.twasi.core.database.repositories.UserRepository;
 import net.twasi.core.graphql.TwasiGraphQLHandledException;
+import net.twasi.core.graphql.model.PluginDetailsDTO;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.InstanceManagerService;
+import net.twasi.core.services.providers.PluginManagerService;
 import net.twasi.core.services.providers.TelegramService;
 import net.twasi.core.services.providers.config.ConfigService;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetupDTO {
     private User user;
@@ -58,7 +62,7 @@ public class SetupDTO {
         ServiceRegistry.get(DataService.class).get(UserRepository.class).commit(user);
 
         TelegramService telegram = TelegramService.get();
-        if(telegram.isConnected()) {
+        if (telegram.isConnected()) {
             try {
                 telegram.sendMessageToTelegramChat(
                         "( ͡° ͜ʖ ͡°) Ein neuer Benutzer hat sich soeben registriert: " +
@@ -73,5 +77,13 @@ public class SetupDTO {
 
     public boolean isSetUp() {
         return user.getStatus() != AccountStatus.SETUP;
+    }
+
+    public List<PluginDetailsDTO> getDefaultPlugins() {
+        PluginManagerService pms = PluginManagerService.get();
+        List<String> defaults = pms.getDefaultPlugins();
+        return pms.getPlugins().stream().filter(pl -> defaults.contains(pl.getName())).map(
+                pl -> new PluginDetailsDTO(pl, user, user.getInstalledPlugins().contains(pl.getName()))
+        ).collect(Collectors.toList());
     }
 }

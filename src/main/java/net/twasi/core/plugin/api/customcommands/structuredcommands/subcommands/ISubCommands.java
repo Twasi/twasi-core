@@ -1,8 +1,12 @@
 package net.twasi.core.plugin.api.customcommands.structuredcommands.subcommands;
 
+import net.twasi.core.plugin.api.TwasiUserPlugin;
+
 import java.util.List;
 
 public interface ISubCommands {
+
+    TwasiUserPlugin getProvidingUserPlugin();
 
     SubCommandCollection getSubCommands();
 

@@ -43,7 +43,8 @@ class ConfigLoader {
                 writer.println("  issuer: Twasi");
                 writer.println("webinterface:");
                 writer.println("  port: 8000");
-                writer.println("  self: https://localhost:8000");
+                writer.println("  self: http://localhost:8000");
+                writer.println("  paginationMax: 10");
                 writer.println("bot:");
                 writer.println("  prefix: \"!\"");
                 writer.println("mail:");
@@ -57,6 +58,8 @@ class ConfigLoader {
                 writer.println("#  botToken: null # Get yours from the telegram botfather");
                 writer.println("#  userName: null # The telegram-bot's username");
                 writer.println("#  chatId: null # The chat-ID the bot should send messages to");
+                writer.println("websocket:");
+                writer.println("  port: 1883");
                 writer.close();
                 TwasiLogger.log.info("Default config file created.");
             } catch (IOException e) {

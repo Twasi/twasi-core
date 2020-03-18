@@ -1,10 +1,14 @@
 package net.twasi.core.api;
 
 import io.prometheus.client.exporter.MetricsServlet;
-import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.api.oauth.OAuthIntegrationController;
+import net.twasi.core.api.upload.CSVUploadHandler;
+import net.twasi.core.api.upload.ImageUploadHandler;
+import net.twasi.core.api.ws.TwasiWebsocketServlet;
+import net.twasi.core.graphql.GraphQLEndpoint;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.ServiceRegistry;
+import net.twasi.core.services.providers.ServletService;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.core.webinterface.controller.auth.AuthCallbackController;
 import net.twasi.core.webinterface.controller.auth.AuthController;
@@ -30,6 +34,8 @@ public class WebInterfaceApp {
         context.setContextPath("/");
         context.addServlet(GraphQLEndpoint.class, "/graphql");
 
+        context.addServlet(TwasiWebsocketServlet.class, "/ws");
+
         handlers.addHandler(context);
 
         server.setHandler(handlers);
@@ -39,7 +45,12 @@ public class WebInterfaceApp {
 
         context.addServlet(new ServletHolder(oAuthIntegrationController), "/oauth/*");
 
+        context.addServlet(ImageUploadHandler.class, "/upload/img");
+        context.addServlet(CSVUploadHandler.class, "/upload/csv");
+
         context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+
+        ServiceRegistry.register(new ServletService((handler, path) -> context.addServlet(handler, "/plugin-handlers/" + path)));
     }
 
     public static void start() {
@@ -50,6 +61,14 @@ public class WebInterfaceApp {
         } catch (Exception e) {
             TwasiLogger.log.error("Error while starting webserver", e);
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                TwasiLogger.log.info("Web interface stopping...");
+                server.stop();
+                TwasiLogger.log.info("Web interface was shut down successfully.");
+            } catch (Exception ignored) {
+            }
+        }));
     }
 
     public static Server getServer() {
@@ -60,5 +79,7 @@ public class WebInterfaceApp {
         return handlers;
     }
 
-    public static ServletContextHandler getServletHandler() { return context; }
+    public static ServletContextHandler getServletHandler() {
+        return context;
+    }
 }

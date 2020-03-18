@@ -13,12 +13,19 @@ import java.util.List;
 public class TwitchAccount {
     @Id
     private ObjectId id;
+
     private String userName;
+
     private String displayName;
+
     private AccessToken token;
+
     private String twitchId;
+
     private String avatar;
+
     private String email;
+
     private String confirmationCode;
 
     private List<PermissionGroups> groups;

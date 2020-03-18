@@ -6,6 +6,7 @@ import com.coxautodev.graphql.tools.SchemaParserBuilder;
 import com.google.common.io.Resources;
 import graphql.schema.GraphQLSchema;
 import kotlin.text.Charsets;
+import net.twasi.core.graphql.GraphQLPaginationResolver;
 import net.twasi.core.graphql.Query;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.services.IService;
@@ -29,6 +30,7 @@ public class ApiSchemaManagementService implements IService {
     private List<String> pluginNames = new ArrayList<>();
 
     public void addForPlugin(String pluginName, String definition, GraphQLQueryResolver resolver) {
+        definition = GraphQLPaginationResolver.resolve(definition);
         schemaBuilder.schemaString(definition)
                 .resolvers(resolver);
         pluginNames.add(pluginName);
@@ -44,10 +46,11 @@ public class ApiSchemaManagementService implements IService {
 
             String pluginDefinitions = pluginNames
                     .stream()
-                    .map(pluginName -> ",\n    " + pluginName.toLowerCase() + "(token: String): " + pluginName)
+                    .map(pluginName -> ",\n    " + pluginName.replaceAll("[-_]", "").toLowerCase() + "(token: String): " + pluginName)
                     .collect(Collectors.joining(","));
 
             defaultSchemaString = defaultSchemaString.replace("%PLUGINS%", pluginDefinitions);
+            defaultSchemaString = GraphQLPaginationResolver.resolve(defaultSchemaString);
 
             TwasiLogger.log.debug("Plugin API definitions: " + pluginDefinitions);
 

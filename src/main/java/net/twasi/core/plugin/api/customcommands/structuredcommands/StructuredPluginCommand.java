@@ -59,4 +59,9 @@ public abstract class StructuredPluginCommand extends TwasiPluginCommand impleme
     public String getSyntaxKey() {
         return getCommandName() + ".syntax";
     }
+
+    @Override
+    public final TwasiUserPlugin getProvidingUserPlugin() {
+        return twasiUserPlugin;
+    }
 }

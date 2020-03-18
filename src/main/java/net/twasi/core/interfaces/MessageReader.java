@@ -1,10 +1,12 @@
 package net.twasi.core.interfaces;
 
+import net.twasi.core.events.IncomingMessageEvent;
+import net.twasi.core.events.IncomingRawEvent;
 import net.twasi.core.events.TwasiEventHandler;
 import net.twasi.core.interfaces.api.TwasiInterface;
-import net.twasi.core.events.IncomingMessageEvent;
 import net.twasi.core.logger.TwasiLogger;
 import net.twasi.core.models.Message.TwasiMessage;
+import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class MessageReader {
 
     // Event handlers
     private List<TwasiEventHandler<IncomingMessageEvent>> incomingMessageEventHandlers = new ArrayList<>();
+    private List<TwasiEventHandler<IncomingRawEvent>> incomingRawEventHandlers = new ArrayList<>();
 
     public MessageReader(TwasiInterface inf) {
         twasiInterface = inf;
@@ -46,6 +49,10 @@ public class MessageReader {
         incomingMessageEventHandlers.add(e);
     }
 
+    public void registerRawEventHandler(TwasiEventHandler<IncomingRawEvent> e) {
+        incomingRawEventHandlers.add(e);
+    }
+
     public void onMessage(MessageEvent event) {
         TwasiMessage message = TwasiMessage.from(event, twasiInterface);
 
@@ -57,14 +64,19 @@ public class MessageReader {
         TwasiLogger.log.trace("IRC: message=" + message.getMessage() + ", type=" + message.getType() + ", sender=" + message.getSender());
         // Ping requests are handled by PircX
         //if (message.getType().equals(MessageType.PING)) {
-            //twasiInterface.getCommunicationHandler().send("PONG " + message.getMessage());
-            //TwasiLogger.log.debug("PING answered: " + message.getMessage());
-            //return;
+        //twasiInterface.getCommunicationHandler().send("PONG " + message.getMessage());
+        //TwasiLogger.log.debug("PING answered: " + message.getMessage());
+        //return;
         //}
 
         // Call all event handlers (middleware)
         incomingMessageEventHandlers.forEach(handler -> new Thread(() -> handler.on(new IncomingMessageEvent(message))).start());
 
         twasiInterface.getDispatcher().dispatch(message);
+    }
+
+    public void onRawEvent(Event event) {
+        // Call all event handlers (middleware)
+        incomingRawEventHandlers.forEach(handler -> new Thread(() -> handler.on(new IncomingRawEvent(event))).start());
     }
 }
