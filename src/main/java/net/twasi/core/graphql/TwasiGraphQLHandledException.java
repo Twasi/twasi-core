@@ -2,7 +2,7 @@ package net.twasi.core.graphql;
 
 import graphql.ErrorClassification;
 import graphql.GraphQLError;
-import graphql.execution.ExecutionPath;
+import graphql.execution.ResultPath;
 import graphql.language.SourceLocation;
 
 import java.util.Collections;
@@ -23,7 +23,7 @@ public class TwasiGraphQLHandledException extends RuntimeException {
         return this;
     }
 
-    public GraphQLError getGraphQLException(SourceLocation location, ExecutionPath path) {
+    public GraphQLError getGraphQLException(SourceLocation location, ResultPath path) {
         return new GraphQLError() {
             public String getMessage() {
                 return TwasiGraphQLHandledException.this.getMessage();

@@ -5,7 +5,7 @@ import graphql.GraphQLError;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
-import graphql.execution.ExecutionPath;
+import graphql.execution.ResultPath;
 import graphql.language.SourceLocation;
 import net.twasi.core.logger.TwasiLogger;
 
@@ -19,7 +19,7 @@ public class GraphQLExceptionHandler implements DataFetcherExceptionHandler {
     public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
         Throwable exception = handlerParameters.getException();
         SourceLocation sourceLocation = handlerParameters.getField().getSingleField().getSourceLocation();
-        ExecutionPath path = handlerParameters.getPath();
+        ResultPath path = handlerParameters.getPath();
         TwasiLogger.log.debug("Data fetcher exception while resolving GraphQL request", exception);
 
         if (exception instanceof TwasiGraphQLHandledException) {
