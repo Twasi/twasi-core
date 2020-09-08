@@ -1,19 +1,17 @@
 package net.twasi.core.services.providers;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import dev.morphia.Datastore;
+import dev.morphia.Morphia;
+import dev.morphia.logging.MorphiaLoggerFactory;
 import net.twasi.core.logger.TwasiLoggerFactory;
 import net.twasi.core.services.IService;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.config.ConfigService;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.logging.MorphiaLoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DatabaseService implements IService {
 
@@ -48,11 +46,9 @@ public class DatabaseService implements IService {
         if (ServiceRegistry.get(ConfigService.class).getCatalog().database.authentication != null &&
                 ServiceRegistry.get(ConfigService.class).getCatalog().database.authentication.user != null &&
                 ServiceRegistry.get(ConfigService.class).getCatalog().database.authentication.password != null) {
-            List<MongoCredential> credentialsList = new ArrayList<>();
             MongoCredential credential = MongoCredential.createCredential(
                     ServiceRegistry.get(ConfigService.class).getCatalog().database.authentication.user, ServiceRegistry.get(ConfigService.class).getCatalog().database.database, ServiceRegistry.get(ConfigService.class).getCatalog().database.authentication.password.toCharArray());
-            credentialsList.add(credential);
-            client = new MongoClient(addr, credentialsList);
+            client = new MongoClient(addr, credential, MongoClientOptions.builder().build());
         } else {
             client = new MongoClient(addr);
         }

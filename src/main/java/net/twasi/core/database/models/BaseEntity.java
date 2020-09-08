@@ -1,7 +1,7 @@
 package net.twasi.core.database.models;
 
+import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Id;
 
 public abstract class BaseEntity implements IEntity {
     @Id

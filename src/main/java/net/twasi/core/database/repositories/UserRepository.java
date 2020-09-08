@@ -1,5 +1,6 @@
 package net.twasi.core.database.repositories;
 
+import dev.morphia.query.Query;
 import net.twasi.core.database.actions.UserActions;
 import net.twasi.core.database.lib.Repository;
 import net.twasi.core.database.models.AccountStatus;
@@ -8,7 +9,6 @@ import net.twasi.core.database.models.TwitchAccount;
 import net.twasi.core.database.models.User;
 import net.twasi.twitchapi.kraken.channels.response.ChannelDTO;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.query.Query;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +28,7 @@ public class UserRepository extends Repository<User> {
     }
 
     public User getByTwitchName(String twitchname) {
-        return query().field("twitchAccount.userName").equal(twitchname).get();
+        return query().field("twitchAccount.userName").equal(twitchname).first();
     }
 
     public User getByTwitchAccountOrCreate(TwitchAccount account, ChannelDTO channelData) {
@@ -38,7 +38,7 @@ public class UserRepository extends Repository<User> {
         if (query.count() == 0) {
             user = UserActions.createNewUser(account);
         } else {
-            user = query.get();
+            user = query.first();
         }
 
         // Update access information

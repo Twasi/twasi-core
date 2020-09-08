@@ -1,9 +1,9 @@
 package net.twasi.core.database.models.permissions;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 import net.twasi.core.database.models.TwitchAccount;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.annotations.Entity;
-import org.mongodb.morphia.annotations.Id;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package net.twasi.core.logger;
 
-import org.mongodb.morphia.logging.Logger;
+
+import dev.morphia.logging.Logger;
 
 public class MorphiaVoidLogger implements Logger {
     @Override

@@ -1,7 +1,7 @@
 package net.twasi.core.logger;
 
-import org.mongodb.morphia.logging.Logger;
-import org.mongodb.morphia.logging.LoggerFactory;
+import dev.morphia.logging.Logger;
+import dev.morphia.logging.LoggerFactory;
 
 public class TwasiLoggerFactory implements LoggerFactory {
     private static MorphiaVoidLogger logger = new MorphiaVoidLogger();
