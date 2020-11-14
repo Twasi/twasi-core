@@ -1,12 +1,8 @@
 package net.twasi.core.graphql;
 
 import graphql.execution.AsyncExecutionStrategy;
-import graphql.kickstart.execution.GraphQLObjectMapper;
-import graphql.kickstart.execution.GraphQLQueryInvoker;
-import graphql.kickstart.execution.config.DefaultExecutionStrategyProvider;
-import graphql.kickstart.servlet.GraphQLConfiguration;
-import graphql.kickstart.servlet.GraphQLHttpServlet;
 import graphql.schema.GraphQLSchema;
+import graphql.servlet.*;
 import net.twasi.core.services.ServiceRegistry;
 import net.twasi.core.services.providers.ApiSchemaManagementService;
 
@@ -19,15 +15,16 @@ public class GraphQLEndpoint extends GraphQLHttpServlet {
 
     private GraphQLSchema schema = ServiceRegistry.get(ApiSchemaManagementService.class).getDefinitiveSchema();
 
+    @Override
     protected GraphQLConfiguration getConfiguration() {
         return GraphQLConfiguration
                 .with(schema)
                 .with(GraphQLQueryInvoker.newBuilder()
-                                         .withExecutionStrategyProvider(new DefaultExecutionStrategyProvider(new AsyncExecutionStrategy(new GraphQLExceptionHandler())))
-                                         .build())
+                        .withExecutionStrategyProvider(new DefaultExecutionStrategyProvider(new AsyncExecutionStrategy(new GraphQLExceptionHandler())))
+                        .build())
                 .with(GraphQLObjectMapper.newBuilder()
-                                         .withGraphQLErrorHandler(list -> list)
-                                         .build())
+                        .withGraphQLErrorHandler(list -> list)
+                        .build())
                 .build();
     }
 
@@ -52,13 +49,13 @@ public class GraphQLEndpoint extends GraphQLHttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         super.doGet(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         super.doGet(req, resp);
     }
