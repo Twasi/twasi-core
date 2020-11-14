@@ -1,6 +1,5 @@
 package net.twasi.core.database.models;
 
-import dev.morphia.annotations.Entity;
 import net.twasi.core.database.models.permissions.PermissionEntity;
 import net.twasi.core.database.models.permissions.PermissionEntityType;
 import net.twasi.core.database.models.permissions.PermissionGroups;
@@ -11,6 +10,7 @@ import net.twasi.core.services.providers.DataService;
 import net.twasi.core.services.providers.PluginManagerService;
 import net.twasi.core.services.providers.config.ConfigService;
 import net.twasi.twitchapi.kraken.channels.response.ChannelDTO;
+import org.mongodb.morphia.annotations.Entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;

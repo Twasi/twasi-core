@@ -1,11 +1,11 @@
 package net.twasi.core.database.models;
 
-import dev.morphia.annotations.Entity;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
 
 import java.util.Date;
 
-@Entity(value = "queue-entries")
+@Entity(value = "queue-entries", noClassnameStored = true)
 public class BetaCode extends BaseEntity {
     private String betaCode;
     private Date unlocked;

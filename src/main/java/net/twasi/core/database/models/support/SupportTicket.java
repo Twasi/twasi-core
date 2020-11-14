@@ -1,9 +1,9 @@
 package net.twasi.core.database.models.support;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Reference;
 import net.twasi.core.database.models.BaseEntity;
 import net.twasi.core.database.models.User;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Reference;
 
 import java.util.ArrayList;
 import java.util.Date;

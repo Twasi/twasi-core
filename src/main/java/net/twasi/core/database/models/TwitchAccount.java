@@ -1,11 +1,11 @@
 package net.twasi.core.database.models;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
 import net.twasi.core.database.models.permissions.PermissionGroups;
 import net.twasi.twitchapi.auth.PersonalAuthorizationContext;
 import net.twasi.twitchapi.helix.users.response.UserDTO;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 import java.util.List;
 

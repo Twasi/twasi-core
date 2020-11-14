@@ -1,6 +1,6 @@
 package net.twasi.core.database.models;
 
-import dev.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 
 import java.time.Instant;
 
